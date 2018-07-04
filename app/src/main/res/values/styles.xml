@@ -7,5 +7,14 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+    <style name="TextAppearence.App.TextInputLayout" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/theme_color_orange</item>
 
+        <item name="colorControlNormal">@color/theme_color_orange</item>
+
+
+        <item name="colorControlActivated">@color/theme_color_orange</item>
+        <item name="colorControlHighlight">@color/theme_color_orange</item>
+
+    </style>
 </resources>

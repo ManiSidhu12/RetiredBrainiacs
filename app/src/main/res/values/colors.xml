@@ -3,4 +3,20 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+<!-- Main Screen Colors  -->
+    <color name="bg_color">#CDEEFF</color>
+    <color name="fb_color">#3360A8</color>
+    <color name="black_moto_color">#2B2B2B</color>
+    <color name="theme_color_orange">#ff6000</color>
+    <color name="dark_blue">#283B3F</color>
+    <color name="join_color">#303634</color>
+    <color name="terms_color">#4D5B5E</color>
+    <color name="already_color">#182329</color>
+    <color name="light_gray">#9498A3</color>
+    <color name="create_color">#393D3C</color>
+    <color name="twitter_bg">#189FED</color>
+    <!---->
+<!--  Sign In Screen -->
+
 </resources>

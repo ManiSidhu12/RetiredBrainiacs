@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">RetiredBrainiacs</string>
+    <string name="app_name">Retired Brainiacs</string>
+    <string name="err_name">Please Enter Name…</string>
+    <string name="err_phn">Please Enter Phone…</string>
+    <string name="err_phn1">Phone No. should be of 10 Digits…</string>
+    <string name="err_email">Please Enter Email…</string>
+    <string name="err_msg_email">Please Enter valid Email…</string>
+    <string name="err_msg_password">Please Enter Password…</string>
+    <string name="err_pswd">Password should be of 6 or More Characters…</string>
+    <string name="err_cnfrmpswd">Password MisMatch…</string>
+    <string name="gender">Gender</string>
+    <string name="signup">Sign Up</string>
+    <string name="fullname">Full Name*</string>
+    <string name="emailid">Email Id*</string>
+    <string name="pswd">Password*</string>
+    <string name="cnfrm_pswd">Confirm Password*</string>
+    <string name="mobile">Mobile*</string>
 </resources>
