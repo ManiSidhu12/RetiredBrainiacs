@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg"
+    android:weightSum="2">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/txt_logo_main"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="55dp"
+      android:src="@drawable/logo"
+        />
+    <TextView
+        android:id="@+id/txt_moto_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Be more. Live more. Be a Brainiac."
+        android:padding="4dp"
+        android:textColor="@color/black_moto_color"
+        android:textSize="18sp"
+        android:gravity="center"
+        />
+</LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/lay_bottom_main"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="20dp"
+            android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/lay_join"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginStart="25dp"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal"
+            >
+
+            <View
+                android:id="@+id/view6"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center|start"
+                android:layout_weight="1"
+                android:background="@color/join_color" />
+
+            <TextView
+                android:id="@+id/txt_join_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginEnd="7dp"
+                android:layout_marginStart="7dp"
+                android:gravity="center"
+                android:text="JOIN US WITH"
+                android:textColor="@color/join_color"
+                android:textSize="18sp" />
+
+            <View
+                android:id="@+id/view7"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_gravity="center|end"
+                android:layout_weight="1"
+                android:background="@color/join_color" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lay_social"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="15dp"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="25dp"
+                android:layout_marginStart="15dp"
+                android:layout_weight="1"
+                android:background="@drawable/fbicon"
+               >
+
+                <ImageView
+                    android:id="@+id/img_fb"
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="7dp"
+                    android:src="@drawable/fb"
+                    android:visibility="gone"
+                    />
+
+                <TextView
+                    android:id="@+id/btn_fb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/img_fb"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="7dp"
+                    android:gravity="center"
+                    android:text="FACEBOOK"
+                    android:visibility="gone"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lay_google"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="25dp"
+                android:layout_weight="1"
+                android:background="@drawable/gicon"
+     >
+
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="25dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="13dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:visibility="gone"
+              />
+
+                <TextView
+                    android:id="@+id/btn_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/imageView3"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="7dp"
+                    android:gravity="center"
+                    android:text="GOOGLE"
+                    android:visibility="gone"
+                    android:textColor="@android:color/white"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_terms_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+android:layout_gravity="center_horizontal"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="7dp"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:padding="4dp"
+            android:textColor="@color/terms_color"
+            android:text="By joining Retired Brainiacs you agree to the Terms of Service and Privacy Policy"
+            />
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/lay_bottom_main"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="15dp"
+>
+        <TextView
+            android:id="@+id/txt_already_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txt_sign_in_main"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Already have an account?"
+            android:textColor="@color/already_color"
+            android:textSize="18sp" />
+        <TextView
+            android:id="@+id/txt_sign_in_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txt_or_main"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:text="Sign in now"
+            android:textColor="@color/theme_color_orange"
+            android:layout_marginBottom="10dp"
+            android:textSize="24sp" />
+        <TextView
+            android:id="@+id/txt_or_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:layout_above="@+id/txt_signup_main"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/light_gray"
+            android:text="OR"/>
+        <TextView
+            android:id="@+id/txt_signup_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:layout_marginBottom="10dp"
+            android:textColor="@color/create_color"
+            android:text="Create an account?"/>
+        </RelativeLayout>
+    </RelativeLayout>
+</LinearLayout>
