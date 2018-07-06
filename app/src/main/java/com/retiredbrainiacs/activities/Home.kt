@@ -5,10 +5,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.BottomNavigationViewHelper
-import com.retiredbrainiacs.fragments.FeedsFragment
-import com.retiredbrainiacs.fragments.ForumFragment
-import com.retiredbrainiacs.fragments.ClassifiedFragment
-import com.retiredbrainiacs.fragments.StoreFragment
+import com.retiredbrainiacs.fragments.*
 import kotlinx.android.synthetic.main.home_screen.*
 
 class Home : AppCompatActivity() {
@@ -37,6 +34,12 @@ class Home : AppCompatActivity() {
 
                 return@OnNavigationItemSelectedListener true
             }
+            R.id.navigation_friends-> {
+                //   message.setText(R.string.title_notifications)
+                supportFragmentManager.beginTransaction().replace(R.id.frame_layout,FriendsFragment()).commit()
+
+                return@OnNavigationItemSelectedListener true
+            }
         }
         false
     }
@@ -44,7 +47,6 @@ class Home : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_screen)
-supportActionBar!!.hide()
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         BottomNavigationViewHelper.disableShiftMode(navigation);
