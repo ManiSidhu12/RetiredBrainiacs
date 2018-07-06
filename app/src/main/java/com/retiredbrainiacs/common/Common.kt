@@ -9,6 +9,7 @@ import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import com.retiredbrainiacs.R
 
 class Common{
@@ -130,6 +131,9 @@ class Common{
             }
 
             return true
+        }
+        fun showToast(ctx : Context,msg : String){
+           Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
         }
     }
 }

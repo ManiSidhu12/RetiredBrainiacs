@@ -15,4 +15,11 @@
     <string name="pswd">Password*</string>
     <string name="cnfrm_pswd">Confirm Password*</string>
     <string name="mobile">Mobile*</string>
+    <string name="title_activity_home">Home</string>
+    <string name="title_home">Home</string>
+    <string name="title_forum">Forum</string>
+    <string name="title_store">Store</string>
+    <string name="title_classified">Classified</string>
+    <string name="title_friends">Friends</string>
 </resources>
+

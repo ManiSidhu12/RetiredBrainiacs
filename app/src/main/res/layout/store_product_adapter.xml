@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@android:color/white">
+<ImageView
+    android:layout_width="match_parent"
+    android:layout_height="170dp"
+    android:layout_gravity="center_horizontal"
+    android:src="@drawable/postimg"
+    android:scaleType="fitXY"
+    android:layout_marginStart="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginEnd="10dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp">
+        <TextView
+            android:id="@+id/txt_product_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:padding="2dp"
+            android:text="RB Coffee Mug"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"/>
+        <TextView
+            android:id="@+id/actual_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="2dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:text="$18.70"
+            android:padding="2dp"
+            android:textColor="@color/theme_color_orange"
+            android:textSize="15sp"/>
+        <TextView
+            android:id="@+id/old_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_toStartOf="@+id/actual_price"
+            android:layout_centerInParent="true"
+            android:text="$24.70"
+            android:gravity="bottom"
+            android:padding="2dp"
+            android:textSize="13sp"/>
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/txt_product_desc"
+        android:layout_width="match_parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:padding="2dp"
+        android:text="Classic Mug 11-ounce or 15-ounce"
+        android:textSize="14sp"
+        android:textColor="@android:color/black"/>
+</LinearLayout>
