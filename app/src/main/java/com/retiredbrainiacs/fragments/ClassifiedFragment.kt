@@ -11,6 +11,10 @@ import kotlinx.android.synthetic.main.custom_tab.view.*
 import android.widget.LinearLayout
 import android.graphics.drawable.GradientDrawable
 import android.support.design.widget.TabLayout
+import android.support.v4.content.ContextCompat
+import android.widget.ImageView
+import android.widget.TextView
+import kotlinx.android.synthetic.main.classified_screen.*
 import kotlinx.android.synthetic.main.classified_screen.view.*
 
 
@@ -21,64 +25,41 @@ class ClassifiedFragment : Fragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
      v = inflater.inflate(R.layout.classified_screen,container,false)
 
-        setViewPager()
-        v.tabs.setupWithViewPager(v.pager)
-        setUpTabIcons()
+
+        showSelection(v.txt_all,v.img_all,v.txt_save,v.txt_my,v.img_save,v.img_my)
+        fragmentManager!!.beginTransaction().replace(R.id.frame_classified,AllClassifiedFragment()).commit()
+
+
+        work()
+
         return v
     }
 
+fun work(){
+    v.lay_all_classi.setOnClickListener {
+        showSelection(v.txt_all,v.img_all,v.txt_save,v.txt_my,v.img_save,v.img_my)
+        fragmentManager!!.beginTransaction().replace(R.id.frame_classified,AllClassifiedFragment()).commit()
 
-    fun setViewPager(){
-        pagerAdap =  ViewPagerAdapter(fragmentManager!!)
+    }
+    v.lay_save_classi.setOnClickListener {
+        showSelection(v.txt_save,v.img_save,v.txt_all,v.txt_my,v.img_all,v.img_my)
+        fragmentManager!!.beginTransaction().replace(R.id.frame_classified,SavedClassifiedFragment()).commit()
 
+    }
+    v.lay_my_classi.setOnClickListener {
+        showSelection(v.txt_my,v.img_my,v.txt_all,v.txt_save,v.img_all,v.img_save)
+        fragmentManager!!.beginTransaction().replace(R.id.frame_classified,MyClassifedFragment()).commit()
 
-        pagerAdap.addFragment(AllClassifiedFragment(),"All")
-        pagerAdap.addFragment(SavedClassifiedFragment(),"Saved")
-        pagerAdap.addFragment(MyClassifedFragment(),"My Classified")
-        v.pager.adapter = pagerAdap
-
+    }
+}
+    fun showSelection(txtSelected : TextView, imgSelected : ImageView, txt2 : TextView, txt3 : TextView, img2 : ImageView, img3: ImageView){
+        txtSelected.setTextColor(resources.getColor(R.color.theme_color_orange))
+        imgSelected.setColorFilter(ContextCompat.getColor(activity!!, R.color.theme_color_orange))
+        txt2.setTextColor(resources.getColor(R.color.black))
+        txt3.setTextColor(resources.getColor(R.color.black))
+        img2.setColorFilter(ContextCompat.getColor(activity!!, R.color.black))
+        img3.setColorFilter(ContextCompat.getColor(activity!!, R.color.black))
 
     }
 
-    fun  setUpTabIcons(){
-        val tabOne = LayoutInflater.from(activity).inflate(R.layout.custom_tab, null)
-        tabOne.textView2.text = "All"
-        tabOne.imageView.setImageResource(R.drawable.store)
-        v.tabs.getTabAt(0)!!.customView = tabOne
-
-        val tabTwo = LayoutInflater.from(activity).inflate(R.layout.custom_tab, null)
-        tabTwo.textView2.text = "Saved"
-        tabTwo.imageView.setImageResource(R.drawable.saved)
-        v.tabs.getTabAt(1)!!.customView = tabTwo
-
-        val tabThree = LayoutInflater.from(activity).inflate(R.layout.custom_tab, null)
-        tabThree.textView2.text = "My Classified"
-        tabThree.imageView.setImageResource(R.drawable.myclassified)
-        v.tabs.getTabAt(2)!!.customView = tabThree
-        val root = v.tabs.getChildAt(0)
-        val root1 = v.tabs.getChildAt(1)
-        val root2 = v.tabs.getChildAt(2)
-        if (root is LinearLayout) {
-            (root as LinearLayout).showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
-            val drawable = GradientDrawable()
-            drawable.setColor(resources.getColor(R.color.light_gray))
-            drawable.setSize(1, 1)
-            (root as LinearLayout).dividerPadding = 25
-            (root as LinearLayout).dividerDrawable = drawable
-
-
-        }
-   //   setTabWidthAsWrapContent(root,0)
-//      setTabWidthAsWrapContent1(root1,1)
-     // setTabWidthAsWrapContent2(root2,2)
-
-
-    }
-    fun setTabWidthAsWrapContent(root : View,tabPosition: Int) {
-        val layout = (root as LinearLayout).getChildAt(tabPosition) as LinearLayout
-        val layoutParams = layout.layoutParams as LinearLayout.LayoutParams
-        layoutParams.weight = 1f
-        layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
-        layout.layoutParams = layoutParams
-    }
 }

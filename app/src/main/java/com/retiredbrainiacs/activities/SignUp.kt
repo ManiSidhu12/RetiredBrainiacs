@@ -2,21 +2,34 @@ package com.retiredbrainiacs.activities
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.ArrayAdapter
+import com.android.volley.AuthFailureError
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
+import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
+import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.NothingSelectedSpinnerAdapter
+import com.retiredbrainiacs.model.login.LoginRoot
 import kotlinx.android.synthetic.main.signup_screen.*
+import java.io.StringReader
 import java.util.*
 
 class SignUp : Activity(){
     val genderArray = arrayOf("Male","Female")
+    lateinit var rootLogin : LoginRoot
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -100,7 +113,7 @@ class SignUp : Activity(){
         btn_signup.setOnClickListener {
             if(Common.validateName(this@SignUp,edt_name_signup,input_lay_name) && Common.validate(this@SignUp,edt_email_signup,input_lay_emailsignup) && Common.validatePassword(this@SignUp,edt_pswd_signup,input_lay_pswdsignup)&& Common.validateCnfrmPassword(this@SignUp,edt_pswd_signup,edt_cnfrmpswd_signup,input_lay_cnfrmpswdsignup) && Common.validateDOB(this@SignUp,edt_dob_signup,input_lay_dobsignup)){
                 if(CommonUtils.getConnectivityStatusString(this@SignUp).equals("true")){
-                  //  signUpWebService()
+                  signUpWebService()
                 }
                 else{
                     CommonUtils.openInternetDialog(this@SignUp)
@@ -155,7 +168,55 @@ class SignUp : Activity(){
             edt_dob_signup.text = Editable.Factory.getInstance().newEditable(date + "/" + mnth + "/" + year)
 
         }, mYear, mMonth, mDay)
+        datePickerDialog.datePicker.maxDate = (mYear-55).toLong()
         datePickerDialog.show()
 
     }
+
+
+    //============== Sign Up Web Service =====
+    private fun signUpWebService(){
+        var url = GlobalConstants.API_URL+"sign_up_from"
+        val pd = ProgressDialog.show(this@SignUp, "", "Loading", false)
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
+
+            if(rootLogin.status.equals("true")) {
+                Common.showToast(this@SignUp,"Registered Successfully...")
+                val intent = Intent(this@SignUp, Home::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+            } else{
+                Common.showToast(this@SignUp,rootLogin.message)
+
+            }
+        },
+
+                Response.ErrorListener { pd.dismiss() }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["first_name"] = edt_name_signup.text.toString()
+                map["last_name"] = ""
+                map["email"] = edt_email_signup.text.toString()
+                map["dob"] = edt_dob_signup.text.toString()
+                map["password"] = edt_pswd_signup.text.toString()
+                map["con_pswd"] = edt_cnfrmpswd_signup.text.toString()
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
+    }
+
 }

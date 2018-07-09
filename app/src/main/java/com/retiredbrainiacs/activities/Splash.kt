@@ -3,13 +3,16 @@ package com.retiredbrainiacs.activities
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import com.facebook.FacebookSdk
 import com.retiredbrainiacs.R
+
 
 class Splash : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.splash_screen)
+
 
         Thread(splashThread).start()
 

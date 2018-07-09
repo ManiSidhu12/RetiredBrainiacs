@@ -95,6 +95,7 @@
             android:weightSum="2">
 
             <RelativeLayout
+                android:id="@+id/lay_fb_main"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginEnd="25dp"

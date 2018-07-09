@@ -58,6 +58,7 @@
             app:tabGravity="fill"
             app:tabMode="fixed"
             android:background="@android:color/white"
+            app:tabIndicatorColor="@android:color/transparent"
             android:layout_height="wrap_content"/>
 
 
