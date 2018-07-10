@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import com.facebook.FacebookSdk
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.common.SharedPrefManager
 
 
 class Splash : Activity() {
@@ -21,9 +22,16 @@ class Splash : Activity() {
         try {
             Thread.sleep(1000)
 
+            if(SharedPrefManager.getInstance(this@Splash).isLoggedIn){
                 val intent = Intent(this, Home::class.java)
                 startActivity(intent)
                 finish()
+            }
+            else {
+                val intent = Intent(this, Home::class.java)
+                startActivity(intent)
+                finish()
+            }
 
         } catch (e: InterruptedException) {
             e.printStackTrace()

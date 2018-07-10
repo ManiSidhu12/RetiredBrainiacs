@@ -58,6 +58,8 @@
                     android:layout_centerInParent="true"
                     android:layout_marginStart="3dp"
                     app:srb_fillColor="#f39c12"
+                    app:srb_isIndicator="true"
+                    app:srb_rating="3.5"
                     app:srb_borderColor="#f39c12"
                     app:srb_pressedFillColor="#f39c12"
                     app:srb_pressedBorderColor="#808080"

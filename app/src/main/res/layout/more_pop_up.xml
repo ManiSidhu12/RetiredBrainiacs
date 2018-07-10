@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+ >
+<LinearLayout
+    android:layout_width="250dp"
+    android:layout_height="200dp"
+    android:orientation="vertical"
+    android:layout_alignParentBottom="true"
+    android:layout_alignParentEnd="true"
+    android:layout_marginEnd="10dp"
+    android:layout_marginBottom="7dp"
+    android:background="@drawable/popup">
+    <RelativeLayout
+        android:id="@+id/lay_store_pop"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp"
+        >
+
+        <ImageView
+            android:id="@+id/img_store_pop"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/store"
+            android:tint="@drawable/textcolor"
+            />
+
+
+
+        <TextView
+            android:id="@+id/txt_store_pop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/img_store_pop"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="15dp"
+            android:padding="3dp"
+            android:textSize="16sp"
+            android:text="Store"
+            android:gravity="start|center"
+            android:textColor="@drawable/textcolor"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/lay_account_pop"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp"
+
+        >
+
+        <ImageView
+            android:id="@+id/img_account_pop"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/account"
+            android:tint="@drawable/textcolor"
+            />
+
+
+
+        <TextView
+            android:id="@+id/txt_account_pop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/img_account_pop"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="15dp"
+            android:padding="3dp"
+            android:textSize="16sp"
+            android:text="Account"
+            android:gravity="start|center"
+            android:textColor="@drawable/textcolor"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/lay_archives_pop"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp"
+
+        >
+
+        <ImageView
+            android:id="@+id/img_archives_pop"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/archive"
+            android:tint="@drawable/textcolor"
+            />
+
+
+
+        <TextView
+            android:id="@+id/txt_archives_pop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/img_archives_pop"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="15dp"
+            android:padding="3dp"
+            android:textSize="16sp"
+            android:text="Personal Archives"
+            android:gravity="start|center"
+            android:ellipsize="end"
+            android:textColor="@drawable/textcolor"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/lay_memorial_pop"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginBottom="12dp"
+        >
+
+        <ImageView
+            android:id="@+id/img_memorial_pop"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="12dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/memorial"
+            android:tint="@drawable/textcolor"
+            />
+
+
+
+        <TextView
+            android:id="@+id/txt_memorial_pop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/img_memorial_pop"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="15dp"
+            android:padding="3dp"
+            android:textSize="16sp"
+            android:text="Memorial pages"
+            android:gravity="start|center"
+            android:ellipsize="end"
+            android:textColor="@drawable/textcolor"
+            />
+    </RelativeLayout>
+</LinearLayout>
+</RelativeLayout>

@@ -11,10 +11,11 @@
         android:icon="@drawable/forum"
         android:title="@string/title_forum" />
 
-    <item
+    <!--<item
         android:id="@+id/navigation_store"
         android:icon="@drawable/store"
-        android:title="@string/title_store" />
+        android:visible="false"
+        android:title="@string/title_store" />-->
     <item
         android:id="@+id/navigation_classified"
         android:icon="@drawable/classified"
@@ -23,4 +24,8 @@
         android:id="@+id/navigation_friends"
         android:icon="@drawable/friends"
         android:title="@string/title_friends" />
+    <item
+        android:id="@+id/navigation_more"
+        android:icon="@drawable/more"
+        android:title="@string/title_more" />
 </menu>

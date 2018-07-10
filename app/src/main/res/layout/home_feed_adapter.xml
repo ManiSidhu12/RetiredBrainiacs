@@ -61,6 +61,8 @@
                 app:srb_fillColor="#f39c12"
                 app:srb_borderColor="#f39c12"
                 app:srb_pressedFillColor="#f39c12"
+                app:srb_isIndicator="true"
+                app:srb_rating="5"
                 app:srb_pressedBorderColor="#808080"
                 app:srb_starSize="13dp"
                 />

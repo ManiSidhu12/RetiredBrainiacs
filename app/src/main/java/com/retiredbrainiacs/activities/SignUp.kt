@@ -18,10 +18,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
-import com.retiredbrainiacs.common.Common
-import com.retiredbrainiacs.common.CommonUtils
-import com.retiredbrainiacs.common.GlobalConstants
-import com.retiredbrainiacs.common.NothingSelectedSpinnerAdapter
+import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.login.LoginRoot
 import kotlinx.android.synthetic.main.signup_screen.*
 import java.io.StringReader
@@ -188,6 +185,7 @@ class SignUp : Activity(){
 
             if(rootLogin.status.equals("true")) {
                 Common.showToast(this@SignUp,"Registered Successfully...")
+                SharedPrefManager.getInstance(this@SignUp).userLogin(rootLogin.id,rootLogin.name,edt_email_signup.text.toString().trim(),"","",edt_pswd_signup.text.toString().trim())
                 val intent = Intent(this@SignUp, Home::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)

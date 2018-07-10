@@ -45,6 +45,8 @@
             app:srb_fillColor="#f39c12"
             app:srb_borderColor="#f39c12"
             app:srb_pressedFillColor="#f39c12"
+            app:srb_rating="4"
+            app:srb_isIndicator="true"
             app:srb_pressedBorderColor="#808080"
             app:srb_starSize="14dp"
             />
@@ -62,7 +64,9 @@
             android:id="@+id/img_req"
             android:layout_width="20dp"
             android:layout_height="20dp"
+            android:layout_marginStart="4dp"
             android:layout_alignParentStart="true"
+            android:src="@drawable/add"
             android:layout_centerInParent="true"/>
         <TextView
             android:layout_width="wrap_content"

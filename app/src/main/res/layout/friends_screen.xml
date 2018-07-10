@@ -51,21 +51,126 @@
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
-    <android.support.design.widget.TabLayout
-        android:id="@+id/tabs_friends"
+
+    <LinearLayout
+        android:id="@+id/lay_tabs_clssified"
         android:layout_width="match_parent"
+        android:layout_height="45dp"
         android:layout_gravity="center_horizontal"
-        android:layout_margin="10dp"
-        app:tabGravity="fill"
-        android:background="@android:color/white"
-        android:layout_height="wrap_content"/>
+        android:layout_marginTop="10dp"
+        android:weightSum="3"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:id="@+id/lay_all_friend"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/img_all_friend"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="22dp"
+                android:layout_centerInParent="true"
+                android:tint="@color/classified_selector"
+                android:src="@drawable/all"/>
 
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/pager_friends"
+
+            <TextView
+                android:id="@+id/txt_all_friend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/img_all_friend"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="3dp"
+                android:padding="3dp"
+                android:textSize="16sp"
+                android:text="All"
+                android:gravity="center"
+                android:ellipsize="end"
+                android:textColor="@color/classified_selector"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/lay_request_friend"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="1dp"
+            android:background="@android:color/white"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/img_request"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:layout_centerInParent="true"
+                android:tint="@color/classified_selector"
+                android:src="@drawable/request"/>
+
+
+
+            <TextView
+                android:id="@+id/txt_request"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/img_request"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="3dp"
+                android:padding="3dp"
+                android:textSize="16sp"
+                android:text="Request"
+                android:gravity="center"
+                android:ellipsize="end"
+                android:textColor="@color/classified_selector"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/lay_accept_friend"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="1dp"
+            android:background="@android:color/white"
+            android:layout_weight="1.5">
+            <ImageView
+                android:id="@+id/img_accept"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:layout_centerInParent="true"
+                android:tint="@color/classified_selector"
+                android:src="@drawable/accept"/>
+
+
+
+            <TextView
+                android:id="@+id/txt_accept"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/img_accept"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="3dp"
+                android:padding="3dp"
+                android:textSize="16sp"
+                android:text="Accept"
+                android:gravity="center"
+                android:ellipsize="end"
+                android:textColor="@color/classified_selector"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:id="@+id/frame_friends"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
-        ></android.support.v4.view.ViewPager>
+        ></FrameLayout>
 
 </LinearLayout>

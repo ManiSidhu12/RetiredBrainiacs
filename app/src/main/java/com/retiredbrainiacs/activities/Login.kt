@@ -1,11 +1,13 @@
 package com.retiredbrainiacs.activities
 
 import android.app.Activity
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.View
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -20,12 +22,24 @@ import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.login.LoginRoot
+import kotlinx.android.synthetic.main.forgot_password.*
 import kotlinx.android.synthetic.main.login_screen.*
 import java.io.StringReader
+import java.util.regex.Pattern
 
 class Login : Activity(){
 
     lateinit var rootLogin : LoginRoot
+
+    private val EMAIL_ADDRESS_PATTERN = Pattern.compile(
+            "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+                    "\\@" +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+                    "(" +
+                    "\\." +
+                    "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+                    ")+"
+    )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_screen)
@@ -75,7 +89,9 @@ class Login : Activity(){
             }
 
         })
-
+txt_forgot.setOnClickListener {
+    openDialog()
+}
         btn_login.setOnClickListener {
             if (Common.validate(this@Login,edt_email_login,input_lay_email) && Common.validatePassword(this@Login,edt_pswd_login,input_lay_pswd)) {
                 if (CommonUtils.getConnectivityStatusString(this@Login).equals("true")) {
@@ -103,6 +119,7 @@ pd.dismiss()
 
             if(rootLogin.status.equals("true")) {
                 Common.showToast(this@Login,"Logged In Successfully...")
+                SharedPrefManager.getInstance(this@Login).userLogin(rootLogin.id,rootLogin.name,email,"","",pswd)
                 val intent = Intent(this@Login, Home::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
@@ -130,5 +147,34 @@ pd.dismiss()
 
     }
 
+    private fun openDialog() {
+        val dialog = Dialog(this@Login, android.R.style.Theme_Translucent_NoTitleBar)
+        dialog.setContentView(R.layout.forgot_password)
+        dialog.show()
+        Common.setFontEditRegular(this@Login, dialog.edt_email_forgot)
+        Common.setFontBtnRegular(this@Login, dialog.btn_ok)
+        Common.setFontBtnRegular(this@Login, dialog.btn_cancel)
+        Common.setFontRegular(this@Login, dialog.txt_title)
+        Common.setFontRegular(this@Login, dialog.txt_enter)
+
+
+        dialog.btn_ok.setOnClickListener(View.OnClickListener {
+            if (dialog.edt_email_forgot.text.isEmpty()) {
+                Common.showToast(this@Login, "Please Enter Email")
+            } else if (!EMAIL_ADDRESS_PATTERN.matcher(dialog.edt_email_forgot.text.toString()).matches()) {
+                Common.showToast(this@Login, "Please Enter Valid Email")
+            } else {
+                dialog.dismiss()
+
+                if(CommonUtils.getConnectivityStatusString(this@Login).equals("true")){
+                    //forgotPasswordWebService(dialog,dialog.edt_email_forgot)
+                }
+                else{
+                    CommonUtils.openInternetDialog(this@Login)
+                }
+            }
+        })
+        dialog.btn_cancel.setOnClickListener(View.OnClickListener { dialog.dismiss() })
+    }
 
 }
