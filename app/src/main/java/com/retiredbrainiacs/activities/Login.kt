@@ -111,7 +111,7 @@ txt_forgot.setOnClickListener {
         val pd = ProgressDialog.show(this@Login, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
-pd.dismiss()
+            pd.dismiss()
             val gson = Gson()
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
@@ -158,7 +158,7 @@ pd.dismiss()
         Common.setFontRegular(this@Login, dialog.txt_enter)
 
 
-        dialog.btn_ok.setOnClickListener(View.OnClickListener {
+        dialog.btn_ok.setOnClickListener{
             if (dialog.edt_email_forgot.text.isEmpty()) {
                 Common.showToast(this@Login, "Please Enter Email")
             } else if (!EMAIL_ADDRESS_PATTERN.matcher(dialog.edt_email_forgot.text.toString()).matches()) {
@@ -173,8 +173,8 @@ pd.dismiss()
                     CommonUtils.openInternetDialog(this@Login)
                 }
             }
-        })
-        dialog.btn_cancel.setOnClickListener(View.OnClickListener { dialog.dismiss() })
+        }
+        dialog.btn_cancel.setOnClickListener{ dialog.dismiss() }
     }
 
 }

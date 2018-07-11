@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.common.Common
+import kotlinx.android.synthetic.main.friends_adapter.view.*
 
 class FriendsAdapter(var ctx : Context) : RecyclerView.Adapter<FriendsAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,8 +20,12 @@ var v = LayoutInflater.from(ctx).inflate(R.layout.friends_adapter,parent,false)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Common.setFontRegular(ctx,holder.txtName)
+        Common.setFontRegular(ctx,holder.txtSend)
     }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val txtName = itemView.txt_name_friend
+        val txtSend = itemView.txt_send_req
     }
     }

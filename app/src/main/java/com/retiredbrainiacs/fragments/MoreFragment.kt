@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AppCompatActivity
 import android.view.*
 import android.widget.LinearLayout
+import com.retiredbrainiacs.common.Common
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.more_pop_up.view.*
 
@@ -27,6 +28,17 @@ v = inflater.inflate(R.layout.more_pop_up,container,false)
         }
 work()
       // openDialog()
+
+        Common.setFontRegular(activity!!,v1.titletxt)
+
+        //=============
+        Common.setFontRegular(activity!!,v.txt_store_pop)
+        Common.setFontRegular(activity!!,v.txt_account_pop)
+        Common.setFontRegular(activity!!,v.txt_archives_pop)
+        Common.setFontRegular(activity!!,v.txt_memorial_pop)
+
+        //============
+
         return  v
     }
 fun work(){

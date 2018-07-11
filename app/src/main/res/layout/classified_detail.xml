@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/theme_color_orange">
+        <RelativeLayout
+            android:id="@+id/lay_back"
+            android:layout_width="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/img_msg_details"
+            android:layout_marginEnd="4dp"
+            android:layout_height="45dp"
+       >
+
+            <ImageView
+                android:id="@+id/img_back_detail"
+                android:layout_width="18dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="7dp"
+                android:src="@drawable/back"
+                android:tint="@android:color/white" />
+
+            <!--  <ImageView
+                  android:id="@+id/logo"
+                  android:layout_width="75dp"
+                  android:layout_height="45dp"
+                  android:layout_centerInParent="true"
+                  android:paddingTop="3dp"
+                  android:src="@drawable/logo"
+                  android:visibility="gone" />-->
+
+
+
+        <TextView
+            android:id="@+id/title_classify_details"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/img_back_detail"
+            android:layout_centerInParent="true"
+            android:layout_marginStart="7dp"
+            android:gravity="start|center"
+            android:padding="4dp"
+            android:textColor="@android:color/white"
+            android:text="Seniors of senior"/>
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/img_msg_details"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="12dp"
+            android:tint="@android:color/white"
+            android:src="@drawable/forum"/>
+    </RelativeLayout>
+<android.support.design.widget.TabLayout
+    android:id="@+id/tab_classified_detail"
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@android:color/white"
+    android:layout_marginTop="20dp"></android.support.design.widget.TabLayout>
+   <FrameLayout
+       android:id="@+id/frame_classi_detail"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent"
+       android:layout_gravity="center_horizontal"
+       android:layout_marginTop="15dp"></FrameLayout>
+</LinearLayout>

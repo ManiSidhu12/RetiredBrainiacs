@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:orientation="vertical">
+    <ImageView
+        android:id="@+id/img_classified_"
+        android:layout_width="match_parent"
+        android:layout_height="160dp"
+        android:layout_marginTop="15dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/imageclass"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="8dp">
+        <TextView
+            android:id="@+id/postad"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/postad_time"
+            android:layout_marginEnd="2dp"
+            android:layout_centerInParent="true"
+            android:text="Postad"
+            android:textSize="14sp"
+            android:gravity="start|center"
+            android:padding="3dp"/>
+        <TextView
+            android:id="@+id/postad_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="5dp"
+            android:text="23 minutes ago"
+            android:textSize="13sp"
+            android:gravity="center"
+            android:padding="2dp"/>
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:background="@color/light_gray"/>
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:text="Description"
+        android:textSize="16sp"
+        android:gravity="start|center"
+        android:textColor="@color/black"
+        android:padding="3dp"/>
+    <TextView
+        android:id="@+id/description_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:text="PAWS' Seniors for senior adoption program is open to residents of Washington state. It was developed to help senior humans."
+        android:textSize="14sp"
+        android:gravity="start|center"
+        android:padding="2dp"/>
+    <TextView
+        android:id="@+id/ad_id_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:text="Ad Id :- 00008732"
+        android:textSize="16sp"
+        android:gravity="start|center"
+        android:padding="2dp"/>
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="15dp">
+    <TextView
+        android:id="@+id/contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_marginEnd="2dp"
+        android:layout_centerInParent="true"
+        android:text="Contact Admin"
+        android:textSize="16sp"
+        android:gravity="start|center"
+        android:textColor="@color/black"
+        android:padding="3dp"/>
+    <TextView
+        android:id="@+id/see_ads"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:text="See all ads"
+        android:textSize="14sp"
+        android:gravity="start|center"
+        android:textColor="@color/theme_color_orange"
+        android:padding="3dp"/>
+
+</RelativeLayout>
+    <TextView
+        android:id="@+id/post_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+android:layout_gravity="center_horizontal"
+        android:text="Posting for under a month"
+        android:textSize="14sp"
+        android:gravity="start|center"
+        android:padding="3dp"/>
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginStart="15dp"
+    android:layout_marginEnd="15dp"
+    android:layout_marginTop="20dp"
+    android:background="@color/theme_color_orange"
+    android:text="Reply"
+    android:textSize="16sp"
+    android:gravity="center"
+    android:textAllCaps="false"
+    android:textColor="@android:color/white"/>
+    <LinearLayout
+        android:id="@+id/lay_btns_classi_details"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:weightSum="2"
+        android:orientation="horizontal">
+        <RelativeLayout
+            android:id="@+id/lay_saved_detail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:background="#DBDBDB"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/img_saved_details"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="22dp"
+                android:layout_centerInParent="true"
+                android:tint="@color/classified_selector"
+                android:src="@drawable/saved"/>
+
+
+
+            <TextView
+                android:id="@+id/txt_saved_details"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/img_saved_details"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="7dp"
+                android:padding="3dp"
+                android:textSize="16sp"
+                android:text="Saved"
+                android:gravity="center"
+                android:ellipsize="end"
+                android:textColor="@color/classified_selector"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/lay_report"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="10dp"
+            android:background="#DBDBDB"
+            android:layout_weight="1">
+            <ImageView
+                android:id="@+id/img_report"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="15dp"
+                android:layout_centerInParent="true"
+                android:tint="@color/classified_selector"
+                android:src="@drawable/report"/>
+
+
+
+            <TextView
+                android:id="@+id/txt_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@+id/img_report"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="7dp"
+                android:padding="3dp"
+                android:textSize="16sp"
+                android:text="Report"
+                android:gravity="center"
+                android:ellipsize="end"
+                android:textColor="@color/classified_selector"
+                />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>
+</ScrollView>

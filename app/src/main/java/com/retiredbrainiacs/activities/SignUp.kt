@@ -186,10 +186,10 @@ class SignUp : Activity(){
             if(rootLogin.status.equals("true")) {
                 Common.showToast(this@SignUp,"Registered Successfully...")
                 SharedPrefManager.getInstance(this@SignUp).userLogin(rootLogin.id,rootLogin.name,edt_email_signup.text.toString().trim(),"","",edt_pswd_signup.text.toString().trim())
-                val intent = Intent(this@SignUp, Home::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                val intent = Intent(this@SignUp, Verification::class.java)
+              //  intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
-                finish()
+               // finish()
             } else{
                 Common.showToast(this@SignUp,rootLogin.message)
 

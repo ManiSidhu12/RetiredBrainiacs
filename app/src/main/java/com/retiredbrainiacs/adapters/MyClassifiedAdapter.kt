@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.common.Common
+import kotlinx.android.synthetic.main.my_classified_adapter.view.*
 
 class MyClassifiedAdapter(var ctx : Context): RecyclerView.Adapter<MyClassifiedAdapter.ViewHolder>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -19,10 +21,13 @@ class MyClassifiedAdapter(var ctx : Context): RecyclerView.Adapter<MyClassifiedA
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        Common.setFontRegular(ctx,holder.txtEdit)
+        Common.setFontRegular(ctx,holder.txtDelete)
     }
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-
+val txtEdit = itemView.txt_edit
+val txtDelete = itemView.txt_delete
 
     }
 }

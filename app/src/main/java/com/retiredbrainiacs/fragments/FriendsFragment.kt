@@ -12,7 +12,9 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.common.Common
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
+import kotlinx.android.synthetic.main.friends_screen.*
 import kotlinx.android.synthetic.main.friends_screen.view.*
 
 class FriendsFragment : Fragment(){
@@ -27,6 +29,16 @@ class FriendsFragment : Fragment(){
             v1.btn_logout.visibility = View.GONE
         }
         v1.titletxt.text = "Friends"
+
+
+        Common.setFontRegular(activity!!,v1.titletxt)
+
+        //========
+        Common.setFontRegular(activity!!,v.txt_all_friend)
+        Common.setFontRegular(activity!!,v.txt_request)
+        Common.setFontRegular(activity!!,v.txt_accept)
+        Common.setFontEditRegular(activity!!,v.edt_srch_friends)
+        //========
 
         showSelection(v.txt_all_friend,v.img_all_friend,v.txt_request,v.txt_accept,v.img_request,v.img_accept,v.lay_all_friend,v.lay_request_friend,v.lay_accept_friend)
         fragmentManager!!.beginTransaction().replace(R.id.frame_friends,AllFriendsFragment()).commit()

@@ -70,13 +70,6 @@ class StoreFragment : Fragment(){
         }
 
 
-/*
-        val tabTwo = LayoutInflater.from(activity).inflate(R.layout.custom_tab, null)
-        tabTwo.textView2.text = "Product"
-        tabTwo.imageView.setImageResource(R.drawable.friends)
-        v.tabs_store.getTabAt(1)!!.customView = tabTwo*/
-
-
         val root = v.tabs_store.getChildAt(0)
         if (root is LinearLayout) {
             (root as LinearLayout).showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
