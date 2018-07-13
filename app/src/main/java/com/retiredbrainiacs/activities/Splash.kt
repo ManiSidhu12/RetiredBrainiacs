@@ -28,7 +28,7 @@ class Splash : Activity() {
                 finish()
             }
             else {
-                val intent = Intent(this, Home::class.java)
+                val intent = Intent(this, MainScreen::class.java)
                 startActivity(intent)
                 finish()
             }

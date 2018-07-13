@@ -13,17 +13,12 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.google.gson.Gson
-import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
-import com.retiredbrainiacs.common.SharedPrefManager
-import com.retiredbrainiacs.model.login.LoginRoot
 import kotlinx.android.synthetic.main.otp_screen.*
 import org.json.JSONObject
-import java.io.StringReader
 
 class Verification : Activity(){
 

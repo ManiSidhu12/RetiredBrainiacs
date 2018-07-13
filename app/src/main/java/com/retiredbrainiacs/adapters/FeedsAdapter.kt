@@ -8,9 +8,10 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.Common
+import com.retiredbrainiacs.model.feeds.Post
 import kotlinx.android.synthetic.main.home_feed_adapter.view.*
 
-class FeedsAdapter(var ctx : Context): RecyclerView.Adapter<FeedsAdapter.ViewHolder>(){
+class FeedsAdapter(var ctx: Context): RecyclerView.Adapter<FeedsAdapter.ViewHolder>(){
     val privacyArray = arrayOf("Public","Private")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -31,6 +32,9 @@ class FeedsAdapter(var ctx : Context): RecyclerView.Adapter<FeedsAdapter.ViewHol
         Common.setFontRegular(ctx,holder.txtComment)
         Common.setFontBtnRegular(ctx,holder.btnPost)
         Common.setFontEditRegular(ctx,holder.edtCmnt)
+
+      //  holder.txtPost.text = posts[position].postContent
+
         val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1,privacyArray)
         adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
         holder.spinPrivacy.adapter = adapterPrivacy

@@ -11,6 +11,12 @@
     <string name="gender">Gender</string>
     <string name="signup">Sign Up</string>
     <string name="fullname">Full Name*</string>
+    <string name="skype">Enter Skype Id</string>
+    <string name="city">City</string>
+    <string name="adrs1">Street Address Line One</string>
+    <string name="adrs2">Street Address Line Two</string>
+    <string name="zipcode">Postal Zip Code</string>
+    <string name="phn">Enter Mobile Number</string>
     <string name="emailid">Email Id*</string>
     <string name="pswd">Password*</string>
     <string name="cnfrm_pswd">Confirm Password*</string>

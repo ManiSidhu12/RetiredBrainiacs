@@ -7,13 +7,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.View
-import com.android.volley.AuthFailureError
-import com.android.volley.DefaultRetryPolicy
-import com.android.volley.Request
-import com.android.volley.Response
+import android.util.Log
+import com.android.volley.*
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.facebook.*
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginResult
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
@@ -24,12 +24,19 @@ import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.login.LoginRoot
 import kotlinx.android.synthetic.main.forgot_password.*
 import kotlinx.android.synthetic.main.login_screen.*
+import org.json.JSONException
+import org.json.JSONObject
 import java.io.StringReader
+import java.util.*
 import java.util.regex.Pattern
 
 class Login : Activity(){
 
     lateinit var rootLogin : LoginRoot
+    lateinit var callbackManager : CallbackManager
+    lateinit var fb_name : String
+    lateinit var fb_img : String
+    lateinit var fb_email : String
 
     private val EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
@@ -42,6 +49,23 @@ class Login : Activity(){
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        callbackManager = CallbackManager.Factory.create()
+        LoginManager.getInstance().registerCallback(callbackManager,
+                object : FacebookCallback<LoginResult> {
+                    override fun onSuccess(loginResult: LoginResult) {
+
+                        requestData()
+                    }
+
+                    override fun onCancel() {
+                        Common.showToast(this@Login,"Login Cancel")
+                    }
+
+                    override fun onError(exception: FacebookException) {
+                        Common.showToast(this@Login,exception.toString())
+                    }
+                })
         setContentView(R.layout.login_screen)
 
         Common.setFontRegular(this@Login,txt_logo_login)
@@ -103,6 +127,106 @@ txt_forgot.setOnClickListener {
                 }
             }
         }
+
+        lay_fb.setOnClickListener {
+            LoginManager.getInstance().logInWithReadPermissions(this@Login, Arrays.asList("public_profile", "email"))
+
+        }
+    }
+    fun requestData() {
+        val request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken()
+        ) { `object`, response ->
+            val json = response.jsonObject
+            if (json != null) {
+                if (!json.has("email")) {
+                    Common.showToast(this@Login,"Unable to get your email..")
+                }
+                else {
+                    fb_name = json.getString("name")
+                    fb_email = json.getString("email")
+                    fb_img = json.getJSONObject("picture").getJSONObject("data").getString("url")
+
+                    checkUserWebService(fb_email,"$$"+ fb_email +"$$")
+                }
+
+
+            }
+        }
+        val parameters = Bundle()
+        parameters.putString("fields", "id,name,link,email,picture")
+        request.parameters = parameters
+        request.executeAsync()
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        Log.e("data",data.toString())
+
+    }
+    private fun checkUserWebService(email : String,pswd : String) {
+        val url = GlobalConstants.API_URL + "check_email"
+        var progressDialog = CommonUtils.createProgressDialog(this@Login)
+
+        progressDialog!!.show()
+
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, { response ->
+            if (progressDialog != null && progressDialog!!.isShowing()) {
+                progressDialog!!.dismiss()
+            }
+            var obj: JSONObject? = null
+            try {
+                obj = JSONObject(response)
+                val status = obj!!.getString("status")
+                //  Log.e("res", response);
+                if (status.equals("true")) {
+                    val msg = obj!!.getString("message")
+                    //  Common.showToast(this@Welcome, msg)
+
+                    if(CommonUtils.getConnectivityStatusString(this@Login).equals("true")){
+                        loginWebService(email,pswd)
+                    }
+                    else{
+                        CommonUtils.openInternetDialog(this@Login)
+
+
+                    }
+                } else {
+
+                    val msg = obj!!.getString("message")
+
+
+                    //  startActivity(Intent(this@Login,SocialSignUp::class.java).putExtra("name",nm).putExtra("email",email).putExtra("pswd",pswd).putExtra("image",img))
+                    // finish()
+                    // Common.showToast(this@Login, msg)
+
+                }
+
+            } catch (e: JSONException) {
+                e.printStackTrace()
+            }
+        },
+                { error: VolleyError ->
+                    if (progressDialog != null && progressDialog!!.isShowing) {
+                        progressDialog!!.dismiss()
+                    }
+
+                    Common.showToast(this@Login, error.message.toString())
+
+                }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = java.util.HashMap<String, String>()
+                map["email"] = email.trim()
+                //Log.e("map", map.toString());
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
     }
 
     //============= Login Web Service =====

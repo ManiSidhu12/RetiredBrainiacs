@@ -215,6 +215,12 @@
                     android:layout_height="match_parent"></Spinner>
             </LinearLayout>
         </RelativeLayout>
+        <ProgressBar
+            android:id="@+id/progress_feed"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="40dp"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_feed"
             android:layout_width="match_parent"
@@ -222,5 +228,6 @@
             android:layout_gravity="center_horizontal"
             android:nestedScrollingEnabled="false"
             android:layout_marginTop="10dp"></android.support.v7.widget.RecyclerView>
+
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

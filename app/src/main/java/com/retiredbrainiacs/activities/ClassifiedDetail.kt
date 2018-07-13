@@ -39,12 +39,12 @@ class ClassifiedDetail : AppCompatActivity(){
 
         val root = tab_classified_detail.getChildAt(0)
         if (root is LinearLayout) {
-            (root as LinearLayout).showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
+            root.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
             val drawable = GradientDrawable()
             drawable.setColor(resources.getColor(R.color.light_gray))
             drawable.setSize(1, 1)
-            (root as LinearLayout).dividerPadding = 25
-            (root as LinearLayout).dividerDrawable = drawable
+          root.dividerPadding = 25
+           root.dividerDrawable = drawable
         }
         supportFragmentManager!!.beginTransaction().replace(R.id.frame_classi_detail,DetailFragment()).commit()
 
