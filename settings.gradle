@@ -1,1 +1,1 @@
-include ':app',':simpleratingbar'
+include ':app',':simpleratingbar',':expand_library'

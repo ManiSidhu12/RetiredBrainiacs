@@ -11,7 +11,7 @@ import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.model.feeds.Post
 import kotlinx.android.synthetic.main.home_feed_adapter.view.*
 
-class FeedsAdapter(var ctx: Context): RecyclerView.Adapter<FeedsAdapter.ViewHolder>(){
+class FeedsAdapter(var ctx: Context,var type : String): RecyclerView.Adapter<FeedsAdapter.ViewHolder>(){
     val privacyArray = arrayOf("Public","Private")
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,9 +35,22 @@ class FeedsAdapter(var ctx: Context): RecyclerView.Adapter<FeedsAdapter.ViewHold
 
       //  holder.txtPost.text = posts[position].postContent
 
-        val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1,privacyArray)
-        adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
-        holder.spinPrivacy.adapter = adapterPrivacy
+        if(type.equals("forum")){
+            holder.laySettings.visibility = View.GONE
+            holder.layLikes.visibility = View.GONE
+            holder.layCmnts.visibility = View.GONE
+
+        }
+        else{
+            holder.laySettings.visibility = View.VISIBLE
+            holder.layLikes.visibility = View.VISIBLE
+            holder.layCmnts.visibility = View.VISIBLE
+            val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1,privacyArray)
+            adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
+            holder.spinPrivacy.adapter = adapterPrivacy
+        }
+
+
     }
 
     class ViewHolder (itemView : View) : RecyclerView.ViewHolder(itemView){
@@ -55,5 +68,8 @@ class FeedsAdapter(var ctx: Context): RecyclerView.Adapter<FeedsAdapter.ViewHold
         val layCmnt = itemView.lay_cmnt
         val edtCmnt = itemView.edt_cmnt
         val btnPost = itemView.btn_post
+        val laySettings = itemView.lay_settings
+        val layLikes = itemView.lay_likes
+        val layCmnts = itemView.lay_cmnts
     }
 }

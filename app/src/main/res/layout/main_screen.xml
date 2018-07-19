@@ -132,7 +132,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/lay_google"
+                android:id="@+id/lay_twitter"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
@@ -141,6 +141,11 @@
                 android:background="@drawable/gicon"
      >
 
+                <com.twitter.sdk.android.core.identity.TwitterLoginButton
+                    android:id="@+id/login_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"/>
                 <ImageView
                     android:id="@+id/imageView3"
                     android:layout_width="25dp"

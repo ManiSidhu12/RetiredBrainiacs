@@ -1,6 +1,5 @@
 package com.retiredbrainiacs.activities
 
-import android.app.Activity
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.support.design.widget.TabLayout
@@ -15,7 +14,6 @@ import com.retiredbrainiacs.fragments.StoreServiceFragment
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.custom_tab.view.*
 import kotlinx.android.synthetic.main.store_screen.*
-import kotlinx.android.synthetic.main.store_screen.view.*
 
 class StoreActivity : AppCompatActivity(){
     var tabTitles = arrayOf("Service","Product")

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="20dp"
+    android:orientation="vertical">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/cmnt_bg">
+        <EditText
+            android:id="@+id/edt_tech_training"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/img_tech"
+            android:layout_marginStart="2dp"
+            android:hint="Techincal/Vocational training"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:padding="3dp"
+            android:textColor="@android:color/black"
+            android:layout_marginEnd="5dp"/>
+        <ImageView
+            android:id="@+id/img_tech"
+            android:layout_width="33dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/cmnt_bg">
+        <EditText
+            android:id="@+id/edt_tech_speciality"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/img_special"
+            android:layout_marginStart="2dp"
+            android:hint="Techincal speciality(e.g. airframe,powerplant mechanics,locomotive engineer)specify"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:padding="3dp"
+            android:textColor="@android:color/black"
+            android:layout_marginEnd="5dp"/>
+        <ImageView
+            android:id="@+id/img_special"
+            android:layout_width="33dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/cmnt_bg">
+        <EditText
+            android:id="@+id/edt_degree"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/img_degree"
+            android:layout_marginStart="2dp"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:padding="3dp"
+            android:hint="Associiate degree specify"
+            android:textColor="@android:color/black"
+            android:layout_marginEnd="5dp"/>
+        <ImageView
+            android:id="@+id/img_degree"
+            android:layout_width="33dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/cmnt_bg">
+        <EditText
+            android:id="@+id/edt_other"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:layout_toStartOf="@+id/img_other"
+            android:layout_marginStart="2dp"
+            android:hint="Other specify"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:padding="3dp"
+            android:textColor="@android:color/black"
+            android:layout_marginEnd="5dp"/>
+        <ImageView
+            android:id="@+id/img_other"
+            android:layout_width="33dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"/>
+    </RelativeLayout>
+
+</LinearLayout>
+</android.support.v4.widget.NestedScrollView>

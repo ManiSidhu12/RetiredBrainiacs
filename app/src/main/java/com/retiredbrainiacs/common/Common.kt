@@ -6,10 +6,7 @@ import android.graphics.Typeface
 import android.support.design.widget.TextInputLayout
 import android.view.View
 import android.view.WindowManager
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import com.retiredbrainiacs.R
 
 class Common{
@@ -135,5 +132,25 @@ class Common{
         fun showToast(ctx : Context,msg : String){
            Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
         }
+
+        fun validateGender(c : Context,spin : Spinner) : Boolean{
+            if(spin.selectedItem == null){
+             showToast(c,"Please Select Gender..")
+                return false
+            }
+            else{
+                return true
+            }
+        }
+        fun validateMariitalStatus(c : Context,spin : Spinner) : Boolean{
+            if(spin.selectedItem == null){
+                showToast(c,"Please Select Marital Status..")
+                return false
+            }
+            else{
+                return true
+            }
+        }
+
     }
 }

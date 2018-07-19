@@ -26,6 +26,7 @@ import java.util.*
 
 class SignUp : Activity(){
     val genderArray = arrayOf("Male","Female")
+    val maritalArray = arrayOf("Single","Married")
     lateinit var rootLogin : LoginRoot
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,10 +46,16 @@ class SignUp : Activity(){
         Common.setFontBtnRegular(this@SignUp,btn_signup)
         Common.setFontRegular(this@SignUp,txt_login)
 
-        val adapter_gender = ArrayAdapter(this@SignUp, R.layout.spinner_txt1,genderArray)
-        adapter_gender.setDropDownViewResource(R.layout.spinner_txt)
-        spin_gender.adapter = adapter_gender
-        spin_gender.adapter = NothingSelectedSpinnerAdapter(adapter_gender, R.layout.gender, this@SignUp)
+        val adapterGender = ArrayAdapter(this@SignUp, R.layout.spinner_txt1,genderArray)
+        adapterGender.setDropDownViewResource(R.layout.spinner_txt)
+        spin_gender.adapter = adapterGender
+        spin_gender.adapter = NothingSelectedSpinnerAdapter(adapterGender, R.layout.gender, this@SignUp)
+
+        val adapterMarital = ArrayAdapter(this@SignUp, R.layout.spinner_txt1,maritalArray)
+        adapterMarital.setDropDownViewResource(R.layout.spinner_txt)
+        spin_marital.adapter = adapterMarital
+        spin_marital.adapter = NothingSelectedSpinnerAdapter(adapterMarital, R.layout.marital, this@SignUp)
+
 
         work()
     }
@@ -108,7 +115,7 @@ class SignUp : Activity(){
         })
 
         btn_signup.setOnClickListener {
-            if(Common.validateName(this@SignUp,edt_name_signup,input_lay_name) && Common.validate(this@SignUp,edt_email_signup,input_lay_emailsignup) && Common.validatePassword(this@SignUp,edt_pswd_signup,input_lay_pswdsignup)&& Common.validateCnfrmPassword(this@SignUp,edt_pswd_signup,edt_cnfrmpswd_signup,input_lay_cnfrmpswdsignup) && Common.validateDOB(this@SignUp,edt_dob_signup,input_lay_dobsignup)){
+            if(Common.validateName(this@SignUp,edt_name_signup,input_lay_name) && Common.validate(this@SignUp,edt_email_signup,input_lay_emailsignup) && Common.validatePassword(this@SignUp,edt_pswd_signup,input_lay_pswdsignup)&& Common.validateCnfrmPassword(this@SignUp,edt_pswd_signup,edt_cnfrmpswd_signup,input_lay_cnfrmpswdsignup) && Common.validateDOB(this@SignUp,edt_dob_signup,input_lay_dobsignup) && Common.validateGender(this@SignUp,spin_gender) && Common.validateMariitalStatus(this@SignUp,spin_marital)){
                 if(CommonUtils.getConnectivityStatusString(this@SignUp).equals("true")){
                   signUpWebService()
                 }
@@ -207,6 +214,8 @@ class SignUp : Activity(){
                 map["dob"] = edt_dob_signup.text.toString()
                 map["password"] = edt_pswd_signup.text.toString()
                 map["con_pswd"] = edt_cnfrmpswd_signup.text.toString()
+                map["gender"] = spin_gender.selectedItem.toString()
+                map["marital_status"] = spin_marital.selectedItem.toString()
                 return map
             }
         }

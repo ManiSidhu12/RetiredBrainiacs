@@ -29,5 +29,7 @@
     <string name="title_friends">Friends</string>
     <string name="title_more">More</string>
     <string name="facebook_app_id">190948631576499</string>
+   <string name="com_twitter_sdk_android_CONSUMER_KEY">r9DgNHtzaxc0etQTszi7hg9VS</string>
+   <string name="com_twitter_sdk_android_CONSUMER_SECRET">Kor2D4Px817qdIuSAEANWDn8twetF7FhKbpprq0mZrRWOSxQZG</string>
 </resources>
 

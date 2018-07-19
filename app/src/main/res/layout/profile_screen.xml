@@ -15,13 +15,15 @@
         android:background="@color/theme_color_orange"
         android:layout_marginTop="25dp"
         android:layout_marginEnd="20dp"
+        android:visibility="gone"
+
         >
     <TextView
         android:id="@+id/contact_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="Contact Information"
-      android:layout_marginStart="15dp"
+        android:layout_marginStart="15dp"
         android:gravity="start|center"
         android:padding="12dp"
         android:textSize="16sp"
@@ -79,6 +81,7 @@
             android:text="Select Country"
             android:textSize="14sp"
             android:padding="3dp"
+            android:visibility="gone"
             android:textColor="@color/theme_color_orange"/>
         <Spinner
             android:id="@+id/spin_country"
@@ -168,6 +171,102 @@
             android:maxLines="1"/>
 
     </android.support.design.widget.TextInputLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Picture"
+            android:layout_marginStart="15dp"
+            android:padding="3dp"
+            android:textSize="16sp"
+            android:textColor="@color/theme_color_orange"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_gravity="center_horizontal">
+            <RelativeLayout
+                android:id="@+id/lay_browse_profile"
+                android:layout_width="120dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:background="@drawable/cmnt_bg">
+                <ImageView
+                    android:id="@+id/attach_profile"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="7dp"
+                    android:src="@drawable/clip"
+                    android:layout_centerInParent="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toEndOf="@+id/attach_profile"
+                    android:layout_centerInParent="true"
+                    android:text="Browse"
+                    android:gravity="center"
+                    android:textSize="16sp"
+                    android:textColor="@color/black"
+                    android:layout_marginStart="5dp"/>
+            </RelativeLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/lay_browse_profile"
+                android:layout_centerInParent="true"
+                android:text="No file chosen"
+                android:gravity="center"
+                android:layout_marginStart="7dp"/>
+        </RelativeLayout>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginStart="10dp"
+    android:layout_marginEnd="10dp"
+    android:layout_marginTop="10dp"
+    android:layout_marginBottom="20dp"
+    android:orientation="horizontal"
+    android:weightSum="4">
+    <Button
+        android:id="@+id/btn_pre"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textAllCaps="false"
+        android:background="@drawable/verify_bg"
+        android:text="Previous"/>
+    <Button
+        android:id="@+id/btn_save_profile"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:textAllCaps="false"
+        android:background="@drawable/login_bg"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="7dp"
+        android:textColor="@android:color/white"
+        android:text="Save &amp; Continue"/>
+    <Button
+        android:id="@+id/btn_skip1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:textAllCaps="false"
+        android:background="@drawable/verify_bg"
+        android:text="Skip"/>
+
+</LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
 </ScrollView>

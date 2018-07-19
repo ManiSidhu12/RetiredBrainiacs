@@ -1,6 +1,10 @@
 package com.retiredbrainiacs.fragments
 
+import android.content.Intent
+import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
@@ -9,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import com.google.gson.Gson
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.FeedsAdapter
@@ -16,6 +21,7 @@ import com.retiredbrainiacs.apis.ApiClient
 import com.retiredbrainiacs.apis.ApiInterface
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
+import com.retiredbrainiacs.common.Imageutils
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.feeds.FeedsRoot
 import io.reactivex.Observer
@@ -23,10 +29,14 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
+import kotlinx.android.synthetic.main.home_feed_screen.*
 import kotlinx.android.synthetic.main.home_feed_screen.view.*
 import retrofit2.Retrofit
+import java.io.File
 
-class FeedsFragment : Fragment(){
+class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
+
+
     val privacyArray = arrayOf("Public","Private")
     //============== Retrofit =========
     lateinit var retroFit: Retrofit
@@ -36,6 +46,12 @@ class FeedsFragment : Fragment(){
 
     lateinit var v : View
     lateinit var v1 : View
+
+    lateinit var imageUtils : Imageutils
+
+
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.home_feed_screen,container,false)
         (activity as AppCompatActivity).supportActionBar!!.show()
@@ -46,6 +62,7 @@ class FeedsFragment : Fragment(){
 
         Common.setFontRegular(activity!!,v1.titletxt)
 
+        imageUtils = Imageutils(activity,this,true)
 
         v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
 
@@ -77,12 +94,19 @@ class FeedsFragment : Fragment(){
         else{
             CommonUtils.openInternetDialog(activity)
         }
+
+        work()
+
         return v
 
 
 
     }
-
+fun work(){
+    v.lay_image_add.setOnClickListener {
+        imageUtils.imagepicker(1)
+    }
+}
 
     //======= Feeds API ====
    fun getFeedsAPI() {
@@ -109,23 +133,47 @@ class FeedsFragment : Fragment(){
                         v.recycler_feed.visibility= View.VISIBLE
                         if(t != null ){
                             if(t.status.equals("true")) {
-                                v.recycler_feed.adapter = FeedsAdapter(activity!!)
+                                v.recycler_feed.adapter = FeedsAdapter(activity!!,"feeds")
                             }
                             else{
                              //   Common.showToast(activity!!,t.message)
-                                v.recycler_feed.adapter = FeedsAdapter(activity!!)
+                                v.recycler_feed.adapter = FeedsAdapter(activity!!,"feeds")
 
                             }
                         }
                     }
 
                     override fun onError(e: Throwable) {
-                        v.progress_feed.visibility= View.GONE
-                        v.recycler_feed.visibility= View.VISIBLE
+                        v.progress_feed.visibility = View.GONE
+                        v.recycler_feed.visibility = View.VISIBLE
                     }
 
 
                 })
     }
 
+    override fun image_attachment(from: Int, filename: String?, file: Bitmap?, uri: Uri?) {
+        val bitmap = file
+        val file_name = filename
+     //   iv_attachment.setImageBitmap(file)
+
+        v.attachlay.visibility = View.VISIBLE
+        v.attach.setImageBitmap(file)
+        v.add_feed.visibility = View.GONE
+        v.attach.scaleType = ImageView.ScaleType.FIT_XY
+
+        val path = Environment.getExternalStorageDirectory().toString() + File.separator + "ImageAttach" + File.separator
+        imageUtils.createImage(file, filename, path, false)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        Log.d("Fragment", "onRequestPermissionsResult: $requestCode")
+        imageUtils.request_permission_result(requestCode, permissions, grantResults)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.d("Fragment", "onActivityResult: ")
+        imageUtils.onActivityResult(requestCode, resultCode, data)
+
+    }
 }

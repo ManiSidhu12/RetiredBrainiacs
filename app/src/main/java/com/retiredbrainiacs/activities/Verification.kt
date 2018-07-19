@@ -169,7 +169,7 @@ try{
     val msg : String = obj.getString("message")
     if(status.equals("true")) {
         Common.showToast(this@Verification,"Verified Successfully...")
-        val intent = Intent(this@Verification, Home::class.java)
+        val intent = Intent(this@Verification, ContactInfo::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent)
         finish()

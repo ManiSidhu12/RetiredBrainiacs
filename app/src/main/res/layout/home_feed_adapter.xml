@@ -102,7 +102,13 @@
         android:layout_marginTop="5dp"
         android:padding="3dp"
         android:textSize="14sp"
+        android:maxLines="2"
         android:text="Lorem ipsum is a dummy text standard for typesettings."/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="See more..."
+        android:visibility="gone"/>
 <ImageView
     android:id="@+id/img_post"
     android:layout_width="match_parent"
@@ -111,6 +117,7 @@
     android:scaleType="fitXY"
     android:layout_margin="5dp"/>
     <LinearLayout
+        android:id="@+id/lay_likes"
         android:layout_width="match_parent"
         android:layout_height="23dp"
         android:layout_gravity="center_horizontal"
@@ -135,7 +142,7 @@
                 android:id="@+id/txt_like"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-android:layout_gravity="center"
+                android:layout_gravity="center"
                 android:text="Like"
                 android:gravity="center"
                 android:textColor="@color/post_color"
@@ -168,6 +175,7 @@ android:layout_gravity="center"
         </LinearLayout>
     </LinearLayout>
     <RelativeLayout
+        android:id="@+id/lay_cmnts"
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_gravity="center_horizontal"

@@ -19,11 +19,16 @@ import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.login.LoginRoot
+import com.twitter.sdk.android.core.Result
+import com.twitter.sdk.android.core.TwitterException
+import com.twitter.sdk.android.core.TwitterSession
+import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import kotlinx.android.synthetic.main.main_screen.*
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.StringReader
 import java.util.*
+import javax.security.auth.callback.Callback
 
 
 class MainScreen : Activity(){
@@ -32,6 +37,7 @@ class MainScreen : Activity(){
     lateinit var fb_img : String
     lateinit var fb_email : String
     lateinit var rootLogin : LoginRoot
+    lateinit var authClient : TwitterAuthClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +57,18 @@ class MainScreen : Activity(){
                         Common.showToast(this@MainScreen,exception.toString())
                     }
                 })
+         authClient = TwitterAuthClient()
+
+
+//        authClient.requestEmail(session, object:Callback<String>() {
+//            fun success(result:Result<String>) {
+//                // Do something with the result, which provides the email address
+//            }
+//            fun failure(exception:TwitterException) {
+//                // Do something on failure
+//            }
+//        })
+
 
         setContentView(R.layout.main_screen)
 
@@ -84,6 +102,31 @@ Common.setFontRegular(this@MainScreen,txt_signup_main)
             LoginManager.getInstance().logInWithReadPermissions(this@MainScreen, Arrays.asList("public_profile", "email"))
 
         }
+        lay_twitter.setOnClickListener {
+            login_button.performClick()
+        }
+
+        login_button.callback = object:com.twitter.sdk.android.core.Callback<TwitterSession>() {
+            override  fun success(result: Result<TwitterSession>) {
+                // Do something with result, which provides a TwitterSession for making API calls
+val twitterSession : TwitterSession  = result.data
+authClient.requestEmail(twitterSession,object :  com.twitter.sdk.android.core.Callback<String>() {
+    override fun success(result1: Result<String>?) {
+Log.e("twitter result",result1?.data)
+
+    }
+
+    override fun failure(exception: TwitterException?) {
+    }
+
+})
+            }
+
+            override   fun failure(exception: TwitterException) {
+                // Do something on failure
+                Log.e("exc",exception.message)
+            }
+        }
     }
     fun requestData() {
         val request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken()
@@ -113,6 +156,11 @@ Common.setFontRegular(this@MainScreen,txt_signup_main)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
+
+
+        // Pass the activity result to the login button.
+        login_button.onActivityResult(requestCode, resultCode, data);
+
         Log.e("data",data.toString())
 
     }

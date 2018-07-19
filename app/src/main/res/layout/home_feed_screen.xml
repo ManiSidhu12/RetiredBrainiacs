@@ -56,6 +56,13 @@
         </RelativeLayout>
 
     </android.support.v7.widget.CardView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="15dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="45dp"
@@ -63,9 +70,7 @@
         android:layout_gravity="center_horizontal"
         android:orientation="horizontal"
         android:weightSum="4"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="15dp">
+       >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -97,6 +102,7 @@
                 android:textSize="13sp"/>
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/lay_audio"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -121,6 +127,7 @@
                 android:textSize="13sp"/>
         </RelativeLayout>
         <RelativeLayout
+            android:id="@+id/lay_image_add"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal"
@@ -154,7 +161,40 @@
             android:layout_marginEnd="7dp"
             android:src="@drawable/ques"/>
     </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/attachlay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                android:background="@android:color/white">
+                <ImageView
+                    android:id="@+id/attach"
+                    android:layout_width="90dp"
+                    android:layout_height="70dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginTop="7dp"
+                    android:layout_marginBottom="7dp"
+                    android:layout_marginStart="5dp"/>
+                <EditText
+                    android:id="@+id/edt_post_data1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/attach"
+                    android:layout_centerHorizontal="true"
+                    android:background="@android:color/transparent"
+                    android:hint="Write something on this page.."
+                    android:textSize="14sp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_marginTop="10dp"/>
+
+            </RelativeLayout>
+        </LinearLayout>
     <RelativeLayout
+        android:id="@+id/add_feed"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
@@ -220,6 +260,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="center_horizontal"
+            android:visibility="gone"
             android:layout_marginTop="40dp"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler_feed"

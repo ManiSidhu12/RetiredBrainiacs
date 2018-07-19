@@ -1,6 +1,7 @@
 package com.retiredbrainiacs.apis;
 
 import com.retiredbrainiacs.model.feeds.FeedsRoot;
+import com.retiredbrainiacs.model.forum.ForumRoot;
 
 import java.util.Map;
 
@@ -13,4 +14,9 @@ public interface ApiInterface {
 
     @POST("?action=my_wall_post")
     Observable<FeedsRoot> getHomeFeeds(@QueryMap Map<String,String> params);
+
+    @POST("?action=list_all_forums")
+    Observable<ForumRoot> getForums(@QueryMap Map<String,String> params);
+
+
 }
