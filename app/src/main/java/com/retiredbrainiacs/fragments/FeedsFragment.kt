@@ -36,7 +36,16 @@ import java.io.File
 
 class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
 
-
+/*
+* http://dev.axtrics.com/retiredbrainiacs/restapi/?action=wall_post
+user_id:72
+to_user_id:
+post_content:testing
+post_type:1
+file_align:center
+image:
+video:
+audio:*/
     val privacyArray = arrayOf("Public","Private")
     //============== Retrofit =========
     lateinit var retroFit: Retrofit
