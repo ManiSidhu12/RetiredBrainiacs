@@ -1,6 +1,5 @@
 package com.retiredbrainiacs.activities
 
-import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -19,7 +18,6 @@ import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.SampleAdapter
 import com.retiredbrainiacs.adapters.SimpleExpandableAdapter
 import com.retiredbrainiacs.common.CommonUtils
-import com.retiredbrainiacs.common.Global
 import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.SimpleChild
@@ -27,52 +25,49 @@ import com.retiredbrainiacs.model.SimpleParentItem
 import com.retiredbrainiacs.model.login.ChildModel
 import com.retiredbrainiacs.model.login.MainModel
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
-import kotlinx.android.synthetic.main.language_screen.*
+import kotlinx.android.synthetic.main.education_screen.*
 import org.json.JSONObject
-import java.util.ArrayList
 
-class Interests : AppCompatActivity(){
+class Education : AppCompatActivity(){
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.education_screen)
 
-        setContentView(R.layout.language_screen)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.custom_action_bar)
 
         var v = supportActionBar!!.customView
-        v.titletxt.text = "Interests"
-
-        //recycler_language.layoutManager = LinearLayoutManager(this@Interests)
+        v.titletxt.text = "Education"
 
 
-        if(CommonUtils.getConnectivityStatusString(this@Interests).equals("true")) {
-            getInterests()
+
+        if(CommonUtils.getConnectivityStatusString(this@Education).equals("true")) {
+            getEducation()
         }
         else{
-            CommonUtils.openInternetDialog(this@Interests)
+            CommonUtils.openInternetDialog(this@Education)
         }
 
-        btn_skip1_language.setOnClickListener {
-startActivity(Intent(this@Interests,Education::class.java))
-        }
 
     }
 
-    //===== Get Interests API =====
-    private fun getInterests(){
-        var url = GlobalConstants.API_URL+"interests_hobbies"
-        progress_lang.visibility = View.VISIBLE
-        recycler_language.visibility = View.GONE
-        lay_bottom_lang.visibility = View.GONE
+    //===== Get Education API =====
+    private fun getEducation(){
+        var url = GlobalConstants.API_URL+"education_history"
+        progress_edu.visibility = View.VISIBLE
+        recycle_education.visibility = View.GONE
+        lay_bottom_edu.visibility = View.GONE
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
-            progress_lang.visibility = View.GONE
-            recycler_language.visibility = View.VISIBLE
-            lay_bottom_lang.visibility = View.VISIBLE
+            progress_edu.visibility = View.GONE
+            recycle_education.visibility = View.VISIBLE
+            lay_bottom_edu.visibility = View.VISIBLE
             var obj = JSONObject(response)
 
             if(obj.getString("status").equals("true")){
-                val arr = obj.getJSONArray("interests_hobbies")
+                val arr = obj.getJSONArray("degrees")
                 var obj1 : JSONObject?= null
                 for(i in 0 until arr.length()){
                     obj1 = arr.getJSONObject(i)
@@ -83,16 +78,16 @@ startActivity(Intent(this@Interests,Education::class.java))
                 lateinit  var objModel : MainModel
                 while (iterator.hasNext()) {
                     val key = iterator.next() as String
-                   // Log.e("key",key)
+                    // Log.e("key",key)
                     objModel = MainModel()
                     objModel.heading = key
                     val arr1 = obj1.getJSONArray(key)
-val listChild = ArrayList<ChildModel>()
-                 lateinit var objChild : ChildModel
+                    val listChild = ArrayList<ChildModel>()
+                    lateinit var objChild : ChildModel
                     for(i in 0 until arr1.length()){
-objChild = ChildModel()
+                        objChild = ChildModel()
                         val obj2 = arr1.getJSONObject(i)
-                            objChild.title = obj2.getString("key_title")
+                        objChild.title = obj2.getString("key_title")
                         objChild.value_id = obj2.getString("key_value")
                         objChild.chkStatus = obj2.getString("chked")
 
@@ -100,34 +95,33 @@ objChild = ChildModel()
 
                     }
 
-objModel.listChild = listChild
+                    objModel.listChild = listChild
                     Log.e("map",objModel.listChild.toString())
 
                     listMain.add(objModel)
 
                 }
 
-                val adapter = SampleAdapter(this@Interests,listMain)
+                val adapter = SampleAdapter(this@Education,listMain)
                 val wrapperAdapter = WrapperExpandableListAdapter(adapter)
-                recycler_language.setAdapter(wrapperAdapter)
+                recycle_education.setAdapter(wrapperAdapter)
 
                 for (i in 0 until wrapperAdapter.getGroupCount()) {
-                    recycler_language.expandGroup(i)
+                    recycle_education.expandGroup(i)
                 }
-
 
             }
         },
 
                 Response.ErrorListener {
-                    progress_lang.visibility = View.GONE
-                    recycler_language.visibility = View.GONE
-                    lay_bottom_lang.visibility = View.GONE }) {
+                    progress_edu.visibility = View.GONE
+                    recycle_education.visibility = View.GONE
+                    lay_bottom_edu.visibility = View.GONE }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val map = java.util.HashMap<String, String>()
 
-                map["user_id"] = SharedPrefManager.getInstance(this@Interests).userId
+                map["user_id"] = SharedPrefManager.getInstance(this@Education).userId
                 return map
             }
         }
@@ -137,5 +131,7 @@ objModel.listChild = listChild
         requestQueue.add(postRequest)
 
     }
+
+
 
 }

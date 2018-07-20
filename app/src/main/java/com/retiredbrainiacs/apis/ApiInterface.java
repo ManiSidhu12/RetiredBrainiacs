@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.apis;
 
+import com.retiredbrainiacs.model.ResponseRoot;
 import com.retiredbrainiacs.model.feeds.FeedsRoot;
 import com.retiredbrainiacs.model.forum.ForumRoot;
 
@@ -18,5 +19,6 @@ public interface ApiInterface {
     @POST("?action=list_all_forums")
     Observable<ForumRoot> getForums(@QueryMap Map<String,String> params);
 
-
+    @POST("?action=sign_next_4_steps")
+    Observable<ResponseRoot> signUpSteps(@QueryMap Map<String,String> params);
 }

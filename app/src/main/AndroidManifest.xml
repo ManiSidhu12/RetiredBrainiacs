@@ -33,6 +33,8 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activities.Interests"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activities.Education"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.MainScreen"
             android:screenOrientation="portrait" />

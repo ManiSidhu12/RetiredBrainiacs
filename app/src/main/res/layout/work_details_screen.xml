@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/lay_bottom_work"
+            android:layout_margin="20dp"
+            android:orientation="vertical">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/cmnt_bg">
+                <Spinner
+                    android:id="@+id/spin_work"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="4dp"
+                    android:padding="3dp"
+                    android:layout_marginEnd="5dp"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/cmnt_bg">
+                <EditText
+                    android:id="@+id/edt_work_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@+id/img_other_work"
+                    android:layout_marginStart="4dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Other(Please specify)"
+                    android:textSize="14sp"
+                    android:singleLine="true"
+                    android:padding="3dp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginEnd="5dp"/>
+                <ImageView
+                    android:id="@+id/img_other_work"
+                    android:layout_width="33dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="45dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="15dp"
+    android:text="Professional traits"
+    android:textSize="18sp"
+    android:textColor="@color/theme_color_orange"
+    android:layout_marginStart="4dp"
+    android:padding="4dp"
+    android:gravity="start|center"/>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/cmnt_bg">
+                <Spinner
+                    android:id="@+id/spin_professional"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="4dp"
+                    android:padding="3dp"
+                    android:layout_marginEnd="5dp"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/cmnt_bg">
+                <EditText
+                    android:id="@+id/edt_profess_other"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@+id/img_prof_work"
+                    android:layout_marginStart="4dp"
+                    android:background="@android:color/transparent"
+                    android:hint="Other(Please specify)"
+                    android:textSize="14sp"
+                    android:singleLine="true"
+                    android:padding="3dp"
+                    android:textColor="@android:color/black"
+                    android:layout_marginEnd="5dp"/>
+                <ImageView
+                    android:id="@+id/img_prof_work"
+                    android:layout_width="33dp"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"/>
+            </RelativeLayout>
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lay_bottom_work"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="20dp"
+            android:orientation="horizontal"
+            android:weightSum="3.7">
+            <Button
+                android:id="@+id/btn_pre_work"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:background="@drawable/verify_bg"
+                android:text="Previous"/>
+            <Button
+                android:id="@+id/btn_save_work"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1.7"
+                android:textAllCaps="false"
+                android:background="@drawable/login_bg"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:textColor="@android:color/white"
+                android:text="Save &amp; Continue"/>
+            <Button
+                android:id="@+id/btn_skip1_work"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:textAllCaps="false"
+                android:background="@drawable/verify_bg"
+                android:text="Skip"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</android.support.v4.widget.NestedScrollView>
