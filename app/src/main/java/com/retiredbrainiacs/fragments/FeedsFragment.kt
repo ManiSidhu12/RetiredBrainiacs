@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.fragments
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
@@ -23,6 +24,7 @@ import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.Imageutils
 import com.retiredbrainiacs.common.SharedPrefManager
+import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.FeedsRoot
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -36,16 +38,6 @@ import java.io.File
 
 class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
 
-/*
-* http://dev.axtrics.com/retiredbrainiacs/restapi/?action=wall_post
-user_id:72
-to_user_id:
-post_content:testing
-post_type:1
-file_align:center
-image:
-video:
-audio:*/
     val privacyArray = arrayOf("Public","Private")
     //============== Retrofit =========
     lateinit var retroFit: Retrofit
@@ -73,7 +65,6 @@ audio:*/
 
         imageUtils = Imageutils(activity,this,true)
 
-        v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
 
 
 
@@ -115,6 +106,16 @@ fun work(){
     v.lay_image_add.setOnClickListener {
         imageUtils.imagepicker(1)
     }
+
+    v.btn_post_feed.setOnClickListener {
+        if(CommonUtils.getConnectivityStatusString(activity).equals("true")){
+
+            addPostAPI()
+        }
+        else{
+            CommonUtils.openInternetDialog(activity)
+        }
+    }
 }
 
     //======= Feeds API ====
@@ -140,13 +141,16 @@ fun work(){
                     override fun onNext(t: FeedsRoot) {
                         v.progress_feed.visibility= View.GONE
                         v.recycler_feed.visibility= View.VISIBLE
+                        Log.e("t",t.posts.size.toString())
                         if(t != null ){
+                            Log.e("status","kn"+t.posts.get(0).postContent)
                             if(t.status.equals("true")) {
-                                v.recycler_feed.adapter = FeedsAdapter(activity!!,"feeds")
+                                v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
+                                v.recycler_feed.adapter = FeedsAdapter(activity!!,t.posts,"post")
                             }
                             else{
-                             //   Common.showToast(activity!!,t.message)
-                                v.recycler_feed.adapter = FeedsAdapter(activity!!,"feeds")
+                              Common.showToast(activity!!,t.message)
+                              //  v.recycler_feed.adapter = FeedsAdapter(activity!!,t.posts)
 
                             }
                         }
@@ -164,7 +168,7 @@ fun work(){
     override fun image_attachment(from: Int, filename: String?, file: Bitmap?, uri: Uri?) {
         val bitmap = file
         val file_name = filename
-     //   iv_attachment.setImageBitmap(file)
+     // iv_attachment.setImageBitmap(file)
 
         v.attachlay.visibility = View.VISIBLE
         v.attach.setImageBitmap(file)
@@ -185,4 +189,54 @@ fun work(){
         imageUtils.onActivityResult(requestCode, resultCode, data)
 
     }
+
+
+    //==== add post api ================
+    fun addPostAPI() {
+        val pd = ProgressDialog.show(activity, "", "Loading", false)
+
+        val map = HashMap<String, String>()
+        map["user_id"] = SharedPrefManager.getInstance(activity).userId
+        map["to_user_id"] = ""
+        map["post_content"] = edt_post_data.text.toString()
+        map["post_type"] = ""
+        map["file_align"] = "center"
+        map["image"] = ""
+        map["video"] = ""
+        map["audio"] = ""
+        Log.e("map add feed",map.toString())
+        service.addPost(map)
+                //.timeout(1,TimeUnit.SECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribe(object : Observer<ResponseRoot> {
+                    override fun onComplete() {
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                    }
+
+                    override fun onNext(t: ResponseRoot) {
+                        pd.dismiss()
+                        if(t != null ){
+                            if(t.status.equals("true")) {
+                                Common.showToast(activity!!,t.message)
+
+                            }
+                            else{
+                                 Common.showToast(activity!!,t.message)
+
+                            }
+                        }
+                    }
+
+                    override fun onError(e: Throwable) {
+                        pd.dismiss()
+                        Common.showToast(activity!!,e.message.toString())
+                    }
+
+
+                })
+    }
+
 }

@@ -21,4 +21,7 @@ public interface ApiInterface {
 
     @POST("?action=sign_next_4_steps")
     Observable<ResponseRoot> signUpSteps(@QueryMap Map<String,String> params);
+
+    @POST("?action=wall_post")
+    Observable<ResponseRoot> addPost(@QueryMap Map<String,String> params);
 }

@@ -21,6 +21,8 @@ public class SharedPrefManager {
     private static final String LOCATION = "loc";
     private static final String DOB = "dob";
     private static final String ABOUTME = "about";
+    private static final String GENDER = "gender";
+    private static final String MARITAL_STATUS = "marital";
     private static SharedPrefManager mInstance;
 
     private static Context mCtx;
@@ -38,7 +40,7 @@ public class SharedPrefManager {
  
     //method to let the user login
     //this method will store the user data in shared preferences
-    public void userLogin(String id,String name,String email,String phn,String img,String pass) {
+    public void userLogin(String id,String name,String email,String phn,String img,String pass,String dob) {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(USER_ID, id);
@@ -47,9 +49,42 @@ public class SharedPrefManager {
         editor.putString(PHN_NO, phn);
         editor.putString(USER_IMG, img);
         editor.putString(PASSWORD, pass);
+        editor.putString(DOB, dob);
         editor.apply();
     }
- 
+
+    public void setUserID(String id){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_ID, id);
+        editor.apply();
+    }
+    public void setGender(String gender){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(GENDER, gender);
+        editor.apply();
+    }
+    public void setMaritalStatus(String status){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(MARITAL_STATUS, status);
+        editor.apply();
+    }
+
+    public String getGender() {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(GENDER, null);
+
+
+    }
+    public String getMaritalStatus() {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(MARITAL_STATUS, null);
+
+
+    }
+
     //this method will checker whether user is already logged in or not
     public boolean isLoggedIn() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);

@@ -103,6 +103,7 @@
         android:padding="3dp"
         android:textSize="14sp"
         android:maxLines="2"
+        android:textColor="@color/create_color"
         android:text="Lorem ipsum is a dummy text standard for typesettings."/>
     <TextView
         android:layout_width="wrap_content"

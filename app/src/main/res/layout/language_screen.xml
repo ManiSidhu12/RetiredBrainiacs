@@ -11,7 +11,8 @@
     android:layout_above="@+id/lay_bottom_lang"
     android:layout_marginBottom="10dp"
     android:groupIndicator="@null"
-    android:orientation="vertical"></com.diegocarloslima.fgelv.lib.FloatingGroupExpandableListView>
+    android:orientation="vertical"/>
+
     <ProgressBar
         android:id="@+id/progress_lang"
         android:layout_width="30dp"

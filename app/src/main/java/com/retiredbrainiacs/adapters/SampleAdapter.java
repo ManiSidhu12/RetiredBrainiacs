@@ -1,6 +1,7 @@
 package com.retiredbrainiacs.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,16 +29,6 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public void onGroupCollapsed(int groupPosition) {
-		super.onGroupCollapsed(groupPosition);
-	}
-
-	@Override
-	public void onGroupExpanded(int groupPosition) {
-		super.onGroupExpanded(groupPosition);
-	}
-
-	@Override
 	public int getGroupCount() {
 		return listMain.size();
 	}
@@ -53,7 +44,7 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+	public View getGroupView(final int groupPosition, final boolean isExpanded, View convertView, ViewGroup parent) {
 		if(convertView == null) {
             convertView = mLayoutInflater.inflate(R.layout.group_view_holder, parent, false);
 		}
@@ -82,8 +73,10 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 
 
 		final ImageView expandedImage = convertView.findViewById(R.id.collapseButton);
+		Log.e("isexpand",""+isExpanded);
 		final int resId = isExpanded ? R.drawable.ic_expand_less_black_24dp : R.drawable.ic_expand_more_black_24dp;
 		expandedImage.setImageResource(resId);
+
 
 		return convertView;
 	}
@@ -124,7 +117,7 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 
 		}
 		else{
-edt_add.setVisibility(View.GONE);
+        edt_add.setVisibility(View.GONE);
 		img_chk.setVisibility(View.VISIBLE);
 			img_nxt.setVisibility(View.VISIBLE);
 

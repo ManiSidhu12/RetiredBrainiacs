@@ -88,6 +88,8 @@ btn_save_language.setOnClickListener {
 btn_skip1_language.setOnClickListener {
 startActivity(Intent(this@Languages,Interests::class.java))
 }
+
+
 /*
         recycler_language.setOnScrollFloatingGroupListener(object: FloatingGroupExpandableListView.OnScrollFloatingGroupListener {
             override fun onScrollFloatingGroupListener(floatingGroupView: View, scrollY: Int) {
@@ -181,7 +183,7 @@ startActivity(Intent(this@Languages,Interests::class.java))
                 recycler_language.setAdapter(wrapperAdapter)
 
                 for (i in 0 until wrapperAdapter.getGroupCount()) {
-                    recycler_language.expandGroup(i)
+                  recycler_language.expandGroup(i)
                 }
             }
         },

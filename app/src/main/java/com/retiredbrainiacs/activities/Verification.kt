@@ -13,17 +13,24 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
+import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
+import com.retiredbrainiacs.common.SharedPrefManager
+import com.retiredbrainiacs.model.login.LoginRoot
 import kotlinx.android.synthetic.main.otp_screen.*
 import org.json.JSONObject
+import java.io.StringReader
 
 class Verification : Activity(){
 
     lateinit var sb : StringBuilder
     lateinit var sb1 : StringBuilder
+
+    lateinit var rootLogin : LoginRoot
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -148,7 +155,8 @@ class Verification : Activity(){
             }
             else{
                 if(CommonUtils.getConnectivityStatusString(this@Verification).equals("true")){
-                    verifyOTP()
+                   // verifyOTP()
+                    signUpWebService()
                 }
                 else{
                     CommonUtils.openInternetDialog(this@Verification)
@@ -169,10 +177,7 @@ try{
     val msg : String = obj.getString("message")
     if(status.equals("true")) {
         Common.showToast(this@Verification,"Verified Successfully...")
-        val intent = Intent(this@Verification, ContactInfo::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-        startActivity(intent)
-        finish()
+       signUpWebService()
     } else{
         Common.showToast(this@Verification,msg)
 
@@ -190,6 +195,54 @@ catch (exc : Exception){
                 val map = HashMap<String, String>()
 
                 map["activation_key"] = sb1.toString()
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
+    }
+    //============== Sign Up Web Service =====
+    private fun signUpWebService(){
+        var url = GlobalConstants.API_URL+"sign_up_from"
+        val pd = ProgressDialog.show(this@Verification, "", "Loading", false)
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
+
+            if(rootLogin.status.equals("true")) {
+                Common.showToast(this@Verification,"Registered Successfully...")
+                val intent = Intent(this@Verification, ContactInfo::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                startActivity(intent)
+                finish()
+            } else{
+                Common.showToast(this@Verification,rootLogin.message)
+
+            }
+        },
+
+                Response.ErrorListener { pd.dismiss() }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["first_name"] = SharedPrefManager.getInstance(this@Verification).name
+                map["last_name"] = ""
+                map["email"] = SharedPrefManager.getInstance(this@Verification).userEmail
+                map["dob"] = SharedPrefManager.getInstance(this@Verification).dob
+                map["password"] = SharedPrefManager.getInstance(this@Verification).password
+                map["con_pswd"] = SharedPrefManager.getInstance(this@Verification).password
+                map["gender"] = SharedPrefManager.getInstance(this@Verification).gender
+                map["marital_status"] = SharedPrefManager.getInstance(this@Verification).maritalStatus
+                map["activation_key"] = sb1.toString()
+                Log.e("map signup",map.toString())
                 return map
             }
         }

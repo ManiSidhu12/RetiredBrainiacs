@@ -15,6 +15,6 @@ class ForumDetails : AppCompatActivity(){
         setContentView(R.layout.forum_details_screen)
 
         recycler_forum_details.layoutManager = LinearLayoutManager(this@ForumDetails)
-        recycler_forum_details.adapter = FeedsAdapter(this@ForumDetails,"forum")
+       // recycler_forum_details.adapter = FeedsAdapter(this@ForumDetails,"forum")
     }
 }

@@ -8,6 +8,7 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.widget.ArrayAdapter
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
@@ -117,7 +118,7 @@ class SignUp : Activity(){
         btn_signup.setOnClickListener {
             if(Common.validateName(this@SignUp,edt_name_signup,input_lay_name) && Common.validate(this@SignUp,edt_email_signup,input_lay_emailsignup) && Common.validatePassword(this@SignUp,edt_pswd_signup,input_lay_pswdsignup)&& Common.validateCnfrmPassword(this@SignUp,edt_pswd_signup,edt_cnfrmpswd_signup,input_lay_cnfrmpswdsignup) && Common.validateDOB(this@SignUp,edt_dob_signup,input_lay_dobsignup) && Common.validateGender(this@SignUp,spin_gender) && Common.validateMariitalStatus(this@SignUp,spin_marital)){
                 if(CommonUtils.getConnectivityStatusString(this@SignUp).equals("true")){
-                  signUpWebService()
+                  sendActivationKeyWebService()
                 }
                 else{
                     CommonUtils.openInternetDialog(this@SignUp)
@@ -178,9 +179,9 @@ class SignUp : Activity(){
     }
 
 
-    //============== Sign Up Web Service =====
-    private fun signUpWebService(){
-        var url = GlobalConstants.API_URL+"sign_up_from"
+    //============== Send Activation Key Web Service =====
+    private fun sendActivationKeyWebService(){
+        var url = GlobalConstants.API_URL+"send_activation_key"
         val pd = ProgressDialog.show(this@SignUp, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -191,8 +192,8 @@ class SignUp : Activity(){
             rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
 
             if(rootLogin.status.equals("true")) {
-                Common.showToast(this@SignUp,"Registered Successfully...")
-                SharedPrefManager.getInstance(this@SignUp).userLogin(rootLogin.id,rootLogin.name,edt_email_signup.text.toString().trim(),"","",edt_pswd_signup.text.toString().trim())
+                Common.showToast(this@SignUp,"Success")
+                SharedPrefManager.getInstance(this@SignUp).userLogin(null,edt_name_signup.text.toString().trim(),edt_email_signup.text.toString().trim(),"","",edt_pswd_signup.text.toString().trim(),edt_dob_signup.text.toString().trim())
                 val intent = Intent(this@SignUp, Verification::class.java)
               //  intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
@@ -208,14 +209,15 @@ class SignUp : Activity(){
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
 
-                map["first_name"] = edt_name_signup.text.toString()
-                map["last_name"] = ""
-                map["email"] = edt_email_signup.text.toString()
-                map["dob"] = edt_dob_signup.text.toString()
+               // map["first_name"] = edt_name_signup.text.toString()
+               // map["last_name"] = ""
+                map["user_email"] = edt_email_signup.text.toString()
+               // map["dob"] = edt_dob_signup.text.toString()
                 map["password"] = edt_pswd_signup.text.toString()
-                map["con_pswd"] = edt_cnfrmpswd_signup.text.toString()
-                map["gender"] = spin_gender.selectedItem.toString()
-                map["marital_status"] = spin_marital.selectedItem.toString()
+                //map["con_pswd"] = edt_cnfrmpswd_signup.text.toString()
+               // map["gender"] = spin_gender.selectedItem.toString()
+               // map["marital_status"] = spin_marital.selectedItem.toString()
+                Log.e("map key",map.toString())
                 return map
             }
         }

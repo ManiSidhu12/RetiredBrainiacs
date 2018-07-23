@@ -243,7 +243,7 @@ txt_forgot.setOnClickListener {
 
             if(rootLogin.status.equals("true")) {
                 Common.showToast(this@Login,"Logged In Successfully...")
-                SharedPrefManager.getInstance(this@Login).userLogin(rootLogin.id,rootLogin.name,email,"","",pswd)
+                SharedPrefManager.getInstance(this@Login).userLogin(rootLogin.id,rootLogin.name,email,"","",pswd,"")
                 val intent = Intent(this@Login, Home::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
