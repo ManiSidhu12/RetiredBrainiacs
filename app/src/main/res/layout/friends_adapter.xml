@@ -20,10 +20,10 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_toEndOf="@+id/img_user_friend"
-        android:layout_toStartOf="@+id/lay_request"
+        android:layout_toStartOf="@+id/lay_end"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="7dp"
+        android:layout_marginTop="5dp"
         android:layout_centerInParent="true">
     <TextView
         android:id="@+id/txt_name_friend"
@@ -51,12 +51,19 @@
             app:srb_starSize="14dp"
             />
     </LinearLayout>
+    <LinearLayout
+        android:id="@+id/lay_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal">
     <RelativeLayout
         android:id="@+id/lay_request"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerInParent="true"
+        android:layout_gravity="end|center"
         android:layout_marginEnd="10dp"
         android:background="@drawable/post_bg"
      >
@@ -82,4 +89,27 @@
             android:textAllCaps="false"
             android:text="Send Friend Request"/>
     </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/btns_lay"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:visibility="gone"
+            android:layout_gravity="end|center">
+            <Button
+                android:id="@+id/btn_accept"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+               android:layout_toStartOf="@+id/btn_reject"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="10dp"
+                />
+            <Button
+                android:id="@+id/btn_reject"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                />
+        </RelativeLayout>
+    </LinearLayout>
 </RelativeLayout>

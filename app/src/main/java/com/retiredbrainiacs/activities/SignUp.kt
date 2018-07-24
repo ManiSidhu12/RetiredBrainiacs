@@ -194,13 +194,14 @@ class SignUp : Activity(){
             if(rootLogin.status.equals("true")) {
                 Common.showToast(this@SignUp,"Success")
                 SharedPrefManager.getInstance(this@SignUp).userLogin(null,edt_name_signup.text.toString().trim(),edt_email_signup.text.toString().trim(),"","",edt_pswd_signup.text.toString().trim(),edt_dob_signup.text.toString().trim())
+                SharedPrefManager.getInstance(this@SignUp).gender = spin_gender.selectedItem.toString()
+                SharedPrefManager.getInstance(this@SignUp).maritalStatus = spin_marital.selectedItem.toString()
                 val intent = Intent(this@SignUp, Verification::class.java)
               //  intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                // finish()
             } else{
                 Common.showToast(this@SignUp,rootLogin.message)
-
             }
         },
 

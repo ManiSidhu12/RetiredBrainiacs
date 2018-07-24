@@ -12,6 +12,8 @@ android {
         targetSdkVersion 27
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
     }
@@ -55,6 +57,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.8.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:3.8.0'
     implementation project(':expand_library')
+    implementation project(':library')
 
     //====facebook====
     implementation 'com.facebook.android:facebook-android-sdk:4.31.0'
@@ -62,6 +65,7 @@ dependencies {
     //==== twitter =========
     implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
     implementation 'com.twitter.sdk.android:tweet-ui:3.1.1'
+    implementation 'com.android.support:multidex:1.0.0'
 
     implementation 'com.diegocarloslima:fgelv:0.1.+@aar'
 

@@ -3,13 +3,13 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="10dp"
+    android:id="@+id/lay_products_store"
     android:background="@android:color/white">
 <ImageView
+    android:id="@+id/img_store_product"
     android:layout_width="match_parent"
     android:layout_height="170dp"
     android:layout_gravity="center_horizontal"
-    android:src="@drawable/productimage"
-    android:scaleType="fitXY"
     android:layout_marginStart="10dp"
     android:layout_marginTop="10dp"
     android:layout_marginEnd="10dp"/>
@@ -48,7 +48,7 @@
             android:layout_marginEnd="4dp"
             android:layout_toStartOf="@+id/actual_price"
             android:layout_centerInParent="true"
-            android:text="$24.70"
+            android:text=""
             android:gravity="bottom"
             android:padding="2dp"
             android:textSize="13sp"/>
