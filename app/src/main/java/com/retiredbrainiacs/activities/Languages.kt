@@ -182,9 +182,9 @@ startActivity(Intent(this@Languages,Interests::class.java))
                 val wrapperAdapter = WrapperExpandableListAdapter(adapter)
                 recycler_language.setAdapter(wrapperAdapter)
 
-                for (i in 0 until wrapperAdapter.getGroupCount()) {
+               /* for (i in 0 until wrapperAdapter.getGroupCount()) {
                   recycler_language.expandGroup(i)
-                }
+                }*/
             }
         },
 
@@ -196,7 +196,8 @@ startActivity(Intent(this@Languages,Interests::class.java))
             override fun getParams(): Map<String, String> {
                 val map = java.util.HashMap<String, String>()
 
-                map["user_id"] = SharedPrefManager.getInstance(this@Languages).userId
+              //  map["user_id"] = SharedPrefManager.getInstance(this@Languages).userId
+                map["user_id"] = "81"
                 return map
             }
         }
@@ -210,7 +211,7 @@ startActivity(Intent(this@Languages,Interests::class.java))
     fun setLanguageAPI() {
         val map = HashMap<String, String>()
         map["user_id"] = SharedPrefManager.getInstance(this@Languages).userId
-        map["first_name"] = ""
+        /*map["first_name"] = ""
         map["last_name"] = ""
         map["dob"] = ""
         map["gender"] = ""
@@ -223,11 +224,11 @@ startActivity(Intent(this@Languages,Interests::class.java))
         map["street_address_line1"] = ""
         map["street_address_line2"] = ""
         map["zip_code"] = ""
-        map["image"] = ""
+        map["image"] = ""*/
         map["known_languages"] = ""
         map["preferred_languages"] = ""
         map["spoken_languages"] = ""
-        map["art"] = ""
+      /*  map["art"] = ""
         map["collectables"] = ""
         map["craft"] = ""
         map["entertainment"] = ""
@@ -259,7 +260,7 @@ startActivity(Intent(this@Languages,Interests::class.java))
         map["detailed_skills"] = ""
         map["work_experience"] = ""
         map["areas_of_expertise"] = ""
-        map["areas_of_expertise_other"] = ""
+        map["areas_of_expertise_other"] = ""*/
         Log.e("map language",map.toString())
         service.signUpSteps(map)
                 //.timeout(1,TimeUnit.SECONDS)

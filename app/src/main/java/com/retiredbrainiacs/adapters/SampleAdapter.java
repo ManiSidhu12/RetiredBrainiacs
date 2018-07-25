@@ -107,7 +107,7 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 		ImageView img_chk = convertView.findViewById(R.id.img_chk);
 		ImageView img_nxt = convertView.findViewById(R.id.next);
 		EditText edt_add = convertView.findViewById(R.id.edt_add);
-		ChildModel model = listMain.get(groupPosition).getListChild().get(childPosition);
+		final ChildModel model = listMain.get(groupPosition).getListChild().get(childPosition);
 
 		text.setText(model.getTitle());
 		if(model.getTitle().equalsIgnoreCase("Other (Please Specify)")){
@@ -125,12 +125,25 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 		}
 		if(model.getChkStatus().equalsIgnoreCase("1")) {
 
-		img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.search_whitebg));
+		img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.sel));
 		}
 		else{
-			img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.sel));
+			img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.unslct));
 
 		}
+		img_chk.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if(model.getChkStatus().equalsIgnoreCase("1")){
+					model.setChkStatus("0");
+				}
+				else{
+					model.setChkStatus("1");
+
+				}
+				notifyDataSetChanged();
+			}
+		});
 		
 		return convertView;
 	}

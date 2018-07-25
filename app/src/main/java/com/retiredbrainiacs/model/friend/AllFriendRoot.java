@@ -16,7 +16,15 @@ private String message;
 @Expose
 private List<ListAll> listAll = null;
 
-public String getStatus() {
+    @SerializedName("list_friends")
+    @Expose
+    private List<ListFriend> listFriends = null;
+    @SerializedName("comment_count")
+    @Expose
+    private List<CommentCount> commentCount = null;
+
+
+    public String getStatus() {
 return status;
 }
 
@@ -39,5 +47,22 @@ return listAll;
 public void setListAll(List<ListAll> listAll) {
 this.listAll = listAll;
 }
+
+    public List<ListFriend> getListFriends() {
+        return listFriends;
+    }
+
+    public void setListFriends(List<ListFriend> listFriends) {
+        this.listFriends = listFriends;
+    }
+
+    public List<CommentCount> getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(List<CommentCount> commentCount) {
+        this.commentCount = commentCount;
+    }
+
 
 }

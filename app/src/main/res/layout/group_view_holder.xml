@@ -24,13 +24,14 @@
         android:textColor="@color/theme_color_orange" />
     <ImageButton
         android:id="@+id/parent_list_item_expand_arrow1"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_alignParentLeft="true"
         android:layout_centerInParent="true"
         android:layout_margin="0dp"
         android:clickable="true"
         android:background="@android:color/transparent"
+        android:visibility="gone"
 
         />
 

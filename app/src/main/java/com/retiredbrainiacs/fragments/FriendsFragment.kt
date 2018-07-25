@@ -62,7 +62,7 @@ class FriendsFragment : Fragment(){
         }
         v.lay_accept_friend.setOnClickListener {
             showSelection(v.txt_accept, v.img_accept, v.txt_all_friend, v.txt_request, v.img_all_friend, v.img_request, v.lay_accept_friend,v.lay_all_friend, v.lay_request_friend)
-            fragmentManager!!.beginTransaction().replace(R.id.frame_friends,AllFriendsFragment()).commit()
+            fragmentManager!!.beginTransaction().replace(R.id.frame_friends,Friends()).commit()
 
         }
     }

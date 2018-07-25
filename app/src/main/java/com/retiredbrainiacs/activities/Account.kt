@@ -26,6 +26,8 @@ class  Account : AppCompatActivity(){
         supportActionBar?.setCustomView(R.layout.custom_action_bar)
         v = supportActionBar!!.customView
         v.titletxt.text = "Account"
+
+        txt_name_account.text = SharedPrefManager.getInstance(this@Account).name
         work()
     }
 
