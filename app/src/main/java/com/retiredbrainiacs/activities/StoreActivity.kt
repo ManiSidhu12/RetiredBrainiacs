@@ -69,12 +69,12 @@ class StoreActivity : AppCompatActivity(){
 
         val root = tabs_store.getChildAt(0)
         if (root is LinearLayout) {
-            (root as LinearLayout).showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
+            root.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
             val drawable = GradientDrawable()
             drawable.setColor(resources.getColor(R.color.light_gray))
             drawable.setSize(1, 1)
-            (root as LinearLayout).dividerPadding = 25
-            (root as LinearLayout).dividerDrawable = drawable
+          root.dividerPadding = 25
+           root.dividerDrawable = drawable
         }
         tabs_store.getTabAt(0)!!.select()
         supportFragmentManager!!.beginTransaction().replace(R.id.frame_store, StoreServiceFragment()).commit()

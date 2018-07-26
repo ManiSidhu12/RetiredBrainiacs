@@ -6,11 +6,14 @@ import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.os.Handler
+import android.os.Message
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -19,10 +22,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
-import com.retiredbrainiacs.apis.ApiClient
-import com.retiredbrainiacs.apis.ApiInterface
-import com.retiredbrainiacs.apis.ApiUtils
-import com.retiredbrainiacs.apis.Service
+import com.retiredbrainiacs.apis.*
 import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.ResponseRoot
 import io.reactivex.Observer
@@ -40,6 +40,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.File
+import java.io.FileInputStream
 import java.io.IOException
 import java.io.StringReader
 import java.nio.charset.Charset
@@ -56,12 +57,16 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     lateinit var gson: Gson
     //==============
 
-    lateinit var service1 : Service
+
+    lateinit var pd : ProgressDialog
 
     lateinit var imageutils: Imageutils
  var file_name : String = ""
  var file_path : String = ""
     lateinit var root : ResponseRoot
+    lateinit var filetype : String
+    lateinit var filename : String
+    lateinit var f : File
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,7 +89,6 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
 
         // Change base URL to your upload server URL.
         //service1 = Retrofit.Builder().baseUrl("http://dev.axtrics.com/retiredbrainiacs/restapi/").client(client).build().create<Service>(Service::class.java)
-service1 = ApiUtils.getAPiService()
         imageutils = Imageutils(this@ContactInfo)
 
         handleCountryJson()
@@ -105,7 +109,9 @@ if(edt_phn.text.toString().isEmpty() && edt_skype.text.toString().isEmpty() && s
             signup1()
         }
         else{
-            uploadImage()
+   if(f != null){
+       uploadImage(file_path)
+   }
         }
     }
     else{
@@ -169,98 +175,7 @@ imageutils.imagepicker(1)
 
         return json!!
     }
-    //======= set basic info in SignUp API ====
-    fun signUpAPI() {
-        val pd = ProgressDialog.show(this@ContactInfo, "", "Loading", false)
 
-        val map = HashMap<String, String>()
-     //   map["user_id"] = SharedPrefManager.getInstance(this@ContactInfo).userId
-map["user_id"]="81"
-       map["phone"] = edt_phn.text.toString().trim()
-        map["skype_id"] = edt_skype.text.toString().trim()
-
-        if(spin_country.selectedItem == null) {
-            map["iso"] = ""
-        }
-        else{
-            map["iso"] = spin_country.selectedItem.toString()
-        }
-        map["location"] = ""
-        map["city"] =  edt_city.text.toString().trim()
-        map["street_address_line1"] = edt_adrs1.text.toString()
-        map["street_address_line2"] = edt_adrs2.text.toString()
-        map["zip_code"] = edt_zipccode.text.toString().trim()
-       // map["image"] = ""
-       /* map["known_languages"] = ""
-        map["preferred_languages"] = ""
-        map["spoken_languages"] = ""
-        map["art"] = ""
-        map["collectables"] = ""
-        map["craft"] = ""
-        map["entertainment"] = ""
-        map["cooking"] = ""
-        map["games"] = ""
-        map["health"] = ""
-        map["literature"] = ""
-        map["miscellaneous"] = ""
-        map["outdoors"] = ""
-        map["science"] = ""
-        map["shopping"] = ""
-        map["sport"] = ""
-        map["technology"] = ""
-        map["travel"] = ""
-        map["eh_technical_or_vocational_training"] = ""
-        map["eh_technical_speciality"] = ""
-        map["eh_associate_degree_specify"] = ""
-        map["eh_other_specify"] = ""
-        map["bachelor_degrees"] = ""
-        map["bachelors_degrees_other"] = ""
-        map["advanced_degrees"] = ""
-        map["advanced_degrees_other"] = ""
-        map["work_detail"] = ""
-        map["work_detail_other"] = ""
-        map["professional_traits"] = ""
-        map["professional_traits_other"] = ""
-        map["professional_skills"] = ""
-        map["professional_skills_other"] = ""
-        map["detailed_skills"] = ""
-        map["work_experience"] = ""
-        map["areas_of_expertise"] = ""
-        map["areas_of_expertise_other"] = ""*/
-        Log.e("map contact",map.toString())
-        service.signUpSteps(map)
-                //.timeout(1,TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(object : Observer<ResponseRoot> {
-                    override fun onComplete() {
-                    }
-
-                    override fun onSubscribe(d: Disposable) {
-                    }
-
-                    override fun onNext(t: ResponseRoot) {
-                        pd.dismiss()
-                        Log.e("response",t.status+t.message)
-                        if(t.status.equals("true")){
-                            Common.showToast(this@ContactInfo,t.message)
-                            startActivity(Intent(this@ContactInfo,Languages::class.java))
-
-
-                        }
-                        else{
-                            Common.showToast(this@ContactInfo,t.message)
-                        }
-                    }
-
-                    override fun onError(e: Throwable) {
-                        pd.dismiss()
-                        if(e.message != null) {
-                            Common.showToast(this@ContactInfo, e.message.toString())
-                        }
-                    }
-                })
-    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
@@ -279,6 +194,7 @@ map["user_id"]="81"
         lay_upload.visibility = View.GONE
         userImage.visibility = View.VISIBLE
         userImage.setImageBitmap(file)
+        f = File(file_path)
 
         val path = Environment.getExternalStorageDirectory().toString() + File.separator + "RetiredBrainiacs" + File.separator
         imageutils.createImage(file, filename, path, false)
@@ -292,59 +208,6 @@ map["user_id"]="81"
 
     }
 
-    fun uploadImage(){
-        val map = HashMap<String, String>()
-        //   map["user_id"] = SharedPrefManager.getInstance(this@ContactInfo).userId
-        map["user_id"]="81"
-        map["phone"] = edt_phn.text.toString().trim()
-        map["skype_id"] = edt_skype.text.toString().trim()
-
-        if(spin_country.selectedItem == null) {
-            map["iso"] = ""
-        }
-        else{
-            map["iso"] = spin_country.selectedItem.toString()
-        }
-        map["location"] = ""
-        map["city"] =  edt_city.text.toString().trim()
-        map["street_address_line1"] = edt_adrs1.text.toString()
-        map["street_address_line2"] = edt_adrs2.text.toString()
-        map["zip_code"] = edt_zipccode.text.toString().trim()
-        Log.e("path",file_path)
-        val file = File(file_path)
-        Log.e("file",file.toString())
-        val reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), file)
-        val body = MultipartBody.Part.createFormData("image", file_name, reqFile)
-        val id = RequestBody.create(MediaType.parse("text/plain"),"81" )
-      //  val name = RequestBody.create(MediaType.parse("text/plain"), "upload_test")
-
-//            Log.d("THIS", data.getData().getPath());
-val call : Call<ResponseRoot>  = service1.postImage(body,id)
-        call.enqueue(object : Callback<ResponseRoot>{
-            override fun onFailure(call: Call<ResponseRoot>?, t: Throwable?) {
-                Log.e("error", t!!.message.toString())
-            }
-
-            override fun onResponse(call: Call<ResponseRoot>?, response: Response<ResponseRoot>?) {
-                if(response!!.isSuccessful){
-                    Log.e("success","true")
-                }
-            }
-
-        })
-       // val req = service1.postImage(body)
-        /*req.enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                Log.e("resp",response.body().toString())
-
-            }
-
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                Log.e("err",t.message)
-                t.printStackTrace()
-            }
-        })*/
-    }
 
     private fun signup1(){
         var url = GlobalConstants.API_URL+"sign_next_4_steps"
@@ -399,4 +262,71 @@ Log.e("msg",root.status+root.message)
 
     }
 
+    //***** Implementing upload Image ****
+    private fun uploadImage(absolutePath: String) {
+        if (absolutePath.endsWith(".jpg")) {
+            filetype = "jpg"
+        } else if (absolutePath.endsWith(".png")) {
+            filetype = "png"
+        } else if (absolutePath.endsWith(".jpeg")) {
+            filetype = "jpeg"
+        }
+        filename = "Image" + System.currentTimeMillis() + "." + filetype
+        pd = ProgressDialog.show(this, "", "Uploading")
+        Thread(null, uploadimage, "").start()
+        //signUp();
+
+    }
+
+
+    // ****** Implementing thread to upload image****
+    private val uploadimage = Runnable {
+        var res = ""
+        try {
+            val fis = FileInputStream(f)
+            var country ="";
+            if(spin_country.selectedItem == null){
+                country ="";
+            }
+            else{
+                country = spin_country.selectedItem.toString()
+            }
+
+            val edit = SendImage(this@ContactInfo,"81",edt_phn.text.toString().trim(), edt_skype.text.toString().trim(),country, edt_city.text.toString().trim(), edt_adrs1.text.toString().trim(), edt_adrs2.text.toString().trim(),edt_zipccode.text.toString().trim(), filetype, filename)
+            res = edit.doStart(fis)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        val msg = Message()
+        msg.obj = res
+        imageHandler.sendMessage(msg)
+    }
+
+    //********** Implementing handler for upload image thread*****
+    internal var imageHandler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            var res = ""
+            try {
+                res = msg.obj.toString()
+                val status = res.split(",")[0]
+                if (status.equals("true", ignoreCase = true)) {
+                   // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
+                    Common.showToast(this@ContactInfo,res.split(",")[1])
+                    startActivity(Intent(this@ContactInfo,Languages::class.java))
+
+
+                } else {
+                    Common.showToast(this@ContactInfo,res.split(",")[1])
+                }
+            } catch (e1: Exception) {
+                e1.printStackTrace()
+            }
+
+            pd.dismiss()
+
+
+        }
+    }
 }

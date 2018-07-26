@@ -4,50 +4,61 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class LoginRoot {
+    @SerializedName("status")
+    @Expose
+    private String status;
+    @SerializedName("message")
+    @Expose
+    private String message;
+    @SerializedName("data")
+    @Expose
+    private Data data;
 
-@SerializedName("status")
-@Expose
-private String status;
-@SerializedName("id")
-@Expose
-private String id;
-@SerializedName("name")
-@Expose
-private String name;
-@SerializedName("message")
-@Expose
-private String message;
+    public String getStatus() {
+        return status;
+    }
 
-public String getStatus() {
-return status;
-}
+    public void setStatus(String status) {
+        this.status = status;
+    }
 
-public void setStatus(String status) {
-this.status = status;
-}
+    public String getMessage() {
+        return message;
+    }
 
-public String getId() {
-return id;
-}
+    public void setMessage(String message) {
+        this.message = message;
+    }
 
-public void setId(String id) {
-this.id = id;
-}
+    public Data getData() {
+        return data;
+    }
 
-public String getName() {
-return name;
-}
+    public void setData(Data data) {
+        this.data = data;
+    }
 
-public void setName(String name) {
-this.name = name;
-}
+    public String getUserId() {
+        return userId;
+    }
 
-public String getMessage() {
-return message;
-}
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
-public void setMessage(String message) {
-this.message = message;
-}
+    @SerializedName("user_id")
+    @Expose
+    private String userId;
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    @SerializedName("email")
+    @Expose
+    private String email;
 }

@@ -72,6 +72,17 @@ public class SharedPrefManager {
         editor.apply();
     }
 
+    public void setUserImage(String img){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USER_IMG, img);
+        editor.apply();
+    }
+    public String getUserImg(){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(USER_IMG, null);
+    }
     public String getGender() {
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(GENDER, null);

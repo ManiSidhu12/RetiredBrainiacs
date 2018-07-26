@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.retiredbrainiacs.R;
@@ -107,12 +108,16 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 		ImageView img_chk = convertView.findViewById(R.id.img_chk);
 		ImageView img_nxt = convertView.findViewById(R.id.next);
 		EditText edt_add = convertView.findViewById(R.id.edt_add);
+		RelativeLayout lay_end = convertView.findViewById(R.id.lay_end);
 		final ChildModel model = listMain.get(groupPosition).getListChild().get(childPosition);
 
 		text.setText(model.getTitle());
 		if(model.getTitle().equalsIgnoreCase("Other (Please Specify)")){
 		edt_add.setVisibility(View.VISIBLE);
 		img_nxt.setVisibility(View.GONE);
+		img_chk.setVisibility(View.GONE);
+		lay_end.setVisibility(View.VISIBLE);
+		text.setVisibility(View.GONE);
 			img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.sel));
 
 		}
@@ -120,17 +125,19 @@ public class SampleAdapter extends BaseExpandableListAdapter {
         edt_add.setVisibility(View.GONE);
 		img_chk.setVisibility(View.VISIBLE);
 			img_nxt.setVisibility(View.VISIBLE);
+			text.setVisibility(View.VISIBLE);
+			lay_end.setVisibility(View.GONE);
+			if(model.getChkStatus().equalsIgnoreCase("1")) {
 
+				img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.sel));
+			}
+			else{
+				img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.unslct));
+
+			}
 
 		}
-		if(model.getChkStatus().equalsIgnoreCase("1")) {
 
-		img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.sel));
-		}
-		else{
-			img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.unslct));
-
-		}
 		img_chk.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {

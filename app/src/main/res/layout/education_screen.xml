@@ -1,153 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:scrollbars="none"
+    >
     <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+><LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="20dp"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"
-    android:layout_above="@+id/lay_bottom_edu"
-    android:orientation="vertical">
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center_horizontal"
-        android:background="@drawable/cmnt_bg">
-        <EditText
-            android:id="@+id/edt_tech_training"
+        android:layout_margin="20dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_above="@+id/lay_bottom_edu"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
-            android:layout_toStartOf="@+id/img_tech"
-            android:layout_marginStart="2dp"
-            android:hint="Techincal/Vocational training"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:padding="3dp"
-            android:background="@android:color/transparent"
-            android:textColor="@android:color/black"
-            android:layout_marginEnd="5dp"/>
-        <ImageView
-            android:id="@+id/img_tech"
-            android:layout_width="33dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/cmnt_bg">
-        <EditText
-            android:id="@+id/edt_tech_speciality"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/cmnt_bg">
+            <EditText
+                android:id="@+id/edt_tech_training"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toStartOf="@+id/lay_tech"
+                android:layout_marginStart="2dp"
+                android:hint="Technical/Vocational training"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:padding="3dp"
+                android:background="@android:color/transparent"
+                android:textColor="@android:color/black"
+                android:layout_marginEnd="5dp"/>
+            <RelativeLayout
+                android:id="@+id/lay_tech"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:background="@color/theme_color_orange">
+            <ImageView
+                android:id="@+id/img_tech"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/book"/>
+            </RelativeLayout>
+        </RelativeLayout>
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
-            android:layout_toStartOf="@+id/img_special"
-            android:layout_marginStart="2dp"
-            android:background="@android:color/transparent"
-            android:hint="Techincal speciality(e.g. airframe,powerplant mechanics,locomotive engineer)specify"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:padding="3dp"
-            android:textColor="@android:color/black"
-            android:layout_marginEnd="5dp"/>
-        <ImageView
-            android:id="@+id/img_special"
-            android:layout_width="33dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/cmnt_bg">
-        <EditText
-            android:id="@+id/edt_degree"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
-            android:layout_toStartOf="@+id/img_degree"
-            android:layout_marginStart="2dp"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:padding="3dp"
-            android:hint="Associate degree specify"
-            android:textColor="@android:color/black"
-            android:background="@android:color/transparent"
-            android:layout_marginEnd="5dp"/>
-        <ImageView
-            android:id="@+id/img_degree"
-            android:layout_width="33dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/cmnt_bg">
-        <EditText
-            android:id="@+id/edt_other"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_centerInParent="true"
-            android:layout_toStartOf="@+id/img_other"
-            android:layout_marginStart="2dp"
-            android:hint="Other specify"
-            android:textSize="14sp"
-            android:singleLine="true"
-            android:padding="3dp"
-            android:textColor="@android:color/black"
-            android:background="@android:color/transparent"
-            android:layout_marginEnd="5dp"/>
-        <ImageView
-            android:id="@+id/img_other"
-            android:layout_width="33dp"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_centerInParent="true"/>
-    </RelativeLayout>
-    <ProgressBar
-        android:id="@+id/progress_edu"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:layout_marginTop="40dp"/>
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/cmnt_bg">
+            <EditText
+                android:id="@+id/edt_tech_speciality"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toStartOf="@+id/lay_special"
+                android:layout_marginStart="2dp"
+                android:background="@android:color/transparent"
+                android:hint="Technical speciality(e.g. airframe,powerplant mechanics,locomotive engineer)specify"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:padding="3dp"
+                android:textColor="@android:color/black"
+                android:layout_marginEnd="5dp"/>
+            <RelativeLayout
+                android:id="@+id/lay_special"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:background="@color/theme_color_orange">
+                <ImageView
+                    android:id="@+id/img_special"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/book"/>
+            </RelativeLayout>
 
-    <com.diegocarloslima.fgelv.lib.FloatingGroupExpandableListView
-    android:id="@+id/recycle_education"
-    android:layout_width="match_parent"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginTop="15dp"
-    android:orientation="vertical"
-    android:layout_height="wrap_content"></com.diegocarloslima.fgelv.lib.FloatingGroupExpandableListView>
-</LinearLayout>
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/cmnt_bg">
+            <EditText
+                android:id="@+id/edt_degree"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toStartOf="@+id/lay_degree"
+                android:layout_marginStart="2dp"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:padding="3dp"
+                android:hint="Associate degree specify"
+                android:textColor="@android:color/black"
+                android:background="@android:color/transparent"
+                android:layout_marginEnd="5dp"/>
+            <RelativeLayout
+                android:id="@+id/lay_degree"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:background="@color/theme_color_orange">
+                <ImageView
+                    android:id="@+id/img_degree"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/book"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/cmnt_bg">
+            <EditText
+                android:id="@+id/edt_other"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_toStartOf="@+id/lay_other"
+                android:layout_marginStart="2dp"
+                android:hint="Other specify"
+                android:textSize="14sp"
+                android:singleLine="true"
+                android:padding="3dp"
+                android:textColor="@android:color/black"
+                android:background="@android:color/transparent"
+                android:layout_marginEnd="5dp"/>
+            <RelativeLayout
+                android:id="@+id/lay_other"
+                android:layout_width="45dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:background="@color/theme_color_orange">
+                <ImageView
+                    android:id="@+id/img_other"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/book"/>
+            </RelativeLayout>
+
+        </RelativeLayout>
+        <ProgressBar
+            android:id="@+id/progress_edu"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:layout_marginTop="40dp"/>
+
+        <com.diegocarloslima.fgelv.lib.FloatingGroupExpandableListView
+            android:id="@+id/recycle_education"
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:orientation="vertical"
+            android:scrollbars="vertical"
+            android:groupIndicator="@null"
+            android:nestedScrollingEnabled="false"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
         <LinearLayout
             android:id="@+id/lay_bottom_edu"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="20dp"
             android:orientation="horizontal"

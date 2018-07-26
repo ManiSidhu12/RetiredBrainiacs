@@ -44,7 +44,7 @@
         android:paddingTop="3dp"
         android:textSize="16sp"
         android:textColor="@android:color/black"
-        android:text="Jasper Shintu"/>
+        android:text=""/>
         <com.iarcuschin.simpleratingbar.SimpleRatingBar
             android:id="@+id/rate_bar_account"
             android:layout_width="wrap_content"

@@ -218,6 +218,7 @@ catch (exc : Exception){
 
             if(rootLogin.status.equals("true")) {
                 Common.showToast(this@Verification,"Registered Successfully...")
+                SharedPrefManager.getInstance(this@Verification).setUserID(rootLogin.userId)
                 val intent = Intent(this@Verification, ContactInfo::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
@@ -239,8 +240,20 @@ catch (exc : Exception){
                 map["dob"] = SharedPrefManager.getInstance(this@Verification).dob
                 map["password"] = SharedPrefManager.getInstance(this@Verification).password
                 map["con_pswd"] = SharedPrefManager.getInstance(this@Verification).password
-                map["gender"] = SharedPrefManager.getInstance(this@Verification).gender
-                map["marital_status"] = SharedPrefManager.getInstance(this@Verification).maritalStatus
+                if(SharedPrefManager.getInstance(this@Verification).gender.equals("Male")){
+                    map["gender"] = "1"
+                }
+                else{
+                    map["gender"] = "2"
+                }
+               // map["gender"] = SharedPrefManager.getInstance(this@Verification).gender
+                if(SharedPrefManager.getInstance(this@Verification).maritalStatus.equals("Single")){
+                    map["marital_status"] = "1"
+                }
+                else{
+                    map["marital_status"] = "2"
+                }
+             //   map["marital_status"] = SharedPrefManager.getInstance(this@Verification).maritalStatus
                 map["activation_key"] = sb1.toString()
                 Log.e("map signup",map.toString())
                 return map

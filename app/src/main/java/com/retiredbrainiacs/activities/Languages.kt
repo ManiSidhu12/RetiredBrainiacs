@@ -1,38 +1,27 @@
 package com.retiredbrainiacs.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.ExpandableListView
-import android.widget.ImageView
-import android.widget.TextView
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.bignerdranch.expandablerecyclerview.Model.ParentListItem
-import com.diegocarloslima.fgelv.lib.FloatingGroupExpandableListView
-import com.diegocarloslima.fgelv.lib.ReflectionUtils
 import com.diegocarloslima.fgelv.lib.WrapperExpandableListAdapter
 import com.google.gson.Gson
+import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.SampleAdapter
 import com.retiredbrainiacs.apis.ApiClient
 import com.retiredbrainiacs.apis.ApiInterface
-import com.retiredbrainiacs.common.CommonUtils
-import com.retiredbrainiacs.common.Global
-import com.retiredbrainiacs.common.GlobalConstants
-import com.retiredbrainiacs.common.SharedPrefManager
+import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.ResponseRoot
-import com.retiredbrainiacs.model.SimpleChild
-import com.retiredbrainiacs.model.SimpleParentItem
-import com.retiredbrainiacs.model.feeds.FeedsRoot
 import com.retiredbrainiacs.model.login.ChildModel
 import com.retiredbrainiacs.model.login.MainModel
 import io.reactivex.Observer
@@ -40,12 +29,12 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
-import kotlinx.android.synthetic.main.group_view_holder.*
-import kotlinx.android.synthetic.main.group_view_holder.view.*
 import kotlinx.android.synthetic.main.language_screen.*
 import org.json.JSONObject
 import retrofit2.Retrofit
+import java.io.StringReader
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Languages : AppCompatActivity(){
     lateinit  var listDataHeader: ArrayList<String>
@@ -56,6 +45,13 @@ class Languages : AppCompatActivity(){
     lateinit var service: ApiInterface
     lateinit var gson: Gson
     //==============
+
+    lateinit var sb_prefer : StringBuilder
+    lateinit var sb_known : StringBuilder
+    lateinit var sb_spoken : StringBuilder
+    lateinit var modelList : ArrayList<MainModel>
+
+    lateinit var root : ResponseRoot
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,6 +69,11 @@ class Languages : AppCompatActivity(){
         gson = Gson()
         //====================
 
+        sb_known = StringBuilder()
+        sb_spoken = StringBuilder()
+        sb_prefer = StringBuilder()
+        modelList = ArrayList()
+
         if(CommonUtils.getConnectivityStatusString(this@Languages).equals("true")) {
             getLanguageApi()
         }
@@ -82,44 +83,13 @@ class Languages : AppCompatActivity(){
 
 
 btn_save_language.setOnClickListener {
-
+getCheckedStatus()
 
 }
 btn_skip1_language.setOnClickListener {
 startActivity(Intent(this@Languages,Interests::class.java))
 }
 
-
-/*
-        recycler_language.setOnScrollFloatingGroupListener(object: FloatingGroupExpandableListView.OnScrollFloatingGroupListener {
-            override fun onScrollFloatingGroupListener(floatingGroupView: View, scrollY: Int) {
-                val interpolation = -scrollY / floatingGroupView.getHeight()
-                // Changing from RGB(162,201,85) to RGB(255,255,255)
-                val greenToWhiteRed = (162 + 93 * interpolation)
-                val greenToWhiteGreen = (201 + 54 * interpolation)
-                val greenToWhiteBlue = (85 + 170 * interpolation)
-                val greenToWhiteColor = Color.argb(255, greenToWhiteRed, greenToWhiteGreen, greenToWhiteBlue)
-                // Changing from RGB(255,255,255) to RGB(0,0,0)
-                val whiteToBlackRed = (255 - 255 * interpolation)
-                val whiteToBlackGreen = (255 - 255 * interpolation)
-                val whiteToBlackBlue = (255 - 255 * interpolation)
-                val whiteToBlackColor = Color.argb(255, whiteToBlackRed, whiteToBlackGreen, whiteToBlackBlue)
-              //  val image : ImageView = floatingGroupView.findViewById(R.id.collapseButton)
-                floatingGroupView.collapseButton.setBackgroundColor(greenToWhiteColor)
-                val imageDrawable = floatingGroupView.collapseButton.getDrawable().mutate()
-                imageDrawable.setColorFilter(whiteToBlackColor, PorterDuff.Mode.SRC_ATOP)
-                // val background = floatingGroupView.findViewById(R.id.sample_activity_list_group_item_background)
-                //  background.setBackgroundColor(greenToWhiteColor)
-                floatingGroupView.txt_cat_name.setTextColor(whiteToBlackColor)
-                //val expanded = floatingGroupView.findViewById(R.id.sample_activity_list_group_expanded_image) as ImageView
-               // val expanded = floatingGroupView.findViewById(R.id.sample_activity_list_group_expanded_image) as ImageView
-                val expandedDrawable = floatingGroupView.collapseButton.getDrawable().mutate()
-                expandedDrawable.setColorFilter(whiteToBlackColor, PorterDuff.Mode.SRC_ATOP)
-            }
-
-
-            })
-*/
 
     }
 
@@ -171,13 +141,11 @@ startActivity(Intent(this@Languages,Interests::class.java))
 
                     listMain.add(objMain)
 
-
+modelList = listMain
                 }
 
                 Log.e("size", listMain.size.toString())
-              for(i in 0 until listMain.size){
-                  Log.e("list final",listMain[i].listChild.toString())
-              }
+
                 val adapter = SampleAdapter(this@Languages,listMain)
                 val wrapperAdapter = WrapperExpandableListAdapter(adapter)
                 recycler_language.setAdapter(wrapperAdapter)
@@ -207,10 +175,52 @@ startActivity(Intent(this@Languages,Interests::class.java))
         requestQueue.add(postRequest)
 
     }
+    private fun setLanguages(){
+        var url = GlobalConstants.API_URL+"sign_next_4_steps"
+        val pd = ProgressDialog.show(this@Languages, "", "Loading", false)
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, com.android.volley.Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+            Log.e("msg",root.status+root.message)
+            if(root.status.equals("true")) {
+                Common.showToast(this@Languages,root.message)
+                startActivity(Intent(this@Languages,Interests::class.java))
+
+
+            } else{
+                Common.showToast(this@Languages,root.message)
+
+            }
+        },
+
+                com.android.volley.Response.ErrorListener { pd.dismiss() }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+                map["user_id"] = "81"
+                map["known_languages"] = sb_known.toString()
+                map["preferred_languages"] = sb_prefer.toString()
+                map["spoken_languages"] = sb_spoken.toString()
+
+                Log.e("map languages",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
+    }
+
     //======= set Language in signUp API ====
     fun setLanguageAPI() {
         val map = HashMap<String, String>()
-        map["user_id"] = SharedPrefManager.getInstance(this@Languages).userId
+        map["user_id"] = "81"
         /*map["first_name"] = ""
         map["last_name"] = ""
         map["dob"] = ""
@@ -225,7 +235,7 @@ startActivity(Intent(this@Languages,Interests::class.java))
         map["street_address_line2"] = ""
         map["zip_code"] = ""
         map["image"] = ""*/
-        map["known_languages"] = ""
+        map["known_languages"] = sb_known.toString()
         map["preferred_languages"] = ""
         map["spoken_languages"] = ""
       /*  map["art"] = ""
@@ -274,6 +284,13 @@ startActivity(Intent(this@Languages,Interests::class.java))
                     }
 
                     override fun onNext(t: ResponseRoot) {
+                        if (t.status.equals("true")){
+                            Common.showToast(this@Languages,t.message)
+                        }
+                        else{
+                            Common.showToast(this@Languages,t.message)
+
+                        }
                     }
 
                     override fun onError(e: Throwable) {
@@ -281,7 +298,60 @@ startActivity(Intent(this@Languages,Interests::class.java))
                 })
     }
 
+fun getCheckedStatus() {
+    if(modelList != null && modelList.size > 0){
+        for(i in 0 until modelList.size)
+        {
+            if(modelList[i].heading.equals("known_languages")){
+                Log.e("title",modelList[i].heading)
+                if(modelList[i].listChild != null && modelList[i].listChild.size > 0){
+                  for(j in 0  until modelList[i].listChild.size){
+                      if(modelList[i].listChild[j].chkStatus.equals("1")){
+                          sb_known.append(modelList[i].listChild[j].value_id+",")
+                      }
+                  }
+                }
+            }
+          else  if(modelList[i].heading.equals("preferred_languages")){
+                Log.e("title",modelList[i].heading)
+                if(modelList[i].listChild != null && modelList[i].listChild.size > 0){
+                    for(j in 0  until modelList[i].listChild.size){
+                        if(modelList[i].listChild[j].chkStatus.equals("1")){
+                            sb_prefer.append(modelList[i].listChild[j].value_id+",")
+                        }
+                    }
+                }
+            }
+            else  if(modelList[i].heading.equals("spoken_languages")){
+                Log.e("title",modelList[i].heading)
+                if(modelList[i].listChild != null && modelList[i].listChild.size > 0){
+                    for(j in 0  until modelList[i].listChild.size){
+                        if(modelList[i].listChild[j].chkStatus.equals("1")){
+                            sb_spoken.append(modelList[i].listChild[j].value_id+",")
+                        }
+                    }
+                }
+            }
 
+        }
+    }
+if(sb_known.length > 0){
+    sb_known.deleteCharAt(sb_known.length -1)
+}
+    if(sb_spoken.length > 0){
+        sb_spoken.deleteCharAt(sb_spoken.length -1)
+    }
+    if(sb_prefer.length > 0){
+        sb_prefer.deleteCharAt(sb_prefer.length -1)
+    }
+Log.e("sbb","amaak"+sb_known.toString())
+    if(CommonUtils.getConnectivityStatusString(this@Languages).equals("true")) {
+        setLanguages()
+    }
+    else{
+        CommonUtils.openInternetDialog(this@Languages)
+    }
+    }
 
 
 }

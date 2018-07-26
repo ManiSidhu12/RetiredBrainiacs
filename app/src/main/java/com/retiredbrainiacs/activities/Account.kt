@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.activities
 
+import android.content.Intent
 import android.os.Bundle
 import android.os.PersistableBundle
 import android.support.v4.app.Fragment
@@ -9,8 +10,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.facebook.login.LoginManager
+import com.facebook.share.Share
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.SharedPrefManager
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.account_screen.*
 import kotlinx.android.synthetic.main.account_screen.view.*
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
@@ -28,13 +31,22 @@ class  Account : AppCompatActivity(){
         v.titletxt.text = "Account"
 
         txt_name_account.text = SharedPrefManager.getInstance(this@Account).name
-        work()
+
+        if (SharedPrefManager.getInstance(this@Account).userImg != null && !SharedPrefManager.getInstance(this@Account).equals(""))
+        {
+            Picasso.with(this@Account).load(SharedPrefManager.getInstance(this@Account).userImg).into(img_user_account)
+        }
+            work()
     }
 
     fun work(){
            lay_logout.setOnClickListener{
             SharedPrefManager.getInstance(this@Account).logout()
             LoginManager.getInstance().logOut()
+        }
+
+        btn_edit.setOnClickListener {
+
         }
     }
 }

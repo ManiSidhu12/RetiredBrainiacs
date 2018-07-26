@@ -12,6 +12,18 @@ private String status;
 @Expose
 private String message;
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    @SerializedName("avt")
+    @Expose
+    private String image;
+
     public String getMsg() {
         return msg;
     }

@@ -243,7 +243,7 @@ Log.e("twitter result",result1?.data)
 
             if(rootLogin.status.equals("true")) {
                 Common.showToast(this@MainScreen,"Logged In Successfully...")
-                SharedPrefManager.getInstance(this@MainScreen).userLogin(rootLogin.id,rootLogin.name,email,"","",pswd,"")
+                SharedPrefManager.getInstance(this@MainScreen).userLogin(rootLogin.data.userId,rootLogin.data.displayName,email,"",rootLogin.data.image,pswd,"")
                 val intent = Intent(this@MainScreen, Home::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
