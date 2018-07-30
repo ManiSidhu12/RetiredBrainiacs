@@ -64,10 +64,16 @@ if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
             holder.lay_request.setBackgroundResource(R.drawable.green_bg)
 
         }
+        if(listAll[position].requestSent.equals("2")){
+            holder.lay_request.visibility = View.GONE
+        }
+        else{
+            holder.lay_request.visibility = View.VISIBLE
+        }
     }
     fun sendRequest(id: String, txtSend: TextView, lay_request: RelativeLayout) {
         val pd = ProgressDialog.show(ctx, "", "Sending", false)
-Log.e("parms",id+","+SharedPrefManager.getInstance(ctx).userId)
+     Log.e("parms",id+","+SharedPrefManager.getInstance(ctx).userId)
         service.sendRequest(SharedPrefManager.getInstance(ctx).userId,id)
                 //.timeout(1,TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())

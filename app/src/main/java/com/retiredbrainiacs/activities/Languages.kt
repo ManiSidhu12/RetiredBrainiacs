@@ -35,6 +35,7 @@ import retrofit2.Retrofit
 import java.io.StringReader
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class Languages : AppCompatActivity(){
     lateinit  var listDataHeader: ArrayList<String>
@@ -46,12 +47,12 @@ class Languages : AppCompatActivity(){
     lateinit var gson: Gson
     //==============
 
-    lateinit var sb_prefer : StringBuilder
-    lateinit var sb_known : StringBuilder
-    lateinit var sb_spoken : StringBuilder
+    lateinit var sb : StringBuilder
     lateinit var modelList : ArrayList<MainModel>
 
     lateinit var root : ResponseRoot
+    var map = HashMap<String, String>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +70,7 @@ class Languages : AppCompatActivity(){
         gson = Gson()
         //====================
 
-        sb_known = StringBuilder()
-        sb_spoken = StringBuilder()
-        sb_prefer = StringBuilder()
+        sb = StringBuilder()
         modelList = ArrayList()
 
         if(CommonUtils.getConnectivityStatusString(this@Languages).equals("true")) {
@@ -200,11 +199,7 @@ modelList = listMain
                 com.android.volley.Response.ErrorListener { pd.dismiss() }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
-                val map = HashMap<String, String>()
-                map["user_id"] = "81"
-                map["known_languages"] = sb_known.toString()
-                map["preferred_languages"] = sb_prefer.toString()
-                map["spoken_languages"] = sb_spoken.toString()
+
 
                 Log.e("map languages",map.toString())
                 return map
@@ -235,7 +230,7 @@ modelList = listMain
         map["street_address_line2"] = ""
         map["zip_code"] = ""
         map["image"] = ""*/
-        map["known_languages"] = sb_known.toString()
+        map["known_languages"] = ""
         map["preferred_languages"] = ""
         map["spoken_languages"] = ""
       /*  map["art"] = ""
@@ -298,53 +293,33 @@ modelList = listMain
                 })
     }
 
-fun getCheckedStatus() {
+fun getCheckedStatus()
+{
     if(modelList != null && modelList.size > 0){
+        map = HashMap()
+map["user_id"] = "81"
         for(i in 0 until modelList.size)
         {
-            if(modelList[i].heading.equals("known_languages")){
                 Log.e("title",modelList[i].heading)
+            sb = StringBuilder()
                 if(modelList[i].listChild != null && modelList[i].listChild.size > 0){
                   for(j in 0  until modelList[i].listChild.size){
                       if(modelList[i].listChild[j].chkStatus.equals("1")){
-                          sb_known.append(modelList[i].listChild[j].value_id+",")
+                          sb.append(modelList[i].listChild[j].value_id+",")
                       }
                   }
                 }
-            }
-          else  if(modelList[i].heading.equals("preferred_languages")){
-                Log.e("title",modelList[i].heading)
-                if(modelList[i].listChild != null && modelList[i].listChild.size > 0){
-                    for(j in 0  until modelList[i].listChild.size){
-                        if(modelList[i].listChild[j].chkStatus.equals("1")){
-                            sb_prefer.append(modelList[i].listChild[j].value_id+",")
-                        }
-                    }
-                }
-            }
-            else  if(modelList[i].heading.equals("spoken_languages")){
-                Log.e("title",modelList[i].heading)
-                if(modelList[i].listChild != null && modelList[i].listChild.size > 0){
-                    for(j in 0  until modelList[i].listChild.size){
-                        if(modelList[i].listChild[j].chkStatus.equals("1")){
-                            sb_spoken.append(modelList[i].listChild[j].value_id+",")
-                        }
-                    }
-                }
-            }
 
+            if(sb.length > 0){
+                sb.deleteCharAt(sb.length -1)
+            }
+map[modelList[i].heading]= sb.toString()
         }
+
     }
-if(sb_known.length > 0){
-    sb_known.deleteCharAt(sb_known.length -1)
-}
-    if(sb_spoken.length > 0){
-        sb_spoken.deleteCharAt(sb_spoken.length -1)
-    }
-    if(sb_prefer.length > 0){
-        sb_prefer.deleteCharAt(sb_prefer.length -1)
-    }
-Log.e("sbb","amaak"+sb_known.toString())
+
+
+Log.e("sbb","amaak"+sb.toString())
     if(CommonUtils.getConnectivityStatusString(this@Languages).equals("true")) {
         setLanguages()
     }

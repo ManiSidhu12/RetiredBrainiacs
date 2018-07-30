@@ -40,7 +40,6 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
 
     val privacyArray = arrayOf("Public","Private")
     //============== Retrofit =========
-    lateinit var retroFit: Retrofit
      lateinit var service: ApiInterface
      lateinit var gson: Gson
     //==============
@@ -70,7 +69,6 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
 
         // ============ Retrofit ===========
         service = ApiClient.getClient().create(ApiInterface::class.java)
-        retroFit = ApiClient.getClient()
         gson = Gson()
         //====================
 

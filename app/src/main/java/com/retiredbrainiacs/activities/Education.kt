@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.activities
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBar
@@ -15,12 +16,16 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.bignerdranch.expandablerecyclerview.Model.ParentListItem
 import com.diegocarloslima.fgelv.lib.WrapperExpandableListAdapter
+import com.google.gson.Gson
+import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.SampleAdapter
 import com.retiredbrainiacs.adapters.SimpleExpandableAdapter
+import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
+import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.SimpleChild
 import com.retiredbrainiacs.model.SimpleParentItem
 import com.retiredbrainiacs.model.login.ChildModel
@@ -28,10 +33,15 @@ import com.retiredbrainiacs.model.login.MainModel
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.education_screen.*
 import org.json.JSONObject
+import java.io.StringReader
 
 class Education : AppCompatActivity(){
 
+    lateinit var sb : StringBuilder
+    lateinit var modelList : java.util.ArrayList<MainModel>
 
+    lateinit var root : ResponseRoot
+    var map = HashMap<String, String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.education_screen)
@@ -58,6 +68,13 @@ work()
        btn_skip1_edu.setOnClickListener {
            startActivity(Intent(this@Education,WorkDetails::class.java))
        }
+
+        btn_save_edu.setOnClickListener {
+            getCheckedStatus()
+        }
+        btn_pre_edu.setOnClickListener {
+            finish()
+        }
     }
 
     //===== Get Education API =====
@@ -106,6 +123,7 @@ work()
                     Log.e("map",objModel.listChild.toString())
 
                     listMain.add(objModel)
+                    modelList = listMain
 
                 }
 
@@ -113,9 +131,7 @@ work()
                 val wrapperAdapter = WrapperExpandableListAdapter(adapter)
                 recycle_education.setAdapter(wrapperAdapter)
 
-               /* for (i in 0 until wrapperAdapter.getGroupCount()) {
-                    recycle_education.expandGroup(i)
-                }*/
+
 
             }
         },
@@ -126,9 +142,9 @@ work()
                     lay_bottom_edu.visibility = View.GONE }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
-                val map = java.util.HashMap<String, String>()
+                val map = HashMap<String, String>()
 
-                map["user_id"] = SharedPrefManager.getInstance(this@Education).userId
+                map["user_id"] = "81"
                 return map
             }
         }
@@ -139,6 +155,85 @@ work()
 
     }
 
+    private fun setEducation(){
+        var url = GlobalConstants.API_URL+"sign_next_4_steps"
+        val pd = ProgressDialog.show(this@Education, "", "Loading", false)
 
+        val postRequest = object : StringRequest(Request.Method.POST, url, com.android.volley.Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+            Log.e("msg",root.status+root.message)
+            if(root.status.equals("true")) {
+                Common.showToast(this@Education,root.message)
+                startActivity(Intent(this@Education,WorkDetails::class.java))
+
+
+            } else{
+                Common.showToast(this@Education,root.message)
+
+            }
+        },
+
+                com.android.volley.Response.ErrorListener { pd.dismiss() }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+
+
+                Log.e("map education",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
+    }
+
+    fun getCheckedStatus()
+    {
+        if(modelList != null && modelList.size > 0){
+            map = HashMap()
+            map["user_id"] = "81"
+            map["eh_technical_or_vocational_training"] = edt_tech_training.text.toString()
+            map["eh_technical_speciality"] = edt_tech_speciality.text.toString()
+            map["eh_associate_degree_specify"] = edt_degree.text.toString()
+            map["eh_other_specify"] = edt_other.text.toString()
+          //  map["bachelor_degrees"] = ""
+          //  map["bachelors_degrees_other"] = ""
+         //   map["advanced_degrees"] = ""
+          //  map["advanced_degrees_other"] = ""
+            for(i in 0 until modelList.size)
+            {
+                Log.e("title",modelList[i].heading)
+                sb = StringBuilder()
+                if(modelList[i].listChild != null && modelList[i].listChild.size > 0){
+                    for(j in 0  until modelList[i].listChild.size){
+                        if(modelList[i].listChild[j].chkStatus.equals("1")){
+                            sb.append(modelList[i].listChild[j].value_id+",")
+                        }
+                    }
+                }
+
+                if(sb.length > 0){
+                    sb.deleteCharAt(sb.length -1)
+                }
+                map[modelList[i].heading]= sb.toString()
+            }
+
+        }
+
+
+        Log.e("sbb","amaak"+sb.toString())
+        if(CommonUtils.getConnectivityStatusString(this@Education).equals("true")) {
+            setEducation()
+        }
+        else{
+            CommonUtils.openInternetDialog(this@Education)
+        }
+    }
 
 }

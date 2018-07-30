@@ -32,9 +32,10 @@ class  Account : AppCompatActivity(){
 
         txt_name_account.text = SharedPrefManager.getInstance(this@Account).name
 
+
         if (SharedPrefManager.getInstance(this@Account).userImg != null && !SharedPrefManager.getInstance(this@Account).equals(""))
         {
-            Picasso.with(this@Account).load(SharedPrefManager.getInstance(this@Account).userImg).into(img_user_account)
+          //  Picasso.with(this@Account).load(SharedPrefManager.getInstance(this@Account).userImg).into(img_user_account)
         }
             work()
     }
@@ -46,6 +47,14 @@ class  Account : AppCompatActivity(){
         }
 
         btn_edit.setOnClickListener {
+
+        }
+
+        lay_about.setOnClickListener {
+            startActivity(Intent(this@Account,AboutUs::class.java))
+        }
+        lay_suggestion.setOnClickListener {
+            startActivity(Intent(this@Account,Sugggestions::class.java))
 
         }
     }

@@ -20,6 +20,18 @@ private Integer rating;
 @SerializedName("request_status")
 @Expose
 private Integer requestStatus;
+
+    public Integer getRequestSent() {
+        return requestSent;
+    }
+
+    public void setRequestSent(Integer requestSent) {
+        this.requestSent = requestSent;
+    }
+
+    @SerializedName("request_sent")
+    @Expose
+    private Integer requestSent;
 @SerializedName("request_status_text")
 @Expose
 private String requestStatusText;

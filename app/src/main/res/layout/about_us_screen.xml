@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:orientation="vertical">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="190dp"
+        android:src="@drawable/aboutus"
+        android:scaleType="fitXY"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="About Us"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp"
+        android:textSize="22sp"
+        android:textColor="@color/theme_color_orange"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textSize="14sp"
+        android:padding="2dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:text="When you are looking to explore life even further and searching for compatible people to share new adventures with, Retired Brainiacs offers everything you desire. Here, invigorating experiences await.\nRetired Brainiacs is a community of loving and caring people who have come together for their ever increasing urge to share life experiences and engage in interesting activities together. Retired Brainiacs are people with diverse personal and professional backgrounds who seek exciting new connections.\nWhen you are in Retired Brainiacs community, it does not matter if you are a movie buff or a classical music aficionado or a connoisseur of fine cuisine, you always have companions to find who share your interests and are excited to walk with you on this journey.\nRetired Brainiacs gives you an opportunity to leave a digital impression of your decades of legacy. With personal archives and memorials, you ensure that coming generations know who you were and what a full rich life you have lived.\nIt is time to take a step in a fresh direction with new people, new memories and new opportunities.\n \nIt is time to be a Retired Brainiac."
+        android:textColor="@android:color/black"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="10dp">
+        <ImageView
+            android:id="@+id/imgg"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            android:src="@drawable/mail"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/imgg"
+            android:layout_centerHorizontal="true"
+            android:layout_marginStart="14dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/general"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="General Enquiries:"
+                android:textColor="@color/theme_color_orange"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/txt_general"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="info@retiredbrainiacs.com"
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/press"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Press Enquiries:"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/theme_color_orange"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/txt_press"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="press@retiredbrainiacs.com"
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/help"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Help &amp; Support"
+                android:layout_marginTop="10dp"
+                android:textColor="@color/theme_color_orange"
+                android:textSize="16sp"/>
+            <TextView
+                android:id="@+id/txt_help"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="support@retiredbrainiacs.com"
+                android:textColor="@color/black"
+                android:textSize="16sp"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
+</ScrollView>

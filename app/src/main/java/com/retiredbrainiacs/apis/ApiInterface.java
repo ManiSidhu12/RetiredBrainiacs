@@ -1,6 +1,7 @@
 package com.retiredbrainiacs.apis;
 
 import com.retiredbrainiacs.model.ResponseRoot;
+import com.retiredbrainiacs.model.classified.ClassifiedRoot;
 import com.retiredbrainiacs.model.feeds.FeedsRoot;
 import com.retiredbrainiacs.model.forum.ForumRoot;
 import com.retiredbrainiacs.model.friend.AllFriendRoot;
@@ -44,14 +45,15 @@ public interface ApiInterface {
     Observable<AllFriendRoot> getFriends(@Field("user_id") String u_id);
 
     @FormUrlEncoded
-    @POST("?action=all_friend_request")
+    @POST("?action=pending_friend_request")
     Observable<AllFriendRoot> getRequests(@Field("user_id") String u_id);
 
     @FormUrlEncoded
     @POST("?action=accept_request")
     Observable<ResponseRoot> acceptRequest(@Field("user_id") String u_id,@Field("sent_from") String id,@Field("act") String type);
 
-    @Multipart
-    @POST("?action=sign_next_4_steps")
-    Call<ResponseRoot> uploadImage(@Part MultipartBody.Part image, @QueryMap Map<String, String> params);
+
+@FormUrlEncoded
+    @POST("?action=list_classified")
+    Observable<ClassifiedRoot> getAllClassified(@Field("user_id") String u_id);
 }

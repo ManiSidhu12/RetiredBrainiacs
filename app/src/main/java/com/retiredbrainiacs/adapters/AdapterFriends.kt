@@ -85,7 +85,7 @@ holder.lay_request.setBackgroundResource(R.drawable.memo_btn_bg)
                         if(t != null ){
                             if(t.status.equals("true")) {
                                 Common.showToast(ctx,t.msg)
-                                lay.visibility =View.GONE
+                                lay.visibility = View.GONE
 
                             }
                             else{

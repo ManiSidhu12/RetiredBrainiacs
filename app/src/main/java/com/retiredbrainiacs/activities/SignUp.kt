@@ -156,6 +156,10 @@ class SignUp : Activity(){
         var date : String
         var mnth : String
         var mnth1 : Int
+        val calen  = Calendar.getInstance()
+        calen.set(Calendar.DAY_OF_MONTH,mDay)
+        calen.set(Calendar.MONTH,mMonth)
+        calen.set(Calendar.YEAR,mYear-55)
         val datePickerDialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
             if(dayOfMonth < 10){
                 date = "0" + dayOfMonth.toString()
@@ -173,7 +177,7 @@ class SignUp : Activity(){
             edt_dob_signup.text = Editable.Factory.getInstance().newEditable(date + "/" + mnth + "/" + year)
 
         }, mYear, mMonth, mDay)
-        datePickerDialog.datePicker.maxDate = (mYear-55).toLong()
+        datePickerDialog.datePicker.maxDate = calen.timeInMillis
         datePickerDialog.show()
 
     }
