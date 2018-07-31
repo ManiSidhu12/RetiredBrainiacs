@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -37,16 +38,37 @@ class AllClassifiedAdapter(var ctx: Context, var listClassified: MutableList<Lis
 
         holder.title.text = listClassified[position].mainTitle
         val list : ArrayList<Datalist> = listClassified[position].datalist
-        adap = ViewPagerAdapter((ctx as AppCompatActivity).supportFragmentManager,list)
-        adap.addFragment(PagerFragment(),"")
+        Log.e("pos",position.toString())
+     //   holder.pager.offscreenPageLimit = 3
+     adap = ViewPagerAdapter((listClassified[position].datalist))
         holder.pager.adapter = adap
+      //  adap.addFragment(PagerFragment(),position)
+if(listClassified[position].datalist.size > 1){
+    holder.btnPrevious.visibility = View.VISIBLE
+    holder.btnNext.visibility = View.VISIBLE
+}
+        else{
+    holder.btnPrevious.visibility = View.GONE
+    holder.btnNext.visibility = View.GONE
+        }
 
-        holder.layMain.setOnClickListener {
-           // ctx.startActivity(Intent(ctx,ClassifiedDetail::class.java))
+        holder.btnNext.setOnClickListener {
+
+            if(holder.pager.currentItem < listClassified[position].datalist.size){
+                holder.pager.setCurrentItem(holder.pager.currentItem+1,true)
+adap.notifyDataSetChanged()
+            }
+
+        }
+        holder.btnPrevious.setOnClickListener {
+            if(holder.pager.currentItem > 0) {
+
+                holder.pager.setCurrentItem(holder.pager.currentItem - 1, true)
+            }
+
         }
     }
-
-    class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
+   class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val title = itemView.txt_classifi_title
      /*   val img = itemView.img_all_post
         val txtPost = itemView.txt_classifi_post_data
@@ -54,5 +76,7 @@ class AllClassifiedAdapter(var ctx: Context, var listClassified: MutableList<Lis
         val txtData = itemView.txt_classifi_all*/
         val layMain = itemView.lay_main_all_classify
         val pager = itemView.pager
+        val btnPrevious = itemView.previous
+        val btnNext = itemView.next
     }
 }

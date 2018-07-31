@@ -33,9 +33,10 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         Common.setFontRegular(ctx,holder.txtComment)
         Common.setFontBtnRegular(ctx,holder.btnPost)
         Common.setFontEditRegular(ctx,holder.edtCmnt)
-        Log.e("content",posts[position].usersWallPostId)
+        Log.e("content",posts[position].postContent)
         holder.txtPost.text = posts[position].postContent
-       // holder.txtUserName.text = posts[position].
+
+        holder.txtUserName.text = posts[position].wallPostUserName
 
         if(type.equals("forum")){
             holder.laySettings.visibility = View.GONE

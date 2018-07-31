@@ -7,20 +7,20 @@ import android.view.View
 import android.view.ViewGroup
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.model.classified.Datalist
-import android.content.Intent.getIntent
-import android.os.Parcelable
 import android.util.Log
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.pager_adap.view.*
 
 
 class PagerFragment : Fragment(){
 
     companion object {
-        fun newInstance(p: Int, datalist: ArrayList<Datalist>) : PagerFragment{
+        fun newInstance(p: Int, datalist: ArrayList<Datalist>, list: ArrayList<Int>) : PagerFragment{
             val f  = PagerFragment()
             val args = Bundle()
             args.putInt("pos", p)
             args.putParcelableArrayList("value", datalist)
+            args.putIntegerArrayList("positions",list)
             f.arguments = args
             return f
         }
@@ -31,9 +31,15 @@ class PagerFragment : Fragment(){
 
         val arraylist : ArrayList<Datalist> = arguments!!.getParcelableArrayList("value")
         var p : Int  = arguments!!.getInt("pos")
-        Log.e("ppp","ddd"+arraylist[p].title)
 
-        v.txt_classifi_all.text = arraylist[p].title
+        val listPositions = arguments!!.getIntegerArrayList("positions")
+        Log.e("ppp","ddd"+arraylist[p].title )
+
+        v.txt_classifi_post_data.text = arraylist[p].title
+
+        if(arraylist[p].image != null && !arraylist[p].image.equals("")){
+            Picasso.with(activity).load(arraylist[p].image).into(v.img_all_post)
+        }
         return v
     }
 }

@@ -6,171 +6,192 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 
 public class Post {
+    @SerializedName("wall_post_user_name")
+    @Expose
+    private String wallPostUserName;
+    @SerializedName("wall_post_user_image")
+    @Expose
+    private String wallPostUserImage;
+    @SerializedName("users_wall_post_id")
+    @Expose
+    private String usersWallPostId;
+    @SerializedName("from_user_id")
+    @Expose
+    private String fromUserId;
+    @SerializedName("to_user_id")
+    @Expose
+    private String toUserId;
+    @SerializedName("post_content")
+    @Expose
+    private String postContent;
+    @SerializedName("image")
+    @Expose
+    private String image;
+    @SerializedName("video")
+    @Expose
+    private String video;
+    @SerializedName("audio")
+    @Expose
+    private String audio;
+    @SerializedName("post_content_type")
+    @Expose
+    private String postContentType;
+    @SerializedName("file_align")
+    @Expose
+    private String fileAlign;
+    @SerializedName("post_type")
+    @Expose
+    private String postType;
+    @SerializedName("posting_date")
+    @Expose
+    private String postingDate;
+    @SerializedName("like_count")
+    @Expose
+    private String likeCount;
+    @SerializedName("liked_by_me")
+    @Expose
+    private String likedByMe;
+    @SerializedName("comment_count")
+    @Expose
+    private String commentCount;
+    @SerializedName("comment_list")
+    @Expose
+    private List<Object> commentList = null;
 
-@SerializedName("users_wall_post_id")
-@Expose
-private String usersWallPostId;
-@SerializedName("from_user_id")
-@Expose
-private String fromUserId;
-@SerializedName("to_user_id")
-@Expose
-private String toUserId;
-@SerializedName("post_content")
-@Expose
-private String postContent;
-@SerializedName("image")
-@Expose
-private String image;
-@SerializedName("video")
-@Expose
-private String video;
-@SerializedName("audio")
-@Expose
-private String audio;
-@SerializedName("post_content_type")
-@Expose
-private String postContentType;
-@SerializedName("file_align")
-@Expose
-private String fileAlign;
-@SerializedName("post_type")
-@Expose
-private String postType;
-@SerializedName("posting_date")
-@Expose
-private String postingDate;
-@SerializedName("like_count")
-@Expose
-private String likeCount;
-@SerializedName("liked_by_me")
-@Expose
-private String likedByMe;
-@SerializedName("comment_count")
-@Expose
-private String commentCount;
-@SerializedName("comment_list")
-@Expose
-private List<CommentList> commentList = null;
+    public String getWallPostUserName() {
+        return wallPostUserName;
+    }
 
-public String getUsersWallPostId() {
-return usersWallPostId;
-}
+    public void setWallPostUserName(String wallPostUserName) {
+        this.wallPostUserName = wallPostUserName;
+    }
 
-public void setUsersWallPostId(String usersWallPostId) {
-this.usersWallPostId = usersWallPostId;
-}
+    public String getWallPostUserImage() {
+        return wallPostUserImage;
+    }
 
-public String getFromUserId() {
-return fromUserId;
-}
+    public void setWallPostUserImage(String wallPostUserImage) {
+        this.wallPostUserImage = wallPostUserImage;
+    }
 
-public void setFromUserId(String fromUserId) {
-this.fromUserId = fromUserId;
-}
+    public String getUsersWallPostId() {
+        return usersWallPostId;
+    }
 
-public String getToUserId() {
-return toUserId;
-}
+    public void setUsersWallPostId(String usersWallPostId) {
+        this.usersWallPostId = usersWallPostId;
+    }
 
-public void setToUserId(String toUserId) {
-this.toUserId = toUserId;
-}
+    public String getFromUserId() {
+        return fromUserId;
+    }
 
-public String getPostContent() {
-return postContent;
-}
+    public void setFromUserId(String fromUserId) {
+        this.fromUserId = fromUserId;
+    }
 
-public void setPostContent(String postContent) {
-this.postContent = postContent;
-}
+    public String getToUserId() {
+        return toUserId;
+    }
 
-public String getImage() {
-return image;
-}
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
 
-public void setImage(String image) {
-this.image = image;
-}
+    public String getPostContent() {
+        return postContent;
+    }
 
-public String getVideo() {
-return video;
-}
+    public void setPostContent(String postContent) {
+        this.postContent = postContent;
+    }
 
-public void setVideo(String video) {
-this.video = video;
-}
+    public String getImage() {
+        return image;
+    }
 
-public String getAudio() {
-return audio;
-}
+    public void setImage(String image) {
+        this.image = image;
+    }
 
-public void setAudio(String audio) {
-this.audio = audio;
-}
+    public String getVideo() {
+        return video;
+    }
 
-public String getPostContentType() {
-return postContentType;
-}
+    public void setVideo(String video) {
+        this.video = video;
+    }
 
-public void setPostContentType(String postContentType) {
-this.postContentType = postContentType;
-}
+    public String getAudio() {
+        return audio;
+    }
 
-public String getFileAlign() {
-return fileAlign;
-}
+    public void setAudio(String audio) {
+        this.audio = audio;
+    }
 
-public void setFileAlign(String fileAlign) {
-this.fileAlign = fileAlign;
-}
+    public String getPostContentType() {
+        return postContentType;
+    }
 
-public String getPostType() {
-return postType;
-}
+    public void setPostContentType(String postContentType) {
+        this.postContentType = postContentType;
+    }
 
-public void setPostType(String postType) {
-this.postType = postType;
-}
+    public String getFileAlign() {
+        return fileAlign;
+    }
 
-public String getPostingDate() {
-return postingDate;
-}
+    public void setFileAlign(String fileAlign) {
+        this.fileAlign = fileAlign;
+    }
 
-public void setPostingDate(String postingDate) {
-this.postingDate = postingDate;
-}
+    public String getPostType() {
+        return postType;
+    }
 
-public String getLikeCount() {
-return likeCount;
-}
+    public void setPostType(String postType) {
+        this.postType = postType;
+    }
 
-public void setLikeCount(String likeCount) {
-this.likeCount = likeCount;
-}
+    public String getPostingDate() {
+        return postingDate;
+    }
 
-public String getLikedByMe() {
-return likedByMe;
-}
+    public void setPostingDate(String postingDate) {
+        this.postingDate = postingDate;
+    }
 
-public void setLikedByMe(String likedByMe) {
-this.likedByMe = likedByMe;
-}
+    public String getLikeCount() {
+        return likeCount;
+    }
 
-public String getCommentCount() {
-return commentCount;
-}
+    public void setLikeCount(String likeCount) {
+        this.likeCount = likeCount;
+    }
 
-public void setCommentCount(String commentCount) {
-this.commentCount = commentCount;
-}
+    public String getLikedByMe() {
+        return likedByMe;
+    }
 
-public List<CommentList> getCommentList() {
-return commentList;
-}
+    public void setLikedByMe(String likedByMe) {
+        this.likedByMe = likedByMe;
+    }
 
-public void setCommentList(List<CommentList> commentList) {
-this.commentList = commentList;
-}
+    public String getCommentCount() {
+        return commentCount;
+    }
+
+    public void setCommentCount(String commentCount) {
+        this.commentCount = commentCount;
+    }
+
+    public List<Object> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<Object> commentList) {
+        this.commentList = commentList;
+    }
 
 }

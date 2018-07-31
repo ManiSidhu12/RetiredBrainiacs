@@ -15,15 +15,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import com.android.volley.AuthFailureError
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
+import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.FeedsAdapter
 import com.retiredbrainiacs.apis.ApiClient
 import com.retiredbrainiacs.apis.ApiInterface
-import com.retiredbrainiacs.common.Common
-import com.retiredbrainiacs.common.CommonUtils
-import com.retiredbrainiacs.common.Imageutils
-import com.retiredbrainiacs.common.SharedPrefManager
+import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.FeedsRoot
 import io.reactivex.Observer
@@ -33,8 +37,10 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.home_feed_screen.*
 import kotlinx.android.synthetic.main.home_feed_screen.view.*
+import org.json.JSONObject
 import retrofit2.Retrofit
 import java.io.File
+import java.io.StringReader
 
 class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
 
@@ -48,7 +54,7 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
     lateinit var v1 : View
 
     lateinit var imageUtils : Imageutils
-
+lateinit var root : FeedsRoot
 
 
 
@@ -87,7 +93,7 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
         v.spin_privacy_feed.adapter = adapterPrivacy
 
         if(CommonUtils.getConnectivityStatusString(activity).equals("true")){
-            getFeedsAPI()
+            getFeeds()
         }
         else{
             CommonUtils.openInternetDialog(activity)
@@ -236,5 +242,49 @@ fun work(){
 
                 })
     }
+
+    private fun getFeeds(){
+        var url = GlobalConstants.API_URL1+"?action=my_wall_post"
+        v.progress_feed.visibility= View.VISIBLE
+        v.recycler_feed.visibility= View.GONE
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            v.progress_feed.visibility= View.GONE
+            v.recycler_feed.visibility= View.VISIBLE
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            root = gson.fromJson<FeedsRoot>(reader, FeedsRoot::class.java)
+
+            if(root.status.equals("true")){
+                v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
+                v.recycler_feed.adapter = FeedsAdapter(activity!!,root.posts,"post")
+            }
+            else{
+                Common.showToast(activity!!,root.message)
+            }
+        },
+
+                Response.ErrorListener {
+                    v.progress_feed.visibility= View.GONE
+                    v.recycler_feed.visibility= View.VISIBLE
+                }){
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["user_id"] = SharedPrefManager.getInstance(activity).userId
+                map["linkname"] = ""
+                map["pst_srch_keyword"] = ""
+                Log.e("map feed",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(activity)
+        requestQueue.add(postRequest)
+
+    }
+
 
 }
