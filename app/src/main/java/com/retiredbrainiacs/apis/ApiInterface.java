@@ -53,7 +53,11 @@ public interface ApiInterface {
     Observable<ResponseRoot> acceptRequest(@Field("user_id") String u_id,@Field("sent_from") String id,@Field("act") String type);
 
 
-@FormUrlEncoded
+    @FormUrlEncoded
     @POST("?action=list_classified")
     Observable<ClassifiedRoot> getAllClassified(@Field("user_id") String u_id);
+
+    @FormUrlEncoded
+    @POST("?action=saved_classified")
+    Observable<ClassifiedRoot> getSavedClassified(@Field("user_id") String u_id);
 }

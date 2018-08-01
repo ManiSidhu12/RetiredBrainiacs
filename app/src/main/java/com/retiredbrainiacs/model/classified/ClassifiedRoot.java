@@ -15,6 +15,9 @@ private String message;
 @SerializedName("list_classified")
 @Expose
 private List<ListClassified> listClassified = null;
+    @SerializedName("classified")
+    @Expose
+    private List<Classified> classified = null;
 
 public String getStatus() {
 return status;
@@ -39,5 +42,12 @@ return listClassified;
 public void setListClassified(List<ListClassified> listClassified) {
 this.listClassified = listClassified;
 }
+    public List<Classified> getClassified() {
+        return classified;
+    }
+
+    public void setClassified(List<Classified> classified) {
+        this.classified = classified;
+    }
 
 }

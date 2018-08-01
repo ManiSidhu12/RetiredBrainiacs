@@ -54,7 +54,7 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
     lateinit var v1 : View
 
     lateinit var imageUtils : Imageutils
-lateinit var root : FeedsRoot
+    lateinit var root : FeedsRoot
 
 
 
@@ -121,6 +121,7 @@ fun work(){
         }
     }
 }
+
 
     //======= Feeds API ====
    fun getFeedsAPI() {

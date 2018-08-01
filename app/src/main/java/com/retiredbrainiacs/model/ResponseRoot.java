@@ -3,6 +3,8 @@ package com.retiredbrainiacs.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 public class ResponseRoot {
 
 @SerializedName("status")
@@ -51,5 +53,14 @@ return message;
 public void setMessage(String message) {
 this.message = message;
 }
+    @SerializedName("favourite")
+    @Expose
+    private List<Integer> favourite = null;
+    public List<Integer> getFavourite() {
+        return favourite;
+    }
 
+    public void setFavourite(List<Integer> favourite) {
+        this.favourite = favourite;
+    }
 }
