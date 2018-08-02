@@ -32,7 +32,7 @@
         android:orientation="horizontal">
 
 
-        <EditText
+        <com.retiredbrainiacs.common.GoEditText
             android:id="@+id/edt1"
             android:layout_width="0dp"
             android:layout_height="match_parent"
@@ -47,7 +47,7 @@
             />
 
 
-            <EditText
+            <com.retiredbrainiacs.common.GoEditText
                 android:id="@+id/edt2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -59,12 +59,13 @@
                 android:gravity="center"
                 android:textSize="16sp"
                 android:textColor="@color/black"
+                android:textIsSelectable="true"
                 android:background="@drawable/cmnt_bg"
 
                 />
 
 
-            <EditText
+            <com.retiredbrainiacs.common.GoEditText
                 android:id="@+id/edt3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
@@ -81,7 +82,7 @@
                 />
 
 
-            <EditText
+            <com.retiredbrainiacs.common.GoEditText
                 android:id="@+id/edt4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"

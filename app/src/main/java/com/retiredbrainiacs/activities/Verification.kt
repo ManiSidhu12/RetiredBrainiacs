@@ -2,6 +2,8 @@ package com.retiredbrainiacs.activities
 
 import android.app.Activity
 import android.app.ProgressDialog
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
@@ -19,6 +21,7 @@ import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
+import com.retiredbrainiacs.common.GoEditTextListener
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.login.LoginRoot
 import kotlinx.android.synthetic.main.otp_screen.*
@@ -47,11 +50,69 @@ class Verification : Activity(){
 
         sb = StringBuilder()
 
+
+
         work()
 
     }
 
     fun work(){
+         edt1.addListener(object : GoEditTextListener{
+             override fun onUpdate(){
+                 val clipMan = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                 // otpView.setText(clipMan.getText());
+
+                 if (clipMan.text.toString() != null && clipMan.text.length == 4) {
+                     Log.e("text",clipMan.text.substring(0,1))
+                     edt1.setText(clipMan.text.substring(0,1))
+                     edt2.setText(clipMan.text.substring(1,2))
+                     edt3.setText(clipMan.text.substring(2,3))
+                     edt4.setText(clipMan.text.substring(3,4))
+                 }
+             }
+            })
+        edt2.addListener(object : GoEditTextListener{
+            override fun onUpdate(){
+                val clipMan = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                // otpView.setText(clipMan.getText());
+
+                if (clipMan.text.toString() != null && clipMan.text.length == 4) {
+                    Log.e("text",clipMan.text.substring(0,1).toString())
+                    edt1.setText(clipMan.text.substring(0,1))
+                    edt2.setText(clipMan.text.substring(1,2))
+                    edt3.setText(clipMan.text.substring(2,3))
+                    edt4.setText(clipMan.text.substring(3,4))
+                }
+            }
+        })
+        edt3.addListener(object : GoEditTextListener{
+            override fun onUpdate(){
+                val clipMan = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                // otpView.setText(clipMan.getText());
+
+                if (clipMan.text.toString() != null && clipMan.text.length == 4) {
+                    Log.e("text",clipMan.text.substring(0,1).toString())
+                    edt1.setText(clipMan.text.substring(0,1))
+                    edt2.setText(clipMan.text.substring(1,2))
+                    edt3.setText(clipMan.text.substring(2,3))
+                    edt4.setText(clipMan.text.substring(3,4))
+                }
+            }
+        })
+        edt4.addListener(object : GoEditTextListener{
+            override fun onUpdate(){
+                val clipMan = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                // otpView.setText(clipMan.getText());
+
+                if (clipMan.text.toString() != null && clipMan.text.length == 4) {
+                    Log.e("text",clipMan.text.substring(0,1).toString())
+                    edt1.setText(clipMan.text.substring(0,1))
+                    edt2.setText(clipMan.text.substring(1,2))
+                    edt3.setText(clipMan.text.substring(2,3))
+                    edt4.setText(clipMan.text.substring(3,4))
+                }
+            }
+        });
         edt1.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
                 if(sb.length == 0){

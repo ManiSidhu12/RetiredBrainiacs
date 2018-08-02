@@ -2,8 +2,11 @@ package com.retiredbrainiacs.common
 
 import android.app.Activity
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Typeface
 import android.support.design.widget.TextInputLayout
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
@@ -152,5 +155,24 @@ class Common{
             }
         }
 
+        //==================== Permission ======================
+        fun askForPermission(c: Activity, permission: String, requestCode: Int?): String {
+            val value: String
+            if (ContextCompat.checkSelfPermission(c, permission) != PackageManager.PERMISSION_GRANTED) {
+
+                if (ActivityCompat.shouldShowRequestPermissionRationale(c, permission)) {
+                    ActivityCompat.requestPermissions(c, arrayOf(permission), requestCode!!)
+
+                } else {
+
+                    ActivityCompat.requestPermissions(c, arrayOf(permission), requestCode!!)
+                }
+                value = "true"
+            } else {
+                showToast(c, "Permission Already Granted...")
+                value = "granted"
+            }
+            return value
+        }
     }
 }

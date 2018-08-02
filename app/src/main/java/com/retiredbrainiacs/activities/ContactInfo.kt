@@ -51,6 +51,7 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
 
 
     lateinit var  list_country : ArrayList<String>
+    lateinit var  list_code : ArrayList<String>
     //============== Retrofit =========
     lateinit var retroFit: Retrofit
     lateinit var service: ApiInterface
@@ -61,8 +62,8 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     lateinit var pd : ProgressDialog
 
     lateinit var imageutils: Imageutils
- var file_name : String = ""
- var file_path : String = ""
+    var file_name : String = ""
+    var file_path : String = ""
     lateinit var root : ResponseRoot
     lateinit var filetype : String
     lateinit var filename : String
@@ -136,12 +137,14 @@ imageutils.imagepicker(1)
     }
     private fun handleCountryJson(){
         list_country = ArrayList()
+        list_code = ArrayList()
         var arr : JSONArray
         try {
             arr = JSONArray(loadJSONFromAsset());
 
             for (i in 0 until arr.length()) {
                 list_country.add(arr.getJSONObject(i).getString("name"))
+                list_code.add(arr.getJSONObject(i).getString("code").toUpperCase())
             }
             spin_country.visibility = View.VISIBLE
             val adapterCountry = ArrayAdapter<String>(this, R.layout.spin_txt1, list_country)
@@ -219,7 +222,7 @@ imageutils.imagepicker(1)
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
             root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
-Log.e("msg",root.status+root.message)
+            Log.e("msg",root.status+root.message)
             if(root.status.equals("true")) {
                 Common.showToast(this@ContactInfo,root.message)
                 startActivity(Intent(this@ContactInfo,Languages::class.java))
@@ -244,7 +247,7 @@ Log.e("msg",root.status+root.message)
                     map["iso"] = ""
                 }
                 else{
-                    map["iso"] = spin_country.selectedItem.toString()
+                    map["iso"] = list_code.get(spin_country.selectedItemPosition-1)
                 }
                 map["location"] = ""
                 map["city"] =  edt_city.text.toString().trim()
@@ -289,7 +292,7 @@ Log.e("msg",root.status+root.message)
                 country ="";
             }
             else{
-                country = spin_country.selectedItem.toString()
+                country = list_code.get(spin_country.selectedItemPosition-1)
             }
 
             val edit = SendImage(this@ContactInfo,"81",edt_phn.text.toString().trim(), edt_skype.text.toString().trim(),country, edt_city.text.toString().trim(), edt_adrs1.text.toString().trim(), edt_adrs2.text.toString().trim(),edt_zipccode.text.toString().trim(), filetype, filename)

@@ -156,6 +156,22 @@ public class AddPostAPI {
                 Log.i("imagetype", "4");
                 dos.writeBytes("Content-type: image/jpeg;" + lineEnd);
             }
+            if (imagetype.endsWith(".mp4")) {
+                Log.i("videotype", "1");
+                dos.writeBytes("Content-type: video/mp4;" + lineEnd);
+            }
+            if (imagetype.endsWith(".avi")) {
+                Log.i("videotype", "2");
+                dos.writeBytes("Content-type: video/avi;" + lineEnd);
+            }
+            if (imagetype.endsWith(".ogg")) {
+                Log.i("videotype", "3");
+                dos.writeBytes("Content-type: video/ogg;" + lineEnd);
+            }
+            if (imagetype.endsWith(".3gp")) {
+                Log.i("videotype", "4");
+                dos.writeBytes("Content-type: video/3gp;" + lineEnd);
+            }
             dos.writeBytes(lineEnd);
 
             int bytesAvailable = fileInputStream.available();

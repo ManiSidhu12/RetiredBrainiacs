@@ -33,9 +33,12 @@ class  Account : AppCompatActivity(){
         txt_name_account.text = SharedPrefManager.getInstance(this@Account).name
 
 
-        if (SharedPrefManager.getInstance(this@Account).userImg != null && !SharedPrefManager.getInstance(this@Account).equals(""))
+        if (SharedPrefManager.getInstance(this@Account).userImg != null && !SharedPrefManager.getInstance(this@Account).userImg.isEmpty())
         {
-          //  Picasso.with(this@Account).load(SharedPrefManager.getInstance(this@Account).userImg).into(img_user_account)
+         Picasso.with(this@Account).load(SharedPrefManager.getInstance(this@Account).userImg).into(img_user_account)
+        }
+        else{
+           img_user_account.setImageResource(R.drawable.dummyuser)
         }
             work()
     }

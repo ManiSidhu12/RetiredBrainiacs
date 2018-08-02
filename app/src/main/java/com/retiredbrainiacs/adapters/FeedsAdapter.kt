@@ -1,19 +1,39 @@
 package com.retiredbrainiacs.adapters
 
+import android.app.ProgressDialog
 import android.content.Context
+import android.graphics.Color
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.ImageView
+import android.widget.TextView
+import com.android.volley.AuthFailureError
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.Common
+import com.retiredbrainiacs.common.CommonUtils
+import com.retiredbrainiacs.common.GlobalConstants
+import com.retiredbrainiacs.common.SharedPrefManager
+import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.Post
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.home_feed_adapter.view.*
+import java.io.StringReader
 
 class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : String): RecyclerView.Adapter<FeedsAdapter.ViewHolder>(){
     val privacyArray = arrayOf("Public","Private")
+
+    lateinit var root: ResponseRoot
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v = LayoutInflater.from(ctx).inflate(R.layout.home_feed_adapter,parent,false)
@@ -38,6 +58,10 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
 
         holder.txtUserName.text = posts[position].wallPostUserName
 
+        if(posts[position].image != null && !posts[position].image.isEmpty()){
+            Picasso.with(ctx).load(posts[position].image).into(holder.imgPost)
+        }
+
         if(type.equals("forum")){
             holder.laySettings.visibility = View.GONE
             holder.layLikes.visibility = View.GONE
@@ -53,6 +77,59 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
             holder.spinPrivacy.adapter = adapterPrivacy
         }
 
+holder.layLike.setOnClickListener {
+    if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
+        like(ctx,posts[position].usersWallPostId,holder.txtLike,holder.imgLike,holder.txtLikeCount)
+    }
+    else{
+        CommonUtils.openInternetDialog(ctx)
+    }
+}
+    }
+    private fun like(ctx: Context, id: String, txtLike: TextView, imgLike: ImageView, txtLikeCount: TextView){
+        var url = GlobalConstants.API_URL1+"?action=submit_like"
+        val pd = ProgressDialog.show(ctx,"","Loading",false)
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = com.google.gson.stream.JsonReader(StringReader(response))
+            reader.isLenient = true
+            root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+
+            if(root.status.equals("true")){
+                Common.showToast(ctx,root.message)
+                txtLike.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
+                txtLikeCount.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
+               imgLike.setColorFilter(ContextCompat.getColor(ctx, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
+txtLikeCount.text = root.likeCount
+            }
+            else{
+                Common.showToast(ctx,root.message)
+                txtLike.setTextColor(Color.parseColor("#90949C"))
+                txtLikeCount.setTextColor(Color.parseColor("#90949C"))
+                imgLike.setColorFilter(Color.parseColor("#90949C"), android.graphics.PorterDuff.Mode.SRC_IN)
+                txtLikeCount.text = root.likeCount
+
+            }
+        },
+
+                Response.ErrorListener {
+                    pd.dismiss()
+                }){
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["user_id"] = SharedPrefManager.getInstance(ctx).userId
+                map["post_id"] = id
+                Log.e("map like",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(ctx)
+        requestQueue.add(postRequest)
 
     }
 
@@ -74,5 +151,9 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         val laySettings = itemView.lay_settings
         val layLikes = itemView.lay_likes
         val layCmnts = itemView.lay_cmnts
+        val txtLikeCount = itemView.txt_like_count
+        val txtCmntCount = itemView.txt_cmnt_count
+        val imgLike = itemView.img_like
+        val imgCmnt = itemView.img_cmnt
     }
 }

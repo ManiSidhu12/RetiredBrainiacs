@@ -203,8 +203,8 @@
         android:background="@android:color/white">
         <ImageView
             android:id="@+id/img_feed"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_alignParentStart="true"
             android:layout_centerInParent="true"
             android:layout_marginStart="7dp"

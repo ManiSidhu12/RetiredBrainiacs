@@ -1,14 +1,24 @@
 package com.retiredbrainiacs.fragments
 
+import android.Manifest
+import android.app.Activity
+import android.app.AlertDialog
 import android.app.ProgressDialog
+import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Bitmap
+import android.media.ThumbnailUtils
 import android.net.Uri
-import android.os.Bundle
-import android.os.Environment
+import android.os.*
+import android.provider.MediaStore
+import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
+import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import android.support.v4.app.Fragment
+import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -25,11 +35,13 @@ import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.FeedsAdapter
+import com.retiredbrainiacs.apis.AddPostAPI
 import com.retiredbrainiacs.apis.ApiClient
 import com.retiredbrainiacs.apis.ApiInterface
 import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.FeedsRoot
+import com.squareup.picasso.Picasso
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -40,7 +52,11 @@ import kotlinx.android.synthetic.main.home_feed_screen.view.*
 import org.json.JSONObject
 import retrofit2.Retrofit
 import java.io.File
+import java.io.FileInputStream
+import java.io.IOException
 import java.io.StringReader
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
 
@@ -55,7 +71,23 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
 
     lateinit var imageUtils : Imageutils
     lateinit var root : FeedsRoot
+     var filetype : String = ""
+    var filename : String = ""
+    var file_path : String = ""
+    lateinit var f : File
+lateinit var pd : ProgressDialog
+     var mediaType : String =""
 
+
+    lateinit var builder: AlertDialog.Builder
+     val CAMERA = 0x5
+    private val VIDEO_CAPTURE_CODE = 200
+    val WRITE_EXST = 0x3
+      var videoPath: String = ""
+    val SELECT_VIDEO = 4
+   lateinit  var fileUri: Uri
+    lateinit var thumbnail: Bitmap
+     var selectedPath = ""
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -87,7 +119,12 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
         Common.setFontEditRegular(activity!!,v.edt_post_data)
         Common.setFontBtnRegular(activity!!,v.btn_post_feed)
         //=======================
-
+        if(SharedPrefManager.getInstance(activity).userImg != null && !SharedPrefManager.getInstance(activity).userImg.isEmpty()){
+            Picasso.with(activity).load(SharedPrefManager.getInstance(activity).userImg).into(v.img_feed)
+        }
+        else{
+            v.img_feed.setImageResource(R.drawable.dummyuser)
+        }
         val adapterPrivacy = ArrayAdapter(activity, R.layout.spin_setting1,privacyArray)
         adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
         v.spin_privacy_feed.adapter = adapterPrivacy
@@ -99,6 +136,8 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
             CommonUtils.openInternetDialog(activity)
         }
 
+        //====== c,$1000,3 bedrooms,2 bathrooms,
+        //======
         work()
 
         return v
@@ -108,13 +147,22 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
     }
 fun work(){
     v.lay_image_add.setOnClickListener {
+        mediaType = "image"
         imageUtils.imagepicker(1)
     }
+v.lay_audio.setOnClickListener {
+    mediaType = "video"
+    openVideoPickerAlert(activity)
 
+}
     v.btn_post_feed.setOnClickListener {
         if(CommonUtils.getConnectivityStatusString(activity).equals("true")){
-
-            addPostAPI()
+if(f == null) {
+    addPostAPI()
+}
+            else{
+        uploadImage(f.absolutePath)
+            }
         }
         else{
             CommonUtils.openInternetDialog(activity)
@@ -170,16 +218,21 @@ fun work(){
                 })
     }
 
-    override fun image_attachment(from: Int, filename: String?, file: Bitmap?, uri: Uri?) {
+    override fun image_attachment(from: Int, filename: String, file: Bitmap?, uri: Uri?) {
         val bitmap = file
         val file_name = filename
      // iv_attachment.setImageBitmap(file)
+file_path = filename
+     //   v.attachlay.visibility = View.VISIBLE
+        v.img_feed.setImageBitmap(file)
+       // v.add_feed.visibility = View.GONE
+        v.img_feed.scaleType = ImageView.ScaleType.FIT_XY
+        v.img_feed.isClickable = true
 
-        v.attachlay.visibility = View.VISIBLE
-        v.attach.setImageBitmap(file)
-        v.add_feed.visibility = View.GONE
-        v.attach.scaleType = ImageView.ScaleType.FIT_XY
-
+        v.img_feed.setOnClickListener {
+            imageUtils.imagepicker(1)
+        }
+        f = File(file_path)
         val path = Environment.getExternalStorageDirectory().toString() + File.separator + "ImageAttach" + File.separator
         imageUtils.createImage(file, filename, path, false)
     }
@@ -193,9 +246,69 @@ fun work(){
         Log.d("Fragment", "onActivityResult: ")
         imageUtils.onActivityResult(requestCode, resultCode, data)
 
+         if (requestCode == VIDEO_CAPTURE_CODE)  {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+                val imageUri = Uri.parse(videoPath)
+                f= File(imageUri.path)
+                val fileSizeInBytes = f.length()
+
+                val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
+                Log.e("file", f.toString())
+
+                thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND)
+                Log.e("thumb", "aman" + thumbnail.toString())
+v.img_feed.setImageBitmap(thumbnail)
+
+            } else {
+                val selectedImageUri = data!!.getData()
+                //   selectedPath = getPath(selectedImageUri, getActivity());
+                // System.out.println("SELECT_VIDEO : " + selectedPath);
+                f = File(selectedImageUri!!.path)
+
+                thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND)
+                v.img_feed.setImageBitmap(thumbnail)
+
+            }
+        }
+        else if (requestCode == SELECT_VIDEO)  {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if(data != null) {
+                    val selectedImageUri = data!!.getData()
+                    // Toast.makeText(getActivity(), selectedImageUri.getPath(), Toast.LENGTH_SHORT).show();
+                    //   selectedPath = getPath(selectedImageUri,getActivity());
+                    //  if(selectedPath != null) {
+                    var selectedPathVideo = ""
+                    selectedPathVideo = ImageFilePath.getPath(activity, selectedImageUri)
+                    Log.e("Image File Path", "" + selectedPathVideo)
+                    f = File(selectedPathVideo)
+                    Log.e("f1", f.toString())
+                    thumbnail = ThumbnailUtils.createVideoThumbnail(selectedPathVideo, MediaStore.Video.Thumbnails.MICRO_KIND)
+                    v.img_feed.setImageBitmap(thumbnail)
+                }
+
+            } else {
+                println("SELECT_video")
+                if(data != null) {
+                    val selectedImageUri = data!!.getData()
+                    selectedPath = getPath(selectedImageUri, activity)
+                    f = File(selectedPath)
+                    thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND)
+                    v.img_feed.setImageBitmap(thumbnail)
+                }
+            }
+
+        }
+
     }
 
-
+    fun getPath(uri: Uri, activity: Activity?): String {
+        val projection = arrayOf(MediaStore.MediaColumns.DATA)
+        val cursor = activity!!.managedQuery(uri, projection, null, null, null)
+        val column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
+        cursor.moveToFirst()
+        return cursor.getString(column_index)
+    }
     //==== add post api ================
     fun addPostAPI() {
         val pd = ProgressDialog.show(activity, "", "Loading", false)
@@ -226,7 +339,7 @@ fun work(){
                         if(t != null ){
                             if(t.status.equals("true")) {
                                 Common.showToast(activity!!,t.message)
-
+getFeeds()
                             }
                             else{
                                  Common.showToast(activity!!,t.message)
@@ -286,6 +399,208 @@ fun work(){
         requestQueue.add(postRequest)
 
     }
+    //***** Implementing upload Image ****
+    private fun uploadImage(absolutePath: String) {
+        if (absolutePath.endsWith(".jpg")) {
+            filetype = "jpg"
+            filename = "Image" + System.currentTimeMillis() + "." + filetype
+
+        } else if (absolutePath.endsWith(".png")) {
+            filetype = "png"
+            filename = "Image" + System.currentTimeMillis() + "." + filetype
+
+        } else if (absolutePath.endsWith(".jpeg")) {
+            filetype = "jpeg"
+            filename = "Image" + System.currentTimeMillis() + "." + filetype
+
+        } else if (absolutePath.endsWith(".mp4")) {
+            filetype = "mp4"
+
+            filename = "Video" + System.currentTimeMillis() + "." + filetype
+
+        }
+        pd = ProgressDialog.show(activity, "", "Uploading")
+        Thread(null, uploadimage, "").start()
+        //signUp();
+
+    }
 
 
+    // ****** Implementing thread to upload image****
+    private val uploadimage = Runnable {
+        var res = ""
+        try {
+            val fis = FileInputStream(f)
+
+
+            val edit = AddPostAPI(activity,SharedPrefManager.getInstance(activity).userId,"", edt_post_data.text.toString().trim(),"", filetype, filename,mediaType)
+            res = edit.doStart(fis)
+
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        val msg = Message()
+        msg.obj = res
+        imageHandler.sendMessage(msg)
+    }
+
+    //********** Implementing handler for upload image thread*****
+    internal var imageHandler: Handler = object : Handler() {
+        override fun handleMessage(msg: Message) {
+            var res = ""
+            try {
+                res = msg.obj.toString()
+                val status = res.split(",")[0]
+                if (status.equals("true", ignoreCase = true)) {
+                    // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
+                    Common.showToast(activity!!,res.split(",")[1])
+                    edt_post_data.text = Editable.Factory.getInstance().newEditable("")
+                    if(SharedPrefManager.getInstance(activity).userImg != null && !SharedPrefManager.getInstance(activity).userImg.isEmpty()){
+                       Picasso.with(activity).load(SharedPrefManager.getInstance(activity).userImg).into(v.img_feed)
+                    }
+                    else{
+                        v.img_feed.setImageResource(R.drawable.dummyuser)
+                    }
+
+getFeeds()
+
+                } else {
+                    Common.showToast(activity!!,res.split(",")[1])
+                }
+            } catch (e1: Exception) {
+                e1.printStackTrace()
+            }
+
+            pd.dismiss()
+
+
+        }
+    }
+
+    //=========== Open Video Camera ==============
+    protected fun openVideoPickerAlert(c: Context?) {
+        //  type="V";
+        val items = arrayOf<CharSequence>("Take Video", "Choose Video from Gallery", "Cancel")
+        builder = AlertDialog.Builder(activity)
+        builder.setTitle("Add Photo!")
+
+        builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
+            if (items[item] == "Take Video") {
+                // type="V";
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    val a = Common.askForPermission(activity!!, Manifest.permission.CAMERA, CAMERA)
+                    if (a.equals("granted", ignoreCase = true)) {
+                        //captureImage();
+                        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+                        var file: File? = null
+                        try {
+                            file = createVideoFile()
+                        } catch (e: IOException) {
+                            e.printStackTrace()
+                        }
+
+                        val photoUri = FileProvider.getUriForFile(activity!!, activity!!.packageName + ".provider", file!!)
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                        if (intent.resolveActivity(activity!!.packageManager) != null) {
+                            startActivityForResult(intent, VIDEO_CAPTURE_CODE)
+                        }
+
+                    }
+                } else {
+                    openVideoCamera()
+                }
+            } else if (items[item] == "Choose Video from Gallery") {
+                // type="V";
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    val a = Common.askForPermission(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXST)
+                    if (a.equals("granted", ignoreCase = true)) {
+                        val intent = Intent()
+                        intent.type = "video/*"
+                        intent.action = Intent.ACTION_GET_CONTENT
+                        startActivityForResult(Intent.createChooser(intent, "Select Video"), SELECT_VIDEO)
+
+                    }
+                } else {
+                    /*  Intent intent = new Intent();
+                intent.setType("video*//*");
+              intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent, "Select Video"),SELECT_VIDEO);
+           */
+                    val i = Intent(Intent.ACTION_PICK, android.provider.MediaStore.Video.Media.EXTERNAL_CONTENT_URI)
+                    startActivityForResult(i, SELECT_VIDEO)
+                }
+            } else if (items[item] == "Cancel") {
+                dialog.dismiss()
+            }
+        })
+        builder.show()
+    }
+
+    //================ Open Camera for Video  Method ===========
+    fun openVideoCamera() {
+        val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
+
+        fileUri = getOutputMediaFileUri(MEDIA_TYPE_VIDEO)
+
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, fileUri)
+        // intent.putExtra("android.intent.extras.CAMERA_FACING", 0);
+        // set the video image quality to high
+        intent.putExtra(MediaStore.EXTRA_VIDEO_QUALITY, 1)
+        // start the image capture Intent
+        startActivityForResult(intent, VIDEO_CAPTURE_CODE)
+    }
+
+
+    @Throws(IOException::class)
+    private fun createVideoFile(): File {
+        // Create an image file name
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val imageFileName = "MP4_" + timeStamp + "_"
+
+        val storageDir = activity!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+                imageFileName, /* prefix */
+                ".mp4", /* suffix */
+                storageDir      /* directory */
+        )
+
+        videoPath = "file:" + image.absolutePath
+        return image
+    }
+
+    fun getOutputMediaFileUri(type: Int): Uri {
+        return Uri.fromFile(getOutputMediaFile(type))
+    }
+
+    // returning image / video /
+
+    private fun getOutputMediaFile(type: Int): File? {
+
+        // External sdcard location
+        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "Retired Brainiacs")
+
+        // Create the storage directory if it does not exist
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                return null
+            }
+        }
+
+        // Create a media file name
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val mediaFile: File
+
+        if (type == MEDIA_TYPE_IMAGE) {
+            mediaFile = File(mediaStorageDir.path + File.separator
+                    + "IMG_" + timeStamp + ".jpg")
+        } else if (type == MEDIA_TYPE_VIDEO) {
+            mediaFile = File(mediaStorageDir.path + File.separator + "VID_" + timeStamp + ".mp4")
+
+        } else {
+            return null
+        }
+
+        return mediaFile
+    }
 }

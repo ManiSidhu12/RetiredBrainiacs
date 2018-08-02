@@ -14,6 +14,18 @@ private String status;
 @Expose
 private String message;
 
+    public String getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(String likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    @SerializedName("like_count")
+    @Expose
+    private String likeCount;
+
     public String getImage() {
         return image;
     }
