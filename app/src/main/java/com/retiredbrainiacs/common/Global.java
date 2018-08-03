@@ -46,4 +46,14 @@ public class Global extends Application {
 
     ArrayList<HashMap<String, String>>   listValues;
 
+    public ArrayList<HashMap<String, String>> getVideoList() {
+        return videoList;
+    }
+
+    public void setVideoList(ArrayList<HashMap<String, String>> videoList) {
+        this.videoList = videoList;
+    }
+
+    ArrayList<HashMap<String,String>> videoList = new ArrayList<>();
+
 }

@@ -49,8 +49,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.home_feed_screen.*
 import kotlinx.android.synthetic.main.home_feed_screen.view.*
-import org.json.JSONObject
-import retrofit2.Retrofit
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -74,11 +72,15 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
      var filetype : String = ""
     var filename : String = ""
     var file_path : String = ""
+    var fileType1 : String = ""
+    var fileName1 : String = ""
     lateinit var f : File
+    lateinit var f1 : File
 lateinit var pd : ProgressDialog
      var mediaType : String =""
+     val MY_PERMISSIONS_RECORD_AUDIO = 1
 
-
+lateinit var global : Global
     lateinit var builder: AlertDialog.Builder
      val CAMERA = 0x5
     private val VIDEO_CAPTURE_CODE = 200
@@ -88,7 +90,7 @@ lateinit var pd : ProgressDialog
    lateinit  var fileUri: Uri
     lateinit var thumbnail: Bitmap
      var selectedPath = ""
-
+lateinit var saveImage : SaveImage
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.home_feed_screen,container,false)
@@ -101,9 +103,11 @@ lateinit var pd : ProgressDialog
         Common.setFontRegular(activity!!,v1.titletxt)
 
         imageUtils = Imageutils(activity,this,true)
-
-
-
+global = Global()
+saveImage = SaveImage(activity)
+if(global.videoList != null){
+    global.videoList.clear()
+}
 
         // ============ Retrofit ===========
         service = ApiClient.getClient().create(ApiInterface::class.java)
@@ -136,8 +140,7 @@ lateinit var pd : ProgressDialog
             CommonUtils.openInternetDialog(activity)
         }
 
-        //====== c,$1000,3 bedrooms,2 bathrooms,
-        //======
+
         work()
 
         return v
@@ -161,7 +164,19 @@ if(f == null) {
     addPostAPI()
 }
             else{
-        uploadImage(f.absolutePath)
+    if(mediaType.equals("video")) {
+        Log.e("mediaType",mediaType)
+     //   uploadImage(f.absolutePath, f1.absolutePath)
+        pd = ProgressDialog.show(activity, "", "Uploading")
+
+        Thread(null, uploadimage, "").start()
+    }
+    else{
+        Log.e("mediaType1",mediaType)
+
+        uploadImage(f.absolutePath,"")
+
+    }
             }
         }
         else{
@@ -256,8 +271,12 @@ file_path = filename
                 val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
                 Log.e("file", f.toString())
 
-                thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND)
+                thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
                 Log.e("thumb", "aman" + thumbnail.toString())
+                f1 = saveImage.storeImage(thumbnail)
+          // uploadImage(f1.getAbsolutePath())
+                addVideo(f.absolutePath,uploadImage1(f.absolutePath).split(",")[0])
+                addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
 v.img_feed.setImageBitmap(thumbnail)
 
             } else {
@@ -266,7 +285,11 @@ v.img_feed.setImageBitmap(thumbnail)
                 // System.out.println("SELECT_VIDEO : " + selectedPath);
                 f = File(selectedImageUri!!.path)
 
-                thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND)
+                thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
+                f1 = saveImage.storeImage(thumbnail)
+               // uploadImage(f1.getAbsolutePath())
+                addVideo(f.absolutePath,uploadImage1(f.absolutePath).split(",")[0])
+                addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
                 v.img_feed.setImageBitmap(thumbnail)
 
             }
@@ -282,8 +305,12 @@ v.img_feed.setImageBitmap(thumbnail)
                     selectedPathVideo = ImageFilePath.getPath(activity, selectedImageUri)
                     Log.e("Image File Path", "" + selectedPathVideo)
                     f = File(selectedPathVideo)
-                    Log.e("f1", f.toString())
-                    thumbnail = ThumbnailUtils.createVideoThumbnail(selectedPathVideo, MediaStore.Video.Thumbnails.MICRO_KIND)
+                    Log.e("f1", f.toString()+f.absolutePath)
+                    thumbnail = ThumbnailUtils.createVideoThumbnail(selectedPathVideo, MediaStore.Video.Thumbnails.MINI_KIND)
+                    f1 = saveImage.storeImage(thumbnail)
+                   // uploadImage(f1.getAbsolutePath())
+                    addVideo(f.absolutePath,uploadImage1(f.absolutePath).split(",")[0])
+                    addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
                     v.img_feed.setImageBitmap(thumbnail)
                 }
 
@@ -293,7 +320,11 @@ v.img_feed.setImageBitmap(thumbnail)
                     val selectedImageUri = data!!.getData()
                     selectedPath = getPath(selectedImageUri, activity)
                     f = File(selectedPath)
-                    thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MICRO_KIND)
+                    thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
+                    f1 = saveImage.storeImage(thumbnail)
+                  //  uploadImage(f1.getAbsolutePath())
+                    addVideo(f.absolutePath,uploadImage1(f.absolutePath).split(",")[0])
+                    addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
                     v.img_feed.setImageBitmap(thumbnail)
                 }
             }
@@ -317,7 +348,18 @@ v.img_feed.setImageBitmap(thumbnail)
         map["user_id"] = SharedPrefManager.getInstance(activity).userId
         map["to_user_id"] = ""
         map["post_content"] = edt_post_data.text.toString()
-        map["post_type"] = ""
+        if(spin_privacy_feed.selectedItem != null) {
+            if (spin_privacy_feed.selectedItem.equals("Public")) {
+                map["post_type"] = "0"
+            }
+            else{
+                map["post_type"] = "1"
+
+            }
+        }
+        else{
+            map["post_type"] = ""
+        }
         map["file_align"] = "center"
         map["image"] = ""
         map["video"] = ""
@@ -370,8 +412,10 @@ getFeeds()
             root = gson.fromJson<FeedsRoot>(reader, FeedsRoot::class.java)
 
             if(root.status.equals("true")){
-                v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
-                v.recycler_feed.adapter = FeedsAdapter(activity!!,root.posts,"post")
+                if(v != null && v.recycler_feed != null) {
+                    v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
+                    v.recycler_feed.adapter = FeedsAdapter(activity!!, root.posts, "post")
+                }
             }
             else{
                 Common.showToast(activity!!,root.message)
@@ -400,7 +444,7 @@ getFeeds()
 
     }
     //***** Implementing upload Image ****
-    private fun uploadImage(absolutePath: String) {
+    private fun uploadImage(absolutePath: String, absolutePath1: String) {
         if (absolutePath.endsWith(".jpg")) {
             filetype = "jpg"
             filename = "Image" + System.currentTimeMillis() + "." + filetype
@@ -417,7 +461,20 @@ getFeeds()
             filetype = "mp4"
 
             filename = "Video" + System.currentTimeMillis() + "." + filetype
+            if (absolutePath1.endsWith(".jpg")) {
 
+                fileType1 = "jpg"
+                fileName1 = "Image" + System.currentTimeMillis() + "." + fileType1
+
+            } else if (absolutePath1.endsWith(".png")) {
+                fileType1 = "png"
+                fileName1 = "Image" + System.currentTimeMillis() + "." + fileType1
+
+            } else if (absolutePath1.endsWith(".jpeg")) {
+                fileType1 = "jpeg"
+                fileName1 = "Image" + System.currentTimeMillis() + "." + fileType1
+
+            }
         }
         pd = ProgressDialog.show(activity, "", "Uploading")
         Thread(null, uploadimage, "").start()
@@ -433,7 +490,7 @@ getFeeds()
             val fis = FileInputStream(f)
 
 
-            val edit = AddPostAPI(activity,SharedPrefManager.getInstance(activity).userId,"", edt_post_data.text.toString().trim(),"", filetype, filename,mediaType)
+            val edit = AddPostAPI(activity,SharedPrefManager.getInstance(activity).userId,"", edt_post_data.text.toString().trim(),"", filetype, filename,mediaType,global.videoList)
             res = edit.doStart(fis)
 
         } catch (e: Exception) {
@@ -445,7 +502,8 @@ getFeeds()
     }
 
     //********** Implementing handler for upload image thread*****
-    internal var imageHandler: Handler = object : Handler() {
+     var imageHandler: Handler = object : Handler()
+    {
         override fun handleMessage(msg: Message) {
             var res = ""
             try {
@@ -602,5 +660,41 @@ getFeeds()
         }
 
         return mediaFile
+    }
+
+    //***********Method to add File Paths-----
+    fun addVideo(path: String, name: String) {
+        val map = HashMap<String, String>()
+        map["key_path"] = path
+        map["file_name"] = name
+        global.videoList.add(map)
+        Log.e("Video List", global.videoList.toString() + global.videoList.size)
+
+
+    }
+
+    private fun uploadImage1(absolutePath: String): String {
+        if (absolutePath.endsWith(".jpg")) {
+            filetype = "png"
+            filename = "Image" + System.currentTimeMillis() + "." + filetype
+
+        } else if (absolutePath.endsWith(".png")) {
+            filetype = "png"
+            filename = "Image" + System.currentTimeMillis() + "." + filetype
+
+        } else if (absolutePath.endsWith(".jpeg")) {
+            filetype = "png"
+            filename = "Image" + System.currentTimeMillis() + "." + filetype
+
+        }
+        else if (absolutePath.endsWith(".mp4")) {
+            filetype = "mp4"
+            filename = "Video" + System.currentTimeMillis() + "." + filetype
+
+        }
+        //pd = ProgressDialog.show(getActivity(), "", "Uploading");
+        // new Thread(null, uploadimage, "").start();
+        Log.e("file123", filename + filetype)
+        return filename+","+filetype
     }
 }

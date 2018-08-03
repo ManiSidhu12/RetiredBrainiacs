@@ -1,11 +1,14 @@
 package com.retiredbrainiacs.model.feeds;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Post {
+public class Post implements Parcelable {
     @SerializedName("wall_post_user_name")
     @Expose
     private String wallPostUserName;
@@ -56,7 +59,38 @@ public class Post {
     private String commentCount;
     @SerializedName("comment_list")
     @Expose
-    private List<Object> commentList = null;
+    private List<CommentList> commentList = null;
+
+    protected Post(Parcel in) {
+        wallPostUserName = in.readString();
+        wallPostUserImage = in.readString();
+        usersWallPostId = in.readString();
+        fromUserId = in.readString();
+        toUserId = in.readString();
+        postContent = in.readString();
+        image = in.readString();
+        video = in.readString();
+        audio = in.readString();
+        postContentType = in.readString();
+        fileAlign = in.readString();
+        postType = in.readString();
+        postingDate = in.readString();
+        likeCount = in.readString();
+        likedByMe = in.readString();
+        commentCount = in.readString();
+    }
+
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
 
     public String getWallPostUserName() {
         return wallPostUserName;
@@ -186,12 +220,36 @@ public class Post {
         this.commentCount = commentCount;
     }
 
-    public List<Object> getCommentList() {
+    public List<CommentList> getCommentList() {
         return commentList;
     }
 
-    public void setCommentList(List<Object> commentList) {
+    public void setCommentList(List<CommentList> commentList) {
         this.commentList = commentList;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(wallPostUserName);
+        dest.writeString(wallPostUserImage);
+        dest.writeString(usersWallPostId);
+        dest.writeString(fromUserId);
+        dest.writeString(toUserId);
+        dest.writeString(postContent);
+        dest.writeString(image);
+        dest.writeString(video);
+        dest.writeString(audio);
+        dest.writeString(postContentType);
+        dest.writeString(fileAlign);
+        dest.writeString(postType);
+        dest.writeString(postingDate);
+        dest.writeString(likeCount);
+        dest.writeString(likedByMe);
+        dest.writeString(commentCount);
+    }
 }

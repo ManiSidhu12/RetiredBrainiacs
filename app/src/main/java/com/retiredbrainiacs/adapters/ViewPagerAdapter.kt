@@ -31,6 +31,9 @@ class ViewPagerAdapter(var datalist: ArrayList<Datalist>) : PagerAdapter() {
         if(datalist[position].image != null && !datalist[position].image.equals("")){
             Picasso.with(container.context).load(datalist[position].image).into(itemView.img_all_post)
         }
+        else{
+            itemView.img_all_post.setImageResource(R.drawable.no_image)
+        }
        /* val imageUrl = wall.getImageurl()
         if (imageUrl != null && !imageUrl!!.isEmpty()) {
             Glide.with(container.getContext())

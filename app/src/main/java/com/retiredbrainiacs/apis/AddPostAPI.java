@@ -10,12 +10,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AddPostAPI {
     private URL connectURL;
@@ -27,7 +30,8 @@ public class AddPostAPI {
     String status,category;
     String open,close;
     String user_id;
-    public AddPostAPI(Context c,String u_id, String to_id, String content, String type, String filetype, String filename1,String mType) {
+    ArrayList<HashMap<String, String>> listVideo;
+    public AddPostAPI(Context c, String u_id, String to_id, String content, String type, String filetype, String filename1, String mType, ArrayList<HashMap<String, String>> videoList) {
         try
         {
             connectURL = new URL(GlobalConstants.API_URL+"wall_post");
@@ -46,7 +50,8 @@ public class AddPostAPI {
 
         imagetype=filetype;
         this.filename=filename1;
-        Log.e("img", imagetype+filename);
+        listVideo = videoList;
+        Log.e("img", imagetype+filename+listVideo);
     }
 
 
@@ -61,7 +66,8 @@ public class AddPostAPI {
 
     public String thirdTry()
     {
-        String existingFileName = filename;
+      //  String existingFileName = filename;
+        String exsistingFileName = "";
 
         String lineEnd = "\r\n";
         String twoHyphens = "--";
@@ -115,15 +121,11 @@ public class AddPostAPI {
 
             //---------image
 
-            if(mediaType.equalsIgnoreCase("image")) {
-                dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + filename + "\"" + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\"video\";filename=\"" + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\"audio\";filename=\"" + lineEnd);
+          /*  if(mediaType.equalsIgnoreCase("image")) {
+
             }
             else if(mediaType.equalsIgnoreCase("video")){
-                dos.writeBytes("Content-Disposition: form-data; name=\"video\";filename=\"" + filename + "\"" + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + lineEnd);
-                dos.writeBytes("Content-Disposition: form-data; name=\"audio\";filename=\"" + lineEnd);
+
             }
             else if(mediaType.equalsIgnoreCase("audio")){
                 dos.writeBytes("Content-Disposition: form-data; name=\"audio\";filename=\"" + filename + "\"" + lineEnd);
@@ -134,46 +136,131 @@ public class AddPostAPI {
                 dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + lineEnd);
                 dos.writeBytes("Content-Disposition: form-data; name=\"video\";filename=\"" + lineEnd);
                 dos.writeBytes("Content-Disposition: form-data; name=\"audio\";filename=\"" + lineEnd);
-            }
+            }*/
+if(mediaType.equalsIgnoreCase("image")) {
+    dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + filename + "\"" + lineEnd);
+    dos.writeBytes("Content-Disposition: form-data; name=\"video\";filename=\"" + lineEnd);
+    dos.writeBytes("Content-Disposition: form-data; name=\"audio\";filename=\"" + lineEnd);
+    if (imagetype.equalsIgnoreCase("jpg")) {
+        Log.i("imagetype", "1");
+        dos.writeBytes("Content-type: image/jpg;" + lineEnd);
+    }
+    if (imagetype.equalsIgnoreCase("png")) {
+        Log.i("imagetype", "2");
+        dos.writeBytes("Content-type: image/png;" + lineEnd);
+    }
+    if (imagetype.equalsIgnoreCase("gif")) {
+        Log.i("imagetype", "3");
+        dos.writeBytes("Content-type: image/gif;" + lineEnd);
+    }
+    if (imagetype.equalsIgnoreCase("jpeg")) {
+        Log.i("imagetype", "4");
+        dos.writeBytes("Content-type: image/jpeg;" + lineEnd);
+    }
+    if (imagetype.endsWith(".mp4")) {
+        Log.i("videotype", "1");
+        dos.writeBytes("Content-type: video/mp4;" + lineEnd);
+    }
+    if (imagetype.endsWith(".avi")) {
+        Log.i("videotype", "2");
+        dos.writeBytes("Content-type: video/avi;" + lineEnd);
+    }
+    if (imagetype.endsWith(".ogg")) {
+        Log.i("videotype", "3");
+        dos.writeBytes("Content-type: video/ogg;" + lineEnd);
+    }
+    if (imagetype.endsWith(".3gp")) {
+        Log.i("videotype", "4");
+        dos.writeBytes("Content-type: video/3gp;" + lineEnd);
+    }
+    dos.writeBytes(lineEnd);
 
-            if (imagetype.equalsIgnoreCase("jpg"))
-            {
-                Log.i("imagetype", "1");
-                dos.writeBytes("Content-type: image/jpg;" + lineEnd);
-            }
-            if (imagetype.equalsIgnoreCase("png"))
-            {
-                Log.i("imagetype", "2");
-                dos.writeBytes("Content-type: image/png;" + lineEnd);
-            }
-            if (imagetype.equalsIgnoreCase("gif"))
-            {
-                Log.i("imagetype", "3");
-                dos.writeBytes("Content-type: image/gif;" + lineEnd);
-            }
-            if (imagetype.equalsIgnoreCase("jpeg"))
-            {
-                Log.i("imagetype", "4");
-                dos.writeBytes("Content-type: image/jpeg;" + lineEnd);
-            }
-            if (imagetype.endsWith(".mp4")) {
+}
+if(mediaType.equalsIgnoreCase("video")) {
+  //  dos.writeBytes("Content-Disposition: form-data; name=\"video\";filename=\"" + filename + "\"" + lineEnd);
+  //  dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + lineEnd);
+    dos.writeBytes("Content-Disposition: form-data; name=\"audio\";filename=\"" + lineEnd);
+    if (listVideo != null && listVideo.size() > 0) {
+        String[] keys = {"video", "image"};
+        for (int i = 0; i < listVideo.size(); i++) {
+            File f = new File(listVideo.get(i).get("key_path"));
+            exsistingFileName = f.getName();
+            Log.e("exsistingFileName", exsistingFileName);
+            fileInputStream = new FileInputStream(f);
+            dos.writeBytes("Content-Disposition: form-data; name=\"" + keys[i] + "\";filename=\"" + exsistingFileName + "\"" + lineEnd);
+
+            //dos.writeBytes("Content-Disposition: form-data; name=\"" + "videos" + "\";filename=\"" + exsistingFileName + "\"" + lineEnd);
+            if (exsistingFileName.endsWith(".mp4")) {
                 Log.i("videotype", "1");
                 dos.writeBytes("Content-type: video/mp4;" + lineEnd);
             }
-            if (imagetype.endsWith(".avi")) {
+            if (exsistingFileName.endsWith(".avi")) {
                 Log.i("videotype", "2");
                 dos.writeBytes("Content-type: video/avi;" + lineEnd);
             }
-            if (imagetype.endsWith(".ogg")) {
+            if (exsistingFileName.endsWith(".ogg")) {
                 Log.i("videotype", "3");
                 dos.writeBytes("Content-type: video/ogg;" + lineEnd);
             }
-            if (imagetype.endsWith(".3gp")) {
-                Log.i("videotype", "4");
+            if (exsistingFileName.endsWith(".3gp")) {
+                Log.e("videotype", "4");
                 dos.writeBytes("Content-type: video/3gp;" + lineEnd);
+            }
+            if (exsistingFileName.endsWith(".jpg")) {
+                Log.i("imagetype", "1");
+                dos.writeBytes("Content-type: image/jpg;" + lineEnd);
+            }
+            if (exsistingFileName.endsWith(".png")) {
+                Log.i("imagetype", "2");
+                dos.writeBytes("Content-type: image/png;" + lineEnd);
+            }
+            if (exsistingFileName.endsWith(".gif")) {
+                Log.i("imagetype", "3");
+                dos.writeBytes("Content-type: image/gif;" + lineEnd);
+            }
+            if (exsistingFileName.endsWith(".jpeg")) {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: image/jpeg;" + lineEnd);
             }
             dos.writeBytes(lineEnd);
 
+            int bytesAvailable = fileInputStream.available();
+            int maxBufferSize = 1024 * 1024;
+            int bufferSize = Math.min(bytesAvailable, maxBufferSize);
+            byte[] buffer = new byte[bufferSize];
+
+            int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+
+            while (bytesRead > 0) {
+                dos.write(buffer, 0, bufferSize);
+                bytesAvailable = fileInputStream.available();
+                bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
+            }
+
+            if (i < listVideo.size()) {
+                dos.writeBytes(lineEnd);
+                dos.writeBytes(twoHyphens + boundary + lineEnd);
+                //dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                Log.e("VALUE", "" + i);
+            } else {
+                if (i + 1 == listVideo.size()) {
+                    dos.writeBytes(lineEnd);
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+                    Log.e("VALUE", "" + i);
+                } else {
+                    dos.writeBytes(lineEnd);
+                    dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    Log.e("VALUE", "" + i);
+
+                }
+
+            }
+        }
+
+    }
+}
             int bytesAvailable = fileInputStream.available();
             int maxBufferSize = 1024;
             int bufferSize = Math.min(bytesAvailable, maxBufferSize);

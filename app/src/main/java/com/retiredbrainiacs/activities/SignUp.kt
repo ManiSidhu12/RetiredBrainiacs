@@ -217,6 +217,7 @@ class SignUp : Activity(){
                // map["first_name"] = edt_name_signup.text.toString()
                // map["last_name"] = ""
                 map["user_email"] = edt_email_signup.text.toString()
+                map["username"] = edt_name_signup.text.toString()
                // map["dob"] = edt_dob_signup.text.toString()
                 map["password"] = edt_pswd_signup.text.toString()
                 //map["con_pswd"] = edt_cnfrmpswd_signup.text.toString()

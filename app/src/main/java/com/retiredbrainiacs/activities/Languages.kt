@@ -200,7 +200,11 @@ modelList = listMain
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
 
+               /* known_other_lang
 
+                pref_other_lang
+
+                spoken_other_lang*/
                 Log.e("map languages",map.toString())
                 return map
             }

@@ -2,6 +2,7 @@ package com.retiredbrainiacs.adapters
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
@@ -20,6 +21,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.activities.FeedDetails
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
@@ -57,9 +59,38 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         holder.txtPost.text = posts[position].postContent
 
         holder.txtUserName.text = posts[position].wallPostUserName
-
+        holder.txtLikeCount.text = posts[position].likeCount
+        holder.txtCmntCount.text = posts[position].commentCount
+if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserImage.isEmpty()){
+    Picasso.with(ctx).load(posts[position].wallPostUserImage).into(holder.imgUser)
+}
+        else{
+    holder.imgUser.setImageResource(R.drawable.dummyuser)
+        }
         if(posts[position].image != null && !posts[position].image.isEmpty()){
             Picasso.with(ctx).load(posts[position].image).into(holder.imgPost)
+        }
+        else{
+            holder.imgPost.setImageResource(R.drawable.no_image)
+        }
+
+        if(posts[position].likedByMe.equals("1")){
+            holder.txtLike.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
+            holder.txtLikeCount.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
+            holder.imgLike.setColorFilter(ContextCompat.getColor(ctx, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
+
+        }
+        else{
+            holder.txtLike.setTextColor(Color.parseColor("#90949C"))
+            holder.txtLikeCount.setTextColor(Color.parseColor("#90949C"))
+            holder.imgLike.setColorFilter(Color.parseColor("#90949C"), android.graphics.PorterDuff.Mode.SRC_IN)
+
+        }
+        holder.layCmnt.setOnClickListener {
+            ctx.startActivity(Intent(ctx,FeedDetails::class.java).putExtra("list",posts[position]))
+        }
+        holder.edtCmnt.setOnClickListener {
+            ctx.startActivity(Intent(ctx,FeedDetails::class.java).putExtra("list",posts[position]))
         }
 
         if(type.equals("forum")){
