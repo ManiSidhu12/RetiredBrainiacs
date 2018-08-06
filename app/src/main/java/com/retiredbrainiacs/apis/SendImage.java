@@ -23,7 +23,7 @@ import java.net.URL;
 public class SendImage
 {
 	private URL connectURL;
-	private String phn,skype,country,city,adrs1,adrs2,zipcode,imagetype,filename;
+	private String phn,skype,country,city,adrs1,adrs2,zipcode,imagetype,filename,contri;
 	private String response;
 	byte[] dataToServer;
 	Context ctx;
@@ -31,7 +31,7 @@ public class SendImage
 	String status,category;
 	String open,close;
 	String user_id;
-	public SendImage(Context c,String u_id, String phone, String skypeId, String contry, String city1, String adress1, String address2, String pin, String filetype, String filename1) {
+	public SendImage(Context c,String u_id, String phone, String skypeId, String contry, String city1, String adress1, String address2, String pin, String filetype, String filename1,String cont) {
 		try 
 		{
 			connectURL = new URL(GlobalConstants.API_URL+"sign_next_4_steps");
@@ -53,6 +53,7 @@ public class SendImage
 
 		imagetype=filetype;
 		this.filename=filename1;
+		contri = cont;
 		Log.e("img", imagetype+filename);
 	}
 
@@ -211,6 +212,7 @@ public class SendImage
 			{
 				String img = job.getString("avt");
 SharedPrefManager.getInstance(ctx).setUserImage(img);
+SharedPrefManager.getInstance(ctx).setContactInfo(phn,skype,contri,city,adrs1,adrs2,zipcode);
 
 			}
 			else{

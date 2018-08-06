@@ -28,6 +28,16 @@ public class ChildModel {
     private String title;
     private String value_id;
     private String chkStatus;
+
+    public String getOther() {
+        return other;
+    }
+
+    public void setOther(String other) {
+        this.other = other;
+    }
+
+    private String other;
     public ChildModel() {
     }
 

@@ -24,7 +24,8 @@ import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.login.ChildModel
 import com.retiredbrainiacs.model.login.MainModel
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
-import kotlinx.android.synthetic.main.work_details_screen.*
+import kotlinx.android.synthetic.main.education_header.view.*
+import kotlinx.android.synthetic.main.education_screen.*
 import org.json.JSONObject
 import java.io.StringReader
 
@@ -36,27 +37,17 @@ class WorkDetails : AppCompatActivity(){
     var map = HashMap<String, String>()
     val workArray = arrayOf("Government Agency","Industry","Military","Academia")
     val professionalArray = arrayOf("Corporate Lawyer","Patent Lawyer","Lobbyist","Engineer","Scientist","Medical Practitioner","Artist")
-
+lateinit var header : View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(R.layout.work_details_screen)
+        setContentView(R.layout.education_screen)
 
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.custom_action_bar)
 
         var v = supportActionBar!!.customView
         v.titletxt.text = "Work Details"
-
-        val adapterWork = ArrayAdapter(this@WorkDetails, R.layout.spinner_txt1,workArray)
-        adapterWork.setDropDownViewResource(R.layout.spinner_txt)
-        spin_work.adapter = adapterWork
-        spin_work.adapter = NothingSelectedSpinnerAdapter(adapterWork, R.layout.work, this@WorkDetails)
-
-        val adapterProfessional = ArrayAdapter(this@WorkDetails, R.layout.spinner_txt1,professionalArray)
-        adapterProfessional.setDropDownViewResource(R.layout.spinner_txt)
-        spin_professional.adapter = adapterProfessional
-        spin_professional.adapter = NothingSelectedSpinnerAdapter(adapterProfessional, R.layout.work, this@WorkDetails)
 
         if(CommonUtils.getConnectivityStatusString(this@WorkDetails).equals("true")){
             getProfessionalSkills()
@@ -65,15 +56,15 @@ class WorkDetails : AppCompatActivity(){
             CommonUtils.openInternetDialog(this@WorkDetails)
         }
 
-        btn_save_work.setOnClickListener {
+        btn_save_edu.setOnClickListener {
             getCheckedStatus()
         }
 
 
-        btn_pre_work.setOnClickListener {
+        btn_pre_edu.setOnClickListener {
             finish()
         }
-        btn_skip1_work.setOnClickListener {
+        btn_skip1_edu.setOnClickListener {
             val intent = Intent(this@WorkDetails, Home::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
             startActivity(intent)
@@ -87,12 +78,12 @@ class WorkDetails : AppCompatActivity(){
         var url = GlobalConstants.API_URL+"professional_skills"
         val pd = ProgressDialog.show(this@WorkDetails, "", "Loading", false)
 
-        recycle_work.visibility = View.GONE
-        lay_bottom_work.visibility = View.GONE
+        recycle_education.visibility = View.GONE
+        lay_bottom_edu.visibility = View.GONE
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
-            recycle_work.visibility = View.VISIBLE
-            lay_bottom_work.visibility = View.VISIBLE
+            recycle_education.visibility = View.VISIBLE
+            lay_bottom_edu.visibility = View.VISIBLE
             pd.dismiss()
             Log.e("resp",response)
             var obj = JSONObject(response)
@@ -123,6 +114,10 @@ class WorkDetails : AppCompatActivity(){
                         if(!obj2.getString("key_title").equals("Other (please specify)")) {
                             objChild.chkStatus = obj2.getString("chked")
                         }
+                        else{
+                            objChild.other = obj2.getString("other_val")
+
+                        }
 
                         listChild.add(objChild)
 
@@ -134,10 +129,26 @@ class WorkDetails : AppCompatActivity(){
                     listMain.add(objModel)
 modelList = listMain
                 }
+                val inflater = layoutInflater
 
+                header = inflater.inflate(R.layout.education_header, recycle_education, false)
+                header.education.visibility = View.GONE
+                header.workdetails.visibility = View.VISIBLE
+
+                val adapterWork = ArrayAdapter(this@WorkDetails, R.layout.spinner_txt1,workArray)
+                adapterWork.setDropDownViewResource(R.layout.spinner_txt)
+                header.spin_work.adapter = adapterWork
+               header.spin_work.adapter = NothingSelectedSpinnerAdapter(adapterWork, R.layout.work, this@WorkDetails)
+
+                val adapterProfessional = ArrayAdapter(this@WorkDetails, R.layout.spinner_txt1,professionalArray)
+                adapterProfessional.setDropDownViewResource(R.layout.spinner_txt)
+                header.spin_professional.adapter = adapterProfessional
+                header.spin_professional.adapter = NothingSelectedSpinnerAdapter(adapterProfessional, R.layout.work, this@WorkDetails)
+
+                recycle_education.addHeaderView(header)
                 val adapter = SampleAdapter(this@WorkDetails,listMain)
                 val wrapperAdapter = WrapperExpandableListAdapter(adapter)
-                recycle_work.setAdapter(wrapperAdapter)
+                recycle_education.setAdapter(wrapperAdapter)
 
                 /*for (i in 0 until wrapperAdapter.getGroupCount()) {
                     recycle_work.expandGroup(i)
@@ -148,8 +159,8 @@ modelList = listMain
 
                 Response.ErrorListener {
                     pd.dismiss()
-                    recycle_work.visibility = View.GONE
-                    lay_bottom_work.visibility = View.GONE }) {
+                    recycle_education.visibility = View.GONE
+                    lay_bottom_edu.visibility = View.GONE }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
@@ -209,22 +220,22 @@ modelList = listMain
         if(modelList != null && modelList.size > 0){
             map = HashMap()
             map["user_id"] = "81"
-            if(spin_work.selectedItem != null) {
-                map["work_detail"] = spin_work.selectedItem.toString()
+            if(header.spin_work.selectedItem != null) {
+                map["work_detail"] = header.spin_work.selectedItem.toString()
             }
             else{
                 map["work_detail"] = ""
 
             }
-                map["work_detail_other"] = edt_work_other.text.toString()
-            if(spin_professional.selectedItem != null) {
-                map["professional_traits"] = spin_professional.selectedItem.toString()
+                map["work_detail_other"] = header.edt_work_other.text.toString()
+            if(header.spin_professional.selectedItem != null) {
+                map["professional_traits"] = header.spin_professional.selectedItem.toString()
 
             }
             else {
                 map["professional_traits"] = ""
             }
-            map["professional_traits_other"] = edt_profess_other.text.toString()
+            map["professional_traits_other"] = header.edt_profess_other.text.toString()
          /*   map["professional_skills"] = ""
             map["professional_skills_other"] = ""
             map["detailed_skills"] = ""
@@ -240,6 +251,9 @@ modelList = listMain
                     for(j in 0  until modelList[i].listChild.size){
                         if(modelList[i].listChild[j].chkStatus.equals("1")){
                             sb.append(modelList[i].listChild[j].value_id+",")
+                        }
+                        if(modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
+                            map[modelList[i].heading+"_other"] = modelList[i].listChild[j].other
                         }
                     }
                 }

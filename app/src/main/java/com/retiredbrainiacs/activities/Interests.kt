@@ -127,9 +127,9 @@ objModel.listChild = listChild
                 val wrapperAdapter = WrapperExpandableListAdapter(adapter)
                 recycler_language.setAdapter(wrapperAdapter)
 
-                for (i in 0 until wrapperAdapter.getGroupCount()) {
+               /* for (i in 0 until wrapperAdapter.getGroupCount()) {
                     recycler_language.expandGroup(i)
-                }
+                }*/
 
 
             }

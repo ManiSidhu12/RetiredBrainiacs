@@ -224,30 +224,32 @@ class Verification : Activity(){
                 }
             }
         }
+        btn_resend.setOnClickListener {
+            if(CommonUtils.getConnectivityStatusString(this@Verification).equals("true")){
+                sendActivationKeyWebService()
+            }
+            else{
+                CommonUtils.openInternetDialog(this@Verification)
+            }
+        }
     }
 
-    private fun verifyOTP(){
-        var url = GlobalConstants.API_URL+"verified"
+    private fun sendActivationKeyWebService(){
+        var url = GlobalConstants.API_URL+"send_activation_key"
         val pd = ProgressDialog.show(this@Verification, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
             pd.dismiss()
-try{
-    var obj : JSONObject = JSONObject(response)
-    val status :  String = obj.getString("status")
-    val msg : String = obj.getString("message")
-    if(status.equals("true")) {
-        Common.showToast(this@Verification,"Verified Successfully...")
-       signUpWebService()
-    } else{
-        Common.showToast(this@Verification,msg)
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
 
-    }
-}
-catch (exc : Exception){
+            if(rootLogin.status.equals("true")) {
 
-}
-
+            } else{
+                Common.showToast(this@Verification,rootLogin.message)
+            }
         },
 
                 Response.ErrorListener { pd.dismiss() }) {
@@ -255,7 +257,10 @@ catch (exc : Exception){
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
 
-                map["activation_key"] = sb1.toString()
+                map["user_email"] = SharedPrefManager.getInstance(this@Verification).userEmail
+                map["username"] = SharedPrefManager.getInstance(this@Verification).name
+                map["password"] = SharedPrefManager.getInstance(this@Verification).password
+                Log.e("map key",map.toString())
                 return map
             }
         }
@@ -281,6 +286,7 @@ catch (exc : Exception){
                 Common.showToast(this@Verification,"Registered Successfully...")
                 SharedPrefManager.getInstance(this@Verification).setUserID(rootLogin.userId)
                 val intent = Intent(this@Verification, ContactInfo::class.java)
+                intent.putExtra("type","verify")
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                 finish()

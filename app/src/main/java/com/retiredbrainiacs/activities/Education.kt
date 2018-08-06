@@ -31,6 +31,7 @@ import com.retiredbrainiacs.model.SimpleParentItem
 import com.retiredbrainiacs.model.login.ChildModel
 import com.retiredbrainiacs.model.login.MainModel
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
+import kotlinx.android.synthetic.main.education_header.view.*
 import kotlinx.android.synthetic.main.education_screen.*
 import org.json.JSONObject
 import java.io.StringReader
@@ -42,6 +43,8 @@ class Education : AppCompatActivity(){
 
     lateinit var root : ResponseRoot
     var map = HashMap<String, String>()
+
+    lateinit var header  : View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.education_screen)
@@ -114,7 +117,9 @@ work()
                         objChild.title = obj2.getString("key_title")
                         objChild.value_id = obj2.getString("key_value")
                         objChild.chkStatus = obj2.getString("chked")
-
+                        if(obj2.getString("key_title").equals("Other (please specify)")) {
+                            objChild.other = obj2.getString("degrees_other")
+                        }
                         listChild.add(objChild)
 
                     }
@@ -126,7 +131,12 @@ work()
                     modelList = listMain
 
                 }
+                val inflater = layoutInflater
 
+                  header = inflater.inflate(R.layout.education_header, recycle_education, false)
+                header.education.visibility = View.VISIBLE
+                header.workdetails.visibility = View.GONE
+                recycle_education.addHeaderView(header)
                 val adapter = SampleAdapter(this@Education,listMain)
                 val wrapperAdapter = WrapperExpandableListAdapter(adapter)
                 recycle_education.setAdapter(wrapperAdapter)
@@ -198,10 +208,10 @@ work()
         if(modelList != null && modelList.size > 0){
             map = HashMap()
             map["user_id"] = "81"
-            map["eh_technical_or_vocational_training"] = edt_tech_training.text.toString()
-            map["eh_technical_speciality"] = edt_tech_speciality.text.toString()
-            map["eh_associate_degree_specify"] = edt_degree.text.toString()
-            map["eh_other_specify"] = edt_other.text.toString()
+            map["eh_technical_or_vocational_training"] = header.edt_tech_training.text.toString()
+            map["eh_technical_speciality"] = header.edt_tech_speciality.text.toString()
+            map["eh_associate_degree_specify"] = header.edt_degree.text.toString()
+            map["eh_other_specify"] = header.edt_other.text.toString()
           //  map["bachelor_degrees"] = ""
           //  map["bachelors_degrees_other"] = ""
          //   map["advanced_degrees"] = ""
@@ -214,6 +224,9 @@ work()
                     for(j in 0  until modelList[i].listChild.size){
                         if(modelList[i].listChild[j].chkStatus.equals("1")){
                             sb.append(modelList[i].listChild[j].value_id+",")
+                        }
+                        if(modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
+                            map[modelList[i].heading+"_other"] = modelList[i].listChild[j].other
                         }
                     }
                 }

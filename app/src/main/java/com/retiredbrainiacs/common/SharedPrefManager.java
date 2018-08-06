@@ -23,6 +23,12 @@ public class SharedPrefManager {
     private static final String ABOUTME = "about";
     private static final String GENDER = "gender";
     private static final String MARITAL_STATUS = "marital";
+    private static final String CITY = "city";
+    private static final String SKYPE = "skype";
+    private static final String COUNTRY = "country";
+    private static final String ADRS1 = "adrs1";
+    private static final String ADRS2 = "adrs2";
+    private static final String ZIPCODE = "zip";
     private static SharedPrefManager mInstance;
 
     private static Context mCtx;
@@ -52,7 +58,18 @@ public class SharedPrefManager {
         editor.putString(DOB, dob);
         editor.apply();
     }
-
+public void setContactInfo(String phn, String skype,String contry,String city,String adrs,String adrs1,String zip){
+    SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+    SharedPreferences.Editor editor = sharedPreferences.edit();
+    editor.putString(PHN_NO, phn);
+    editor.putString(SKYPE, skype);
+    editor.putString(COUNTRY,contry);
+    editor.putString(CITY, city);
+    editor.putString(ADRS1, adrs);
+    editor.putString(ADRS2, adrs1);
+    editor.putString(ZIPCODE, zip);
+    editor.apply();
+}
     public void setUserID(String id){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -147,6 +164,38 @@ public class SharedPrefManager {
 
         return sharedPreferences.getString(DOB, null);
     }
+    public String getSkype(){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(SKYPE, null);
+    }
+    public String getCity(){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(CITY, null);
+    }
+    public String getCountry(){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(COUNTRY, null);
+    }
+    public String getAdrs1(){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(ADRS1, null);
+    }
+    public String getAdrs2(){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(ADRS2, null);
+    }
+    public String getZipCode(){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(ZIPCODE, null);
+    }
+
+
     public String getDeviceToken(){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
 if(sharedPreferences.getString(DEVICE_ID,null) != null){

@@ -161,7 +161,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="12dp"
         >
             <Spinner
                 android:id="@+id/spin_gender"
@@ -191,7 +191,7 @@
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="12dp"
             >
             <Spinner
                 android:id="@+id/spin_marital"

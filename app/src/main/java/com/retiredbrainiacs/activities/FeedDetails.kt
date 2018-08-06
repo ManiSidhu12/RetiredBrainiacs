@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import com.android.volley.AuthFailureError
@@ -23,6 +24,7 @@ import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.ResponseRoot
+import com.retiredbrainiacs.model.feeds.CommentList
 import com.retiredbrainiacs.model.feeds.Post
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
@@ -31,8 +33,16 @@ import java.io.StringReader
 
 class FeedDetails : AppCompatActivity(){
     lateinit var post : Post
-lateinit var root : ResponseRoot
+    lateinit var root : ResponseRoot
+    lateinit var  commentList : MutableList<CommentList>
 
+    companion object {
+    lateinit var  cmntList : MutableList<CommentList>
+
+    fun getData(commentList: MutableList<CommentList>) {
+         cmntList = commentList
+    }
+}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,14 +53,15 @@ lateinit var root : ResponseRoot
 
         var v = supportActionBar!!.customView
         v.titletxt.text = "Details"
-lay_settings_detail.visibility = View.GONE
-        if(intent != null && intent.getParcelableExtra<Post>("list") != null) {
-         post = intent.getParcelableExtra("list")
+        lay_settings_detail.visibility = View.GONE
+        if(intent != null && intent.extras.getParcelable<Post>("list") != null) {
+         post = intent.extras.getParcelable("list")
+
             if(post.wallPostUserImage != null && !post.wallPostUserImage.isEmpty()){
                 Picasso.with(this@FeedDetails).load(post.wallPostUserImage).into(img_user_feed_detail)
             }
             else{
-                img_user_feed_detail.setImageResource(R.drawable.dummyuser)
+                img_user_feed_detail.visibility = View.GONE
             }
             if(post.image != null && !post.image.isEmpty()){
                 Picasso.with(this@FeedDetails).load(post.image).into(img_post_detail)
@@ -77,10 +88,11 @@ lay_settings_detail.visibility = View.GONE
 
             }
             txt_cmnt_count_detail.text = post.commentCount
-
-            if(post.commentList != null && post.commentList.size > 0){
+            Log.e("true",post.toString())
+commentList = FeedDetails.cmntList
+            if(commentList != null && commentList.size > 0){
                 recycler_cmnts_detail.layoutManager = LinearLayoutManager(this@FeedDetails)
-                recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails,post.commentList)
+                recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails,commentList)
             }
 }
 btn_post_detail.setOnClickListener {
@@ -110,6 +122,12 @@ comment()
 
             if(root.status.equals("true")){
                 Common.showToast(this@FeedDetails,root.message)
+                edt_cmnt_detail.text = Editable.Factory.getInstance().newEditable("")
+
+                if(root.commentList != null && root.commentList.size > 0){
+                    recycler_cmnts_detail.layoutManager = LinearLayoutManager(this@FeedDetails)
+                    recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails,root.commentList)
+                }
 
             }
             else{

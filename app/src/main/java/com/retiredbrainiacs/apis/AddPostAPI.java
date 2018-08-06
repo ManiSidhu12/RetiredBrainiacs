@@ -302,8 +302,8 @@ if(mediaType.equalsIgnoreCase("video")) {
 
             if(status.equalsIgnoreCase("true"))
             {
-                String img = job.getString("avt");
-                SharedPrefManager.getInstance(ctx).setUserImage(img);
+                //String img = job.getString("avt");
+               // SharedPrefManager.getInstance(ctx).setUserImage(img);
 
             }
             else{

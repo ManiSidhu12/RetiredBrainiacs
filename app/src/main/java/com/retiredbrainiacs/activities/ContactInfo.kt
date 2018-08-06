@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.Message
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -25,6 +26,7 @@ import com.retiredbrainiacs.R
 import com.retiredbrainiacs.apis.*
 import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.ResponseRoot
+import com.squareup.picasso.Picasso
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -93,7 +95,11 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         imageutils = Imageutils(this@ContactInfo)
 
         handleCountryJson()
-
+        if(intent != null && intent.extras != null) {
+            if (intent.extras.getString("type").equals("edit")) {
+                setdata()
+            }
+        }
 
         work()
     }
@@ -225,6 +231,15 @@ imageutils.imagepicker(1)
             Log.e("msg",root.status+root.message)
             if(root.status.equals("true")) {
                 Common.showToast(this@ContactInfo,root.message)
+                var contri = ""
+                if(spin_country.selectedItem == null) {
+contri = ""
+                }
+                else{
+                   contri = spin_country.selectedItem.toString()
+                }
+                Log.e("country",spin_country.selectedItem.toString())
+                SharedPrefManager.getInstance(this@ContactInfo).setContactInfo(edt_phn.text.toString().trim(), edt_skype.text.toString().trim(), contri, edt_city.text.toString().trim(), edt_adrs1.text.toString(), edt_adrs2.text.toString(), edt_zipccode.text.toString().trim())
                 startActivity(Intent(this@ContactInfo,Languages::class.java))
 
 
@@ -287,15 +302,18 @@ imageutils.imagepicker(1)
         var res = ""
         try {
             val fis = FileInputStream(f)
-            var country ="";
+            var country =""
+            var code = ""
             if(spin_country.selectedItem == null){
-                country ="";
+                code =""
+                country = ""
             }
             else{
-                country = list_code.get(spin_country.selectedItemPosition-1)
+                code = list_code.get(spin_country.selectedItemPosition-1)
+                country = spin_country.selectedItem.toString()
             }
 
-            val edit = SendImage(this@ContactInfo,"81",edt_phn.text.toString().trim(), edt_skype.text.toString().trim(),country, edt_city.text.toString().trim(), edt_adrs1.text.toString().trim(), edt_adrs2.text.toString().trim(),edt_zipccode.text.toString().trim(), filetype, filename)
+            val edit = SendImage(this@ContactInfo,"81",edt_phn.text.toString().trim(), edt_skype.text.toString().trim(),code, edt_city.text.toString().trim(), edt_adrs1.text.toString().trim(), edt_adrs2.text.toString().trim(),edt_zipccode.text.toString().trim(), filetype, filename,country)
             res = edit.doStart(fis)
 
         } catch (e: Exception) {
@@ -308,7 +326,7 @@ imageutils.imagepicker(1)
     }
 
     //********** Implementing handler for upload image thread*****
-    internal var imageHandler: Handler = object : Handler() {
+     var imageHandler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
             var res = ""
             try {
@@ -332,4 +350,43 @@ imageutils.imagepicker(1)
 
         }
     }
+
+
+    fun setdata(){
+        if(SharedPrefManager.getInstance(this@ContactInfo).phnNo != null) {
+            edt_phn.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).phnNo)
+        }
+        if(SharedPrefManager.getInstance(this@ContactInfo).skype != null) {
+            edt_skype.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).skype)
+        }
+        if(SharedPrefManager.getInstance(this@ContactInfo).city != null) {
+            edt_city.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).city)
+        }
+        if(SharedPrefManager.getInstance(this@ContactInfo).adrs1 != null) {
+            edt_adrs1.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).adrs1)
+        }
+        if(SharedPrefManager.getInstance(this@ContactInfo).adrs2 != null) {
+            edt_adrs2.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).adrs2)
+
+        }
+        if(SharedPrefManager.getInstance(this@ContactInfo).zipCode != null) {
+            edt_zipccode.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).zipCode)
+        }
+        if(SharedPrefManager.getInstance(this@ContactInfo).userImg != null && !SharedPrefManager.getInstance(this@ContactInfo).userImg.isEmpty()){
+  no_file.visibility = View.GONE
+       userImage.visibility = View.VISIBLE
+       Picasso.with(this@ContactInfo).load(SharedPrefManager.getInstance(this@ContactInfo).userImg).into(userImage)
+   }
+if(SharedPrefManager.getInstance(this@ContactInfo).country != null && !SharedPrefManager.getInstance(this@ContactInfo).country.isEmpty()){
+
+
+        for (i in 0 until list_country.size) {
+            // Log.e("ii",""+i);
+            if (list_country[i].equals(SharedPrefManager.getInstance(this@ContactInfo).country)) {
+                spin_country.setSelection(i + 1)
+            }
+        }
 }
+    }
+}
+

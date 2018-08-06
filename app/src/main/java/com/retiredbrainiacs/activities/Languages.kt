@@ -132,7 +132,10 @@ startActivity(Intent(this@Languages,Interests::class.java))
                      objChild.title = obj2.getString("key_title")
                      objChild.value_id = obj2.getString("key_value")
                      objChild.chkStatus = obj2.getString("chked")
+if(obj2.getString("key_title").equals("Other (Please Specify)")){
+    objChild.other = obj2.getString("other_lang_val")
 
+}
                         listChild.add(objChild)
                     }
                     objMain.listChild = listChild
@@ -311,6 +314,23 @@ map["user_id"] = "81"
                       if(modelList[i].listChild[j].chkStatus.equals("1")){
                           sb.append(modelList[i].listChild[j].value_id+",")
                       }
+
+                      if(modelList[i].heading.equals("spoken_languages")) {
+                          if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
+                              map["spoken_other_lang"] = modelList[i].listChild[j].other
+                          }
+                      }
+                          else if(modelList[i].heading.equals("known_languages")) {
+                          if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
+                              map["known_other_lang"] = modelList[i].listChild[j].other
+                          }
+                      }
+                              else if(modelList[i].heading.equals("preferred_languages")){
+                                  if(modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
+                                      map["pref_other_lang"] = modelList[i].listChild[j].other
+                                  }
+                      }
+
                   }
                 }
 

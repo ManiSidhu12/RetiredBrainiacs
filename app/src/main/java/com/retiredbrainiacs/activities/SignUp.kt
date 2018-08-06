@@ -118,7 +118,8 @@ class SignUp : Activity(){
         btn_signup.setOnClickListener {
             if(Common.validateName(this@SignUp,edt_name_signup,input_lay_name) && Common.validate(this@SignUp,edt_email_signup,input_lay_emailsignup) && Common.validatePassword(this@SignUp,edt_pswd_signup,input_lay_pswdsignup)&& Common.validateCnfrmPassword(this@SignUp,edt_pswd_signup,edt_cnfrmpswd_signup,input_lay_cnfrmpswdsignup) && Common.validateDOB(this@SignUp,edt_dob_signup,input_lay_dobsignup) && Common.validateGender(this@SignUp,spin_gender) && Common.validateMariitalStatus(this@SignUp,spin_marital)){
                 if(CommonUtils.getConnectivityStatusString(this@SignUp).equals("true")){
-                  sendActivationKeyWebService()
+                  //sendActivationKeyWebService()
+                    signUpWebService()
                 }
                 else{
                     CommonUtils.openInternetDialog(this@SignUp)
@@ -233,5 +234,67 @@ class SignUp : Activity(){
         requestQueue.add(postRequest)
 
     }
+    private fun signUpWebService(){
+        var url = GlobalConstants.API_URL+"sign_up_from"
+        val pd = ProgressDialog.show(this@SignUp, "", "Loading", false)
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
+
+            if(rootLogin.status.equals("true")) {
+                Common.showToast(this@SignUp,"Registered Successfully...")
+                SharedPrefManager.getInstance(this@SignUp).setUserID(rootLogin.userId)
+                val intent = Intent(this@SignUp, Verification::class.java)
+                startActivity(intent)
+            } else{
+                Common.showToast(this@SignUp,rootLogin.message)
+
+            }
+        },
+
+                Response.ErrorListener { pd.dismiss() }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["first_name"] = edt_name_signup.text.toString()
+                map["last_name"] = ""
+                map["email"] = edt_email_signup.text.toString()
+                map["dob"] = edt_dob_signup.text.toString()
+                map["password"] = edt_pswd_signup.text.toString()
+                map["con_pswd"] = edt_pswd_signup.text.toString()
+                if(spin_gender.selectedItem != null) {
+                    if (spin_gender.selectedItem.toString().equals("Male")) {
+                        map["gender"] = "1"
+                    } else {
+                        map["gender"] = "2"
+                    }
+                }
+                // map["gender"] = SharedPrefManager.getInstance(this@Verification).gender
+                if(spin_marital.selectedItem != null) {
+
+                    if (spin_marital.selectedItem.toString().equals("Single")) {
+                        map["marital_status"] = "1"
+                    } else {
+                        map["marital_status"] = "2"
+                    }
+                }
+                //   map["marital_status"] = SharedPrefManager.getInstance(this@Verification).maritalStatus
+               // map["activation_key"] = sb1.toString()
+                Log.e("map signup",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
+    }
+
 
 }

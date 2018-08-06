@@ -74,7 +74,7 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
     var file_path : String = ""
     var fileType1 : String = ""
     var fileName1 : String = ""
-    lateinit var f : File
+     var f : File  ?= null
     lateinit var f1 : File
 lateinit var pd : ProgressDialog
      var mediaType : String =""
@@ -114,7 +114,7 @@ if(global.videoList != null){
         gson = Gson()
         //====================
 
-
+     Log.e("id",   SharedPrefManager.getInstance(activity).userId)
         //======= Font =========
         Common.setFontRegular(activity!!,v.status)
         Common.setFontRegular(activity!!,v.audio)
@@ -174,7 +174,7 @@ if(f == null) {
     else{
         Log.e("mediaType1",mediaType)
 
-        uploadImage(f.absolutePath,"")
+        uploadImage(f!!.absolutePath,"")
 
     }
             }
@@ -266,16 +266,16 @@ file_path = filename
 
                 val imageUri = Uri.parse(videoPath)
                 f= File(imageUri.path)
-                val fileSizeInBytes = f.length()
+                val fileSizeInBytes = f!!.length()
 
                 val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
                 Log.e("file", f.toString())
 
-                thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
+                thumbnail = ThumbnailUtils.createVideoThumbnail(f!!.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
                 Log.e("thumb", "aman" + thumbnail.toString())
                 f1 = saveImage.storeImage(thumbnail)
           // uploadImage(f1.getAbsolutePath())
-                addVideo(f.absolutePath,uploadImage1(f.absolutePath).split(",")[0])
+                addVideo(f!!.absolutePath,uploadImage1(f!!.absolutePath).split(",")[0])
                 addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
 v.img_feed.setImageBitmap(thumbnail)
 
@@ -285,10 +285,10 @@ v.img_feed.setImageBitmap(thumbnail)
                 // System.out.println("SELECT_VIDEO : " + selectedPath);
                 f = File(selectedImageUri!!.path)
 
-                thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
+                thumbnail = ThumbnailUtils.createVideoThumbnail(f!!.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
                 f1 = saveImage.storeImage(thumbnail)
                // uploadImage(f1.getAbsolutePath())
-                addVideo(f.absolutePath,uploadImage1(f.absolutePath).split(",")[0])
+                addVideo(f!!.absolutePath,uploadImage1(f!!.absolutePath).split(",")[0])
                 addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
                 v.img_feed.setImageBitmap(thumbnail)
 
@@ -305,11 +305,11 @@ v.img_feed.setImageBitmap(thumbnail)
                     selectedPathVideo = ImageFilePath.getPath(activity, selectedImageUri)
                     Log.e("Image File Path", "" + selectedPathVideo)
                     f = File(selectedPathVideo)
-                    Log.e("f1", f.toString()+f.absolutePath)
+                    Log.e("f1", f.toString()+ f!!.absolutePath)
                     thumbnail = ThumbnailUtils.createVideoThumbnail(selectedPathVideo, MediaStore.Video.Thumbnails.MINI_KIND)
                     f1 = saveImage.storeImage(thumbnail)
                    // uploadImage(f1.getAbsolutePath())
-                    addVideo(f.absolutePath,uploadImage1(f.absolutePath).split(",")[0])
+                    addVideo(f!!.absolutePath,uploadImage1(f!!.absolutePath).split(",")[0])
                     addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
                     v.img_feed.setImageBitmap(thumbnail)
                 }
@@ -320,10 +320,10 @@ v.img_feed.setImageBitmap(thumbnail)
                     val selectedImageUri = data!!.getData()
                     selectedPath = getPath(selectedImageUri, activity)
                     f = File(selectedPath)
-                    thumbnail = ThumbnailUtils.createVideoThumbnail(f.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
+                    thumbnail = ThumbnailUtils.createVideoThumbnail(f!!.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
                     f1 = saveImage.storeImage(thumbnail)
                   //  uploadImage(f1.getAbsolutePath())
-                    addVideo(f.absolutePath,uploadImage1(f.absolutePath).split(",")[0])
+                    addVideo(f!!.absolutePath,uploadImage1(f!!.absolutePath).split(",")[0])
                     addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
                     v.img_feed.setImageBitmap(thumbnail)
                 }
@@ -342,61 +342,60 @@ v.img_feed.setImageBitmap(thumbnail)
     }
     //==== add post api ================
     fun addPostAPI() {
+
+        var url = GlobalConstants.API_URL1+"?action=wall_post"
         val pd = ProgressDialog.show(activity, "", "Loading", false)
 
-        val map = HashMap<String, String>()
-        map["user_id"] = SharedPrefManager.getInstance(activity).userId
-        map["to_user_id"] = ""
-        map["post_content"] = edt_post_data.text.toString()
-        if(spin_privacy_feed.selectedItem != null) {
-            if (spin_privacy_feed.selectedItem.equals("Public")) {
-                map["post_type"] = "0"
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+          pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            var  root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+
+            if(root.status.equals("true")){
+                Common.showToast(activity!!,root.message)
+                edt_post_data.text = Editable.Factory.getInstance().newEditable("")
+                getFeeds()
             }
             else{
-                map["post_type"] = "1"
+                Common.showToast(activity!!,root.message)
+            }
+        },
 
+                Response.ErrorListener {
+                  pd.dismiss()
+                }){
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+                map["user_id"] = SharedPrefManager.getInstance(activity).userId
+                map["to_user_id"] = ""
+                map["post_content"] = edt_post_data.text.toString()
+                if(spin_privacy_feed.selectedItem != null) {
+                    if (spin_privacy_feed.selectedItem.equals("Public")) {
+                        map["post_type"] = "0"
+                    }
+                    else{
+                        map["post_type"] = "1"
+
+                    }
+                }
+                else{
+                    map["post_type"] = ""
+                }
+                map["file_align"] = "center"
+                map["image"] = ""
+                map["video"] = ""
+                map["audio"] = ""
+                Log.e("map add feed",map.toString())
+                return map
             }
         }
-        else{
-            map["post_type"] = ""
-        }
-        map["file_align"] = "center"
-        map["image"] = ""
-        map["video"] = ""
-        map["audio"] = ""
-        Log.e("map add feed",map.toString())
-        service.addPost(map)
-                //.timeout(1,TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.newThread())
-                .subscribe(object : Observer<ResponseRoot> {
-                    override fun onComplete() {
-                    }
 
-                    override fun onSubscribe(d: Disposable) {
-                    }
-
-                    override fun onNext(t: ResponseRoot) {
-                        pd.dismiss()
-                        if(t != null ){
-                            if(t.status.equals("true")) {
-                                Common.showToast(activity!!,t.message)
-getFeeds()
-                            }
-                            else{
-                                 Common.showToast(activity!!,t.message)
-
-                            }
-                        }
-                    }
-
-                    override fun onError(e: Throwable) {
-                        pd.dismiss()
-                        Common.showToast(activity!!,e.message.toString())
-                    }
-
-
-                })
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(activity)
+        requestQueue.add(postRequest)
     }
 
     private fun getFeeds(){
@@ -520,7 +519,7 @@ getFeeds()
                         v.img_feed.setImageResource(R.drawable.dummyuser)
                     }
 
-getFeeds()
+               getFeeds()
 
                 } else {
                     Common.showToast(activity!!,res.split(",")[1])

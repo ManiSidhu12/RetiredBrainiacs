@@ -61,6 +61,7 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         holder.txtUserName.text = posts[position].wallPostUserName
         holder.txtLikeCount.text = posts[position].likeCount
         holder.txtCmntCount.text = posts[position].commentCount
+        holder.txtTime.text = posts[position].postingDate
 if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserImage.isEmpty()){
     Picasso.with(ctx).load(posts[position].wallPostUserImage).into(holder.imgUser)
 }
@@ -68,10 +69,12 @@ if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserIma
     holder.imgUser.setImageResource(R.drawable.dummyuser)
         }
         if(posts[position].image != null && !posts[position].image.isEmpty()){
+            holder.imgPost.visibility = View.VISIBLE
+
             Picasso.with(ctx).load(posts[position].image).into(holder.imgPost)
         }
         else{
-            holder.imgPost.setImageResource(R.drawable.no_image)
+            holder.imgPost.visibility = View.GONE
         }
 
         if(posts[position].likedByMe.equals("1")){
@@ -87,9 +90,13 @@ if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserIma
 
         }
         holder.layCmnt.setOnClickListener {
+            Log.e("data",posts[position].commentList.toString())
+            FeedDetails.getData(posts[position].commentList)
             ctx.startActivity(Intent(ctx,FeedDetails::class.java).putExtra("list",posts[position]))
         }
         holder.edtCmnt.setOnClickListener {
+            FeedDetails.getData(posts[position].commentList)
+
             ctx.startActivity(Intent(ctx,FeedDetails::class.java).putExtra("list",posts[position]))
         }
 

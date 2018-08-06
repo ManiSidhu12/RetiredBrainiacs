@@ -20,6 +20,29 @@ public class CommentList {
     @Expose
     private String comment;
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
+
+    public String getWallPostImage() {
+        return wallPostImage;
+    }
+
+    public void setWallPostImage(String wallPostImage) {
+        this.wallPostImage = wallPostImage;
+    }
+
+    @SerializedName("display_name")
+    @Expose
+    private String displayName;
+    @SerializedName("wall_post_user_image")
+    @Expose
+    private String wallPostImage;
+
     public String getFromUserId() {
         return fromUserId;
     }

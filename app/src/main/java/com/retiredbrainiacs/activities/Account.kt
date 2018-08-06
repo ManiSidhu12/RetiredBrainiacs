@@ -50,7 +50,7 @@ class  Account : AppCompatActivity(){
         }
 
         btn_edit.setOnClickListener {
-
+startActivity(Intent(this@Account,ContactInfo::class.java).putExtra("type","edit"))
         }
 
         lay_about.setOnClickListener {

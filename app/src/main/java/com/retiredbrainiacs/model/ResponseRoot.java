@@ -2,6 +2,7 @@ package com.retiredbrainiacs.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.retiredbrainiacs.model.feeds.CommentList;
 
 import java.util.List;
 
@@ -75,4 +76,16 @@ this.message = message;
     public void setFavourite(List<Integer> favourite) {
         this.favourite = favourite;
     }
+
+    public List<CommentList> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<CommentList> commentList) {
+        this.commentList = commentList;
+    }
+
+    @SerializedName("comment_list")
+    @Expose
+    private List<CommentList> commentList = null;
 }

@@ -112,6 +112,12 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 		final ChildModel model = listMain.get(groupPosition).getListChild().get(childPosition);
 
 		text.setText(model.getTitle());
+		if(model.getOther() != null && !model.getOther().isEmpty()){
+			edt_add.setText(model.getOther());
+		}
+		if(!edt_add.getText().toString().isEmpty()){
+			model.setOther(edt_add.getText().toString());
+		}
 		if(model.getTitle().equalsIgnoreCase("Other (Please Specify)")){
 		edt_add.setVisibility(View.VISIBLE);
 		img_nxt.setVisibility(View.GONE);
