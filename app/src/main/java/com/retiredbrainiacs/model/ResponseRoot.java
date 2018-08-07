@@ -68,15 +68,15 @@ this.message = message;
 }
     @SerializedName("favourite")
     @Expose
-    private List<Integer> favourite = null;
-    public List<Integer> getFavourite() {
+    private List<Favourite> favourite = null;
+
+    public List<Favourite> getFavourite() {
         return favourite;
     }
 
-    public void setFavourite(List<Integer> favourite) {
+    public void setFavourite(List<Favourite> favourite) {
         this.favourite = favourite;
     }
-
     public List<CommentList> getCommentList() {
         return commentList;
     }

@@ -89,10 +89,10 @@ class FeedDetails : AppCompatActivity(){
             }
             txt_cmnt_count_detail.text = post.commentCount
             Log.e("true",post.toString())
-commentList = FeedDetails.cmntList
+            commentList = FeedDetails.cmntList
             if(commentList != null && commentList.size > 0){
                 recycler_cmnts_detail.layoutManager = LinearLayoutManager(this@FeedDetails)
-                recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails,commentList)
+                //recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails, commentList, edt_cmnt)
             }
 }
 btn_post_detail.setOnClickListener {
@@ -101,7 +101,7 @@ btn_post_detail.setOnClickListener {
     }
     else{
         if(CommonUtils.getConnectivityStatusString(this@FeedDetails).equals("true")){
-comment()
+          comment()
         }
         else{
             CommonUtils.openInternetDialog(this@FeedDetails)
@@ -126,7 +126,7 @@ comment()
 
                 if(root.commentList != null && root.commentList.size > 0){
                     recycler_cmnts_detail.layoutManager = LinearLayoutManager(this@FeedDetails)
-                    recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails,root.commentList)
+                 //   recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails, root.commentList, edt_cmnt)
                 }
 
             }

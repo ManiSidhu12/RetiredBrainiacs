@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="5dp">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,90 +26,105 @@
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             android:layout_centerHorizontal="true">
-            <TextView
-                android:id="@+id/txt_name_cmnt"
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:paddingStart="3dp"
-                android:paddingTop="3dp"
-                android:textSize="16sp"
-                android:textColor="@android:color/black"
-                android:text="Jasper Shintu"/>
-            <TextView
-                android:id="@+id/txt_time_cmnt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:textSize="14sp"
-                android:paddingStart="3dp"
-                android:text="23 minutes ago"/>
+                android:layout_gravity="center_horizontal">
+                <TextView
+                    android:id="@+id/txt_name_cmnt"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_toStartOf="@+id/txtTime"
+                    android:layout_marginEnd="3dp"
+                    android:paddingStart="3dp"
+                    android:paddingTop="3dp"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/black"
+                    android:text="Jasper Shintu"/>
+
+                <TextView
+                    android:id="@+id/txtTime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginEnd="5dp"
+                   android:text="2 days ago"
+                    android:textSize="14sp" />
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="3dp"
-                android:layout_gravity="center_horizontal">
+                android:layout_marginTop="3dp">
+
                 <com.iarcuschin.simpleratingbar.SimpleRatingBar
                     android:id="@+id/rate_bar_cmnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
-                    android:layout_centerInParent="true"
                     android:layout_marginStart="3dp"
-                    app:srb_fillColor="#f39c12"
                     app:srb_borderColor="#f39c12"
-                    app:srb_pressedFillColor="#f39c12"
+                    app:srb_fillColor="#f39c12"
                     app:srb_isIndicator="true"
-                    app:srb_rating="5"
                     app:srb_pressedBorderColor="#808080"
-                    app:srb_starSize="13dp"
-                    />
+                    app:srb_pressedFillColor="#f39c12"
+                    app:srb_rating="5"
+                    app:srb_starSize="13dp" />
+
                 <TextView
                     android:id="@+id/txt_rating_cmnt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toEndOf="@+id/rate_bar_cmnt"
                     android:layout_centerInParent="true"
                     android:layout_marginStart="5dp"
-                    android:textSize="14sp"
+                    android:layout_toEndOf="@+id/rate_bar_cmnt"
+                    android:text="4.5/5"
+                    android:visibility="gone"
                     android:textColor="@android:color/black"
-                    android:text="4.5/5"/>
+                    android:textSize="14sp" />
             </RelativeLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 >
-            <EditText
-                android:id="@+id/edt_cmnt"
+            <TextView
+                android:id="@+id/txtcmnt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_centerInParent="true"
-                android:layout_toStartOf="@+id/layedit"
-                android:layout_marginEnd="3dp"
-                android:enabled="false"
+                android:layout_centerHorizontal="true"
+                android:padding="3dp"
+                android:layout_marginEnd="5dp"
                 />
                 <LinearLayout
                     android:id="@+id/layedit"
                     android:layout_width="wrap_content"
-                    android:layout_height="35dp"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/txtcmnt"
+                    android:layout_centerHorizontal="true"
                     android:layout_alignParentEnd="true"
-                    android:layout_centerInParent="true"
                     android:layout_marginEnd="5dp"
+                    android:layout_marginTop="3dp"
+                    android:layout_marginBottom="5dp"
                     android:orientation="horizontal">
                     <Button
                         android:id="@+id/edit_cmnt"
-                        android:layout_width="30dp"
+                        android:layout_width="20dp"
                         android:layout_height="match_parent"
                         android:background="@drawable/edit"/>
                     <Button
                         android:id="@+id/delete_cmnt"
-                        android:layout_width="30dp"
+                        android:layout_width="20dp"
                         android:layout_height="match_parent"
                         android:background="@android:drawable/ic_delete"/>
 
                 </LinearLayout>
+
             </RelativeLayout>
         </LinearLayout>
     </RelativeLayout>

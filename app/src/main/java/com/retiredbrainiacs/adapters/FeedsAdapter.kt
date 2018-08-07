@@ -1,18 +1,19 @@
 package com.retiredbrainiacs.adapters
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.WindowManager
+import android.widget.*
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -21,7 +22,7 @@ import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.retiredbrainiacs.R
-import com.retiredbrainiacs.activities.FeedDetails
+import com.retiredbrainiacs.activities.CommentListing
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
@@ -29,11 +30,13 @@ import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.Post
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.dialog_global.*
 import kotlinx.android.synthetic.main.home_feed_adapter.view.*
 import java.io.StringReader
 
 class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : String): RecyclerView.Adapter<FeedsAdapter.ViewHolder>(){
     val privacyArray = arrayOf("Public","Private")
+    val actionsArray = arrayOf("Edit","Delete")
 
     lateinit var root: ResponseRoot
 
@@ -54,23 +57,22 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         Common.setFontRegular(ctx,holder.txtLike)
         Common.setFontRegular(ctx,holder.txtComment)
         Common.setFontBtnRegular(ctx,holder.btnPost)
-        Common.setFontEditRegular(ctx,holder.edtCmnt)
-        Log.e("content",posts[position].postContent)
+        Common.setFontRegular(ctx,holder.edtCmnt)
+       // Log.e("content",posts[position].postContent)
         holder.txtPost.text = posts[position].postContent
 
         holder.txtUserName.text = posts[position].wallPostUserName
         holder.txtLikeCount.text = posts[position].likeCount
         holder.txtCmntCount.text = posts[position].commentCount
         holder.txtTime.text = posts[position].postingDate
-if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserImage.isEmpty()){
+   if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserImage.isEmpty()){
     Picasso.with(ctx).load(posts[position].wallPostUserImage).into(holder.imgUser)
-}
-        else{
+   }
+  else{
     holder.imgUser.setImageResource(R.drawable.dummyuser)
         }
         if(posts[position].image != null && !posts[position].image.isEmpty()){
             holder.imgPost.visibility = View.VISIBLE
-
             Picasso.with(ctx).load(posts[position].image).into(holder.imgPost)
         }
         else{
@@ -87,17 +89,18 @@ if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserIma
             holder.txtLike.setTextColor(Color.parseColor("#90949C"))
             holder.txtLikeCount.setTextColor(Color.parseColor("#90949C"))
             holder.imgLike.setColorFilter(Color.parseColor("#90949C"), android.graphics.PorterDuff.Mode.SRC_IN)
-
         }
         holder.layCmnt.setOnClickListener {
             Log.e("data",posts[position].commentList.toString())
-            FeedDetails.getData(posts[position].commentList)
-            ctx.startActivity(Intent(ctx,FeedDetails::class.java).putExtra("list",posts[position]))
+           CommentListing.getData(posts[position].commentList)
+          ctx.startActivity(Intent(ctx,CommentListing::class.java).putExtra("id",posts[position].usersWallPostId))
+            (ctx as AppCompatActivity).overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up )
         }
         holder.edtCmnt.setOnClickListener {
-            FeedDetails.getData(posts[position].commentList)
+            CommentListing.getData(posts[position].commentList)
 
-            ctx.startActivity(Intent(ctx,FeedDetails::class.java).putExtra("list",posts[position]))
+           ctx.startActivity(Intent(ctx,CommentListing::class.java).putExtra("id",posts[position].usersWallPostId))
+            (ctx as AppCompatActivity).overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up )
         }
 
         if(type.equals("forum")){
@@ -113,8 +116,23 @@ if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserIma
             val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1,privacyArray)
             adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
             holder.spinPrivacy.adapter = adapterPrivacy
-        }
 
+            val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1,actionsArray)
+            adapterActions.setDropDownViewResource(R.layout.spinner_txt)
+            holder.spinActions.adapter = adapterActions
+        }
+     holder.spinActions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        if(holder.spinActions.selectedItem.equals("Delete")){
+        showDialogMsg(ctx,posts[position].usersWallPostId,holder.layoutFeed)
+        }
+    }
+
+
+}
 holder.layLike.setOnClickListener {
     if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
         like(ctx,posts[position].usersWallPostId,holder.txtLike,holder.imgLike,holder.txtLikeCount)
@@ -124,6 +142,46 @@ holder.layLike.setOnClickListener {
     }
 }
     }
+
+    fun showDialogMsg(c: Context, id: String, layoutFeed: LinearLayout) {
+        val globalDialog = Dialog(c, R.style.Theme_Dialog)
+        globalDialog.setContentView(R.layout.dialog_global)
+        globalDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+
+
+
+        globalDialog.text.text = "Are you sure you want to delete?"
+
+
+
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(globalDialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        globalDialog.show()
+        globalDialog.window!!.attributes = lp
+        globalDialog.ok.text = "Yes"
+        globalDialog.cancel.text = "No"
+
+        globalDialog.cancel.setOnClickListener{
+
+            globalDialog.dismiss()
+
+
+        }
+
+
+        globalDialog.ok.setOnClickListener {
+globalDialog.dismiss()
+            if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
+                deletePost(c,id,layoutFeed)
+            }
+        }
+
+
+    }
+
     private fun like(ctx: Context, id: String, txtLike: TextView, imgLike: ImageView, txtLikeCount: TextView){
         var url = GlobalConstants.API_URL1+"?action=submit_like"
         val pd = ProgressDialog.show(ctx,"","Loading",false)
@@ -171,6 +229,48 @@ txtLikeCount.text = root.likeCount
 
     }
 
+    private fun deletePost(ctx: Context, id: String, layoutFeed: LinearLayout){
+        var url = GlobalConstants.API_URL1+"?action=delete_post"
+        val pd = ProgressDialog.show(ctx,"","Loading",false)
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = com.google.gson.stream.JsonReader(StringReader(response))
+            reader.isLenient = true
+          var  root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+
+            if(root1.status.equals("true")){
+                Common.showToast(ctx,root1.message)
+                layoutFeed.visibility = View.GONE
+
+            }
+            else{
+                Common.showToast(ctx,root1.message)
+
+            }
+        },
+
+                Response.ErrorListener {
+                    pd.dismiss()
+                }){
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["user_id"] = SharedPrefManager.getInstance(ctx).userId
+                map["post_id"] = id
+                Log.e("map like",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(ctx)
+        requestQueue.add(postRequest)
+
+    }
+
+
     class ViewHolder (itemView : View) : RecyclerView.ViewHolder(itemView){
         val imgUser = itemView.img_user_feed
         val txtUserName = itemView.txt_name_user
@@ -193,5 +293,7 @@ txtLikeCount.text = root.likeCount
         val txtCmntCount = itemView.txt_cmnt_count
         val imgLike = itemView.img_like
         val imgCmnt = itemView.img_cmnt
+        val spinActions = itemView.spin_actions
+        val layoutFeed = itemView.layoutfeed
     }
 }

@@ -36,6 +36,9 @@
         <activity android:name=".activities.Interests"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activities.CommentListing"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
         <activity android:name=".activities.Education"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>

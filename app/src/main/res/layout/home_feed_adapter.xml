@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_marginBottom="10dp"
     android:background="@android:color/white"
+    android:id="@+id/layoutfeed"
     android:orientation="vertical">
 <RelativeLayout
     android:layout_width="match_parent"
@@ -14,17 +15,17 @@
     android:layout_marginTop="5dp">
     <ImageView
         android:id="@+id/img_user_feed"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/user"/>
+ />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_toEndOf="@+id/img_user_feed"
-        android:layout_toStartOf="@+id/lay_settings"
+        android:layout_toStartOf="@+id/lay_actions"
         android:layout_marginEnd="5dp"
         android:layout_marginStart="5dp"
         android:layout_centerHorizontal="true">
@@ -37,6 +38,7 @@
             android:paddingTop="3dp"
             android:textSize="16sp"
             android:textColor="@android:color/black"
+            android:singleLine="true"
             android:text="Jasper Shintu"/>
         <TextView
             android:id="@+id/txt_time"
@@ -45,6 +47,7 @@
             android:layout_gravity="center_horizontal"
             android:textSize="14sp"
             android:paddingStart="3dp"
+            android:singleLine="true"
             android:text="23 minutes ago"/>
         <RelativeLayout
             android:layout_width="match_parent"
@@ -75,13 +78,27 @@
                 android:layout_marginStart="5dp"
                 android:textSize="14sp"
                 android:textColor="@android:color/black"
+                android:visibility="gone"
                 android:text="4.5/5"/>
         </RelativeLayout>
-    </LinearLayout>
+    </LinearLayout>    <LinearLayout
+    android:id="@+id/lay_actions"
+    android:layout_width="90dp"
+    android:layout_height="30dp"
+   android:layout_toStartOf="@+id/lay_settings"
+    android:layout_marginEnd="5dp"
+    android:background="@drawable/spin_bg"
+    android:layout_centerInParent="true">
+    <Spinner
+        android:id="@+id/spin_actions"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></Spinner>
+</LinearLayout>
+
     <LinearLayout
         android:id="@+id/lay_settings"
-        android:layout_width="110dp"
-        android:layout_height="35dp"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="5dp"
         android:background="@drawable/spin_bg"
@@ -225,7 +242,7 @@
             android:layout_toStartOf="@+id/btn_post"
             android:background="@drawable/cmnt_bg"
             android:layout_centerInParent="true">
-        <EditText
+        <TextView
             android:id="@+id/edt_cmnt"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -235,7 +252,6 @@
             android:gravity="start|center"
             android:layout_centerInParent="true"
             android:textSize="14sp"
-            android:editable="false"
             android:background="@android:color/transparent"/>
         </RelativeLayout>
     </RelativeLayout>

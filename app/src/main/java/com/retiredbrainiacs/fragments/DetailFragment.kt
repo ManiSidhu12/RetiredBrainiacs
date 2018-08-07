@@ -116,8 +116,8 @@ saveClassified()
             root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if(root1.status.equals("true")){
-v.txt_saved_details.text = "Saved"
-        v.txt_saved_details.setTextColor(ContextCompat.getColor(activity!!, R.color.theme_color_orange))
+         v.txt_saved_details.text = "Saved"
+         v.txt_saved_details.setTextColor(ContextCompat.getColor(activity!!, R.color.theme_color_orange))
            v.img_saved_details.setColorFilter(ContextCompat.getColor(activity!!, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
 
             }

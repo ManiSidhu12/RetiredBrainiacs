@@ -24,7 +24,7 @@ class Home : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_forum -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout,ForumFragment()).commit()
+                supportFragmentManager.beginTransaction().replace(R.id.frame_layout,ForumFragment()).addToBackStack("home").commit()
 
                 return@OnNavigationItemSelectedListener true
 
