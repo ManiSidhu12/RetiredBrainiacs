@@ -10,7 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
+import android.widget.RelativeLayout
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -45,34 +45,47 @@ class CommentsAdapter(var ctx: Context, var commentList: MutableList<CommentList
         if(commentList[position].wallPostImage != null && !commentList[position].wallPostImage.isEmpty()){
           Picasso.with(ctx).load(commentList[position].wallPostImage).into(holder.imgUser)
         }
-holder.btnEdit.setOnClickListener {
+
+        if(commentList[position].edit == 1){
+holder.layEdit.visibility = View.VISIBLE
+        }
+        else{
+            holder.layEdit.visibility = View.GONE
+        }
+    holder.btnEdit.setOnClickListener {
     GlobalConstants.editStatus = true
     GlobalConstants.cmntid = commentList[position].commentId
     GlobalConstants.pos = position
     edt_cmnt.text = Editable.Factory.getInstance().newEditable(commentList[position].comment)
-}
+    }
 
         holder.btnDelete.setOnClickListener {
             GlobalConstants.editStatus = false
+            if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
+                deleteComment(ctx,post_id,commentList[position].commentId,holder.mainLayout,commentList,position)
+            }
+            else{
+                CommonUtils.openInternetDialog(ctx)
+            }
         }
 
 
     }
-    private fun editComment(ctx: Context, post_id: String,cmnt_id : String,edt : EditText,txtCmnt : TextView){
-        var url = GlobalConstants.API_URL1+"?action=edit_comment"
+    private fun deleteComment(ctx: Context, post_id: String, cmnt_id: String, mainLayout: RelativeLayout, commentList: MutableList<CommentList>, position: Int){
+        var url = GlobalConstants.API_URL1+"?action=delete_comment"
         val pd = ProgressDialog.show(ctx,"","Loading",false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
             pd.dismiss()
             val gson = Gson()
             val reader = com.google.gson.stream.JsonReader(StringReader(response))
             reader.isLenient = true
-         var   root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+            var root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if(root.status.equals("true")){
                 Common.showToast(ctx,root.message)
-                txtCmnt.text = edt.text.toString()
-                edt.text = Editable.Factory.getInstance().newEditable("")
-
+                commentList.removeAt(position)
+                notifyDataSetChanged()
+              //  mainLayout.visibility = View.GONE
             }
             else{
                 Common.showToast(ctx,root.message)
@@ -91,8 +104,7 @@ holder.btnEdit.setOnClickListener {
                // map["user_id"] = SharedPrefManager.getInstance(ctx).userId
                 map["post_id"] = post_id
                 map["comment_id"] = cmnt_id
-                map["comment"] = edt.text.toString()
-                Log.e("map edit comment",map.toString())
+                Log.e("map delete comment",map.toString())
                 return map
             }
         }
@@ -111,5 +123,7 @@ holder.btnEdit.setOnClickListener {
         val ratingBar = itemView.rate_bar_cmnt
         val btnEdit = itemView.edit_cmnt
         val btnDelete = itemView.delete_cmnt
+        val mainLayout = itemView.cmntsLay
+        val layEdit = itemView.layedit
     }
 }

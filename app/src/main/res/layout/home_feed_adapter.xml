@@ -127,6 +127,9 @@
         android:layout_height="wrap_content"
         android:text="See more..."
         android:visibility="gone"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 <ImageView
     android:id="@+id/img_post"
     android:layout_width="match_parent"
@@ -135,6 +138,13 @@
     android:layout_marginEnd="5dp"
     android:layout_marginBottom="5dp"
     android:layout_marginStart="5dp"/>
+        <Button
+            android:id="@+id/btn_play"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"/>
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/lay_likes"
         android:layout_width="match_parent"

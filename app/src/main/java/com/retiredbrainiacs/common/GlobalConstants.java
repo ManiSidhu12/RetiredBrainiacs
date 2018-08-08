@@ -6,4 +6,5 @@ public class GlobalConstants {
     public static  boolean editStatus = false;
     public static String cmntid = "";
     public static int pos = 0;
+    public static String count = "0";
 }

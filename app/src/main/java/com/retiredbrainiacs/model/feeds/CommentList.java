@@ -20,6 +20,19 @@ public class CommentList {
     @Expose
     private String comment;
 
+
+    public Integer getEdit() {
+        return edit;
+    }
+
+    public void setEdit(Integer edit) {
+        this.edit = edit;
+    }
+
+    @SerializedName("edit")
+    @Expose
+    private Integer edit;
+
     public String getDisplayName() {
         return displayName;
     }

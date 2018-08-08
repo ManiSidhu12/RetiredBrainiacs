@@ -8,11 +8,9 @@ import android.graphics.Color
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.view.*
 import android.widget.*
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
@@ -23,14 +21,12 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.activities.CommentListing
-import com.retiredbrainiacs.common.Common
-import com.retiredbrainiacs.common.CommonUtils
-import com.retiredbrainiacs.common.GlobalConstants
-import com.retiredbrainiacs.common.SharedPrefManager
+import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.Post
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_global.*
+import kotlinx.android.synthetic.main.edit_pop_up.*
 import kotlinx.android.synthetic.main.home_feed_adapter.view.*
 import java.io.StringReader
 
@@ -63,7 +59,7 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
 
         holder.txtUserName.text = posts[position].wallPostUserName
         holder.txtLikeCount.text = posts[position].likeCount
-        holder.txtCmntCount.text = posts[position].commentCount
+        holder.txtCmntCount.text = posts[position].commentList.size.toString()
         holder.txtTime.text = posts[position].postingDate
    if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserImage.isEmpty()){
     Picasso.with(ctx).load(posts[position].wallPostUserImage).into(holder.imgUser)
@@ -73,6 +69,12 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         }
         if(posts[position].image != null && !posts[position].image.isEmpty()){
             holder.imgPost.visibility = View.VISIBLE
+            if(posts[position].video != null && !posts[position].video.isEmpty()){
+                holder.btnPlay.visibility  = View.VISIBLE
+            }
+            else{
+                holder.btnPlay.visibility = View.GONE
+            }
             Picasso.with(ctx).load(posts[position].image).into(holder.imgPost)
         }
         else{
@@ -92,14 +94,14 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         }
         holder.layCmnt.setOnClickListener {
             Log.e("data",posts[position].commentList.toString())
-           CommentListing.getData(posts[position].commentList)
-          ctx.startActivity(Intent(ctx,CommentListing::class.java).putExtra("id",posts[position].usersWallPostId))
+           CommentListing.getData(posts,position)
+          ctx.startActivity(Intent(ctx,CommentListing::class.java).putExtra("id",posts[position].usersWallPostId).putExtra("position",position))
             (ctx as AppCompatActivity).overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up )
         }
         holder.edtCmnt.setOnClickListener {
-            CommentListing.getData(posts[position].commentList)
+            CommentListing.getData(posts,position)
 
-           ctx.startActivity(Intent(ctx,CommentListing::class.java).putExtra("id",posts[position].usersWallPostId))
+           ctx.startActivity(Intent(ctx,CommentListing::class.java).putExtra("id",posts[position].usersWallPostId).putExtra("position",position))
             (ctx as AppCompatActivity).overridePendingTransition( R.anim.slide_in_up, R.anim.slide_out_up )
         }
 
@@ -120,14 +122,21 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
             val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1,actionsArray)
             adapterActions.setDropDownViewResource(R.layout.spinner_txt)
             holder.spinActions.adapter = adapterActions
+            holder.spinActions.adapter = NothingSelectedSpinnerAdapter(adapterActions, R.layout.actions, ctx)
+
         }
      holder.spinActions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        if(holder.spinActions.selectedItem.equals("Delete")){
-        showDialogMsg(ctx,posts[position].usersWallPostId,holder.layoutFeed)
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+        if(holder.spinActions.selectedItem != null) {
+            if (holder.spinActions.selectedItem.equals("Delete")) {
+                showDialogMsg(ctx, posts[position].usersWallPostId, holder.layoutFeed, posts, position)
+            }
+            else{
+                showEditDiaolg(ctx,posts[position].postContent)
+            }
         }
     }
 
@@ -135,15 +144,32 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
 }
 holder.layLike.setOnClickListener {
     if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
-        like(ctx,posts[position].usersWallPostId,holder.txtLike,holder.imgLike,holder.txtLikeCount)
+        like(ctx,posts[position].usersWallPostId,holder.txtLike,holder.imgLike,holder.txtLikeCount,posts[position])
     }
     else{
         CommonUtils.openInternetDialog(ctx)
     }
 }
     }
+fun showEditDiaolg(c: Context, postContent: String){
+    val dialog = Dialog(c,R.style.Theme_Dialog)
 
-    fun showDialogMsg(c: Context, id: String, layoutFeed: LinearLayout) {
+    dialog.setContentView(R.layout.edit_pop_up)
+ // dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+    if(SharedPrefManager.getInstance(c).userImg != null && !SharedPrefManager.getInstance(c).userImg.isEmpty()){
+        Picasso.with(c).load(SharedPrefManager.getInstance(c).userImg).into(dialog.img_user_pop)
+    }
+    else{
+        dialog.img_user_pop.setImageResource(R.drawable.dummyuser)
+    }
+    dialog.edt_post.text = Editable.Factory.getInstance().newEditable(postContent)
+    dialog.edt_post.setSelection(dialog.edt_post.text.length)
+    val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1,privacyArray)
+    adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
+    dialog.spin_privacy_pop.adapter = adapterPrivacy
+    dialog.show()
+}
+    fun showDialogMsg(c: Context, id: String, layoutFeed: LinearLayout, post: MutableList<Post>, position: Int) {
         val globalDialog = Dialog(c, R.style.Theme_Dialog)
         globalDialog.setContentView(R.layout.dialog_global)
         globalDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
@@ -175,14 +201,14 @@ holder.layLike.setOnClickListener {
         globalDialog.ok.setOnClickListener {
 globalDialog.dismiss()
             if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
-                deletePost(c,id,layoutFeed)
+                deletePost(c,id,layoutFeed,post,position)
             }
         }
 
 
     }
 
-    private fun like(ctx: Context, id: String, txtLike: TextView, imgLike: ImageView, txtLikeCount: TextView){
+    private fun like(ctx: Context, id: String, txtLike: TextView, imgLike: ImageView, txtLikeCount: TextView, post: Post){
         var url = GlobalConstants.API_URL1+"?action=submit_like"
         val pd = ProgressDialog.show(ctx,"","Loading",false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -194,17 +220,21 @@ globalDialog.dismiss()
 
             if(root.status.equals("true")){
                 Common.showToast(ctx,root.message)
-                txtLike.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
-                txtLikeCount.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
-               imgLike.setColorFilter(ContextCompat.getColor(ctx, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
-txtLikeCount.text = root.likeCount
+                if(root.message.equals("like")) {
+                    txtLike.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
+                    txtLikeCount.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
+                    imgLike.setColorFilter(ContextCompat.getColor(ctx, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
+              post.likedByMe = "1"  }
+                else{
+                    txtLike.setTextColor(Color.parseColor("#90949C"))
+                    txtLikeCount.setTextColor(Color.parseColor("#90949C"))
+                    imgLike.setColorFilter(Color.parseColor("#90949C"), android.graphics.PorterDuff.Mode.SRC_IN)
+                post.likedByMe = "0"}
+                txtLikeCount.text = root.likeCount
             }
             else{
                 Common.showToast(ctx,root.message)
-                txtLike.setTextColor(Color.parseColor("#90949C"))
-                txtLikeCount.setTextColor(Color.parseColor("#90949C"))
-                imgLike.setColorFilter(Color.parseColor("#90949C"), android.graphics.PorterDuff.Mode.SRC_IN)
-                txtLikeCount.text = root.likeCount
+
 
             }
         },
@@ -229,7 +259,7 @@ txtLikeCount.text = root.likeCount
 
     }
 
-    private fun deletePost(ctx: Context, id: String, layoutFeed: LinearLayout){
+    private fun deletePost(ctx: Context, id: String, layoutFeed: LinearLayout, post: MutableList<Post>, position: Int){
         var url = GlobalConstants.API_URL1+"?action=delete_post"
         val pd = ProgressDialog.show(ctx,"","Loading",false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -241,7 +271,9 @@ txtLikeCount.text = root.likeCount
 
             if(root1.status.equals("true")){
                 Common.showToast(ctx,root1.message)
-                layoutFeed.visibility = View.GONE
+                //layoutFeed.visibility = View.GONE
+                post.removeAt(position)
+                notifyDataSetChanged()
 
             }
             else{
@@ -259,7 +291,7 @@ txtLikeCount.text = root.likeCount
 
                 map["user_id"] = SharedPrefManager.getInstance(ctx).userId
                 map["post_id"] = id
-                Log.e("map like",map.toString())
+                Log.e("map delete",map.toString())
                 return map
             }
         }
@@ -295,5 +327,6 @@ txtLikeCount.text = root.likeCount
         val imgCmnt = itemView.img_cmnt
         val spinActions = itemView.spin_actions
         val layoutFeed = itemView.layoutfeed
+        val btnPlay = itemView.btn_play
     }
 }

@@ -39,6 +39,7 @@ import com.retiredbrainiacs.apis.AddPostAPI
 import com.retiredbrainiacs.apis.ApiClient
 import com.retiredbrainiacs.apis.ApiInterface
 import com.retiredbrainiacs.common.*
+import com.retiredbrainiacs.common.EventListener
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.FeedsRoot
 import com.squareup.picasso.Picasso
@@ -56,7 +57,15 @@ import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
 
-class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener{
+class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener,EventListener{
+    override fun sendDataToActivity(data: String, pos: Int) {
+        Log.e("data123",data)
+        if (root != null){
+            root.posts[pos].commentCount = data
+            adap.notifyDataSetChanged()
+        }
+
+    }
 
     val privacyArray = arrayOf("Public","Private")
     //============== Retrofit =========
@@ -91,6 +100,7 @@ lateinit var global : Global
     lateinit var thumbnail: Bitmap
      var selectedPath = ""
 lateinit var saveImage : SaveImage
+    lateinit var adap : FeedsAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.home_feed_screen,container,false)
@@ -214,7 +224,8 @@ if(f == null) {
                             Log.e("status","kn"+t.posts.get(0).postContent)
                             if(t.status.equals("true")) {
                                 v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
-                                v.recycler_feed.adapter = FeedsAdapter(activity!!,t.posts,"post")
+                                adap = FeedsAdapter(activity!!,t.posts,"post")
+                                v.recycler_feed.adapter = adap
                             }
                             else{
                               Common.showToast(activity!!,t.message)
@@ -413,7 +424,8 @@ v.img_feed.setImageBitmap(thumbnail)
             if(root.status.equals("true")){
                 if(v != null && v.recycler_feed != null) {
                     v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
-                    v.recycler_feed.adapter = FeedsAdapter(activity!!, root.posts, "post")
+                  adap = FeedsAdapter(activity!!, root.posts, "post")
+                    v.recycler_feed.adapter = adap
                 }
             }
             else{
@@ -696,4 +708,6 @@ v.img_feed.setImageBitmap(thumbnail)
         Log.e("file123", filename + filetype)
         return filename+","+filetype
     }
+
+
 }
