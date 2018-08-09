@@ -5,6 +5,8 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.MediaPlayer
+import android.net.Uri
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
@@ -26,7 +28,7 @@ import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.Post
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_global.*
-import kotlinx.android.synthetic.main.edit_pop_up.*
+import kotlinx.android.synthetic.main.edit_pop_up1.*
 import kotlinx.android.synthetic.main.home_feed_adapter.view.*
 import java.io.StringReader
 
@@ -61,6 +63,15 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         holder.txtLikeCount.text = posts[position].likeCount
         holder.txtCmntCount.text = posts[position].commentList.size.toString()
         holder.txtTime.text = posts[position].postingDate
+
+        if(SharedPrefManager.getInstance(ctx).userId.equals(posts[position].fromUserId)){
+            holder.laySettings.visibility = View.VISIBLE
+            holder.layActions.visibility = View.VISIBLE
+        }
+        else{
+            holder.laySettings.visibility = View.GONE
+            holder.layActions.visibility = View.GONE
+        }
    if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserImage.isEmpty()){
     Picasso.with(ctx).load(posts[position].wallPostUserImage).into(holder.imgUser)
    }
@@ -69,15 +80,21 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         }
         if(posts[position].image != null && !posts[position].image.isEmpty()){
             holder.imgPost.visibility = View.VISIBLE
-            if(posts[position].video != null && !posts[position].video.isEmpty()){
-                holder.btnPlay.visibility  = View.VISIBLE
+            Picasso.with(ctx).load(posts[position].image).into(holder.imgPost)
+        }
+        else if(posts[position].videoImg != null && !posts[position].videoImg.isEmpty()){
+            if(posts[position].video != null && !posts[position].video.isEmpty()) {
+                holder.btnPlay.visibility = View.VISIBLE
             }
             else{
                 holder.btnPlay.visibility = View.GONE
+
             }
-            Picasso.with(ctx).load(posts[position].image).into(holder.imgPost)
+            holder.imgPost.visibility = View.VISIBLE
+            Picasso.with(ctx).load(posts[position].videoImg).into(holder.imgPost)
         }
         else{
+            holder.btnPlay.visibility = View.GONE
             holder.imgPost.visibility = View.GONE
         }
 
@@ -112,7 +129,7 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
 
         }
         else{
-            holder.laySettings.visibility = View.VISIBLE
+         //   holder.laySettings.visibility = View.VISIBLE
             holder.layLikes.visibility = View.VISIBLE
             holder.layCmnts.visibility = View.VISIBLE
             val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1,privacyArray)
@@ -135,13 +152,39 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
                 showDialogMsg(ctx, posts[position].usersWallPostId, holder.layoutFeed, posts, position)
             }
             else{
-                showEditDiaolg(ctx,posts[position].postContent)
+                showEditDiaolg(ctx,posts[position].postContent, posts[position].usersWallPostId,holder.layoutFeed, posts, position)
             }
         }
     }
 
 
 }
+        holder.imgPost.setOnClickListener {
+
+        }
+
+        holder.btnPlay.setOnClickListener {
+            holder.imgLayout.visibility = View.GONE
+            holder.videoView.visibility = View.VISIBLE
+            if(posts[position].video != null && !posts[position].video.isEmpty()) {
+                holder.videoView.setVideoURI(Uri.parse(posts[position].video))
+                holder.videoView.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
+                    override fun onPrepared(mp: MediaPlayer?) {
+                        mp!!.setVolume(0f, 0f)
+                        mp!!.setLooping(false)
+                        mp.setOnCompletionListener {
+                            holder.videoView.visibility = View.GONE
+                            holder.imgLayout.visibility = View.VISIBLE
+
+
+                        }
+                    }
+
+
+                })
+                holder.videoView.start()
+            }
+        }
 holder.layLike.setOnClickListener {
     if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
         like(ctx,posts[position].usersWallPostId,holder.txtLike,holder.imgLike,holder.txtLikeCount,posts[position])
@@ -151,11 +194,12 @@ holder.layLike.setOnClickListener {
     }
 }
     }
-fun showEditDiaolg(c: Context, postContent: String){
+fun showEditDiaolg(c: Context, postContent: String, postId: String, layoutFeed: LinearLayout, posts: MutableList<Post>, position: Int){
     val dialog = Dialog(c,R.style.Theme_Dialog)
 
-    dialog.setContentView(R.layout.edit_pop_up)
- // dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+    dialog.setContentView(R.layout.edit_pop_up1)
+    dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+
     if(SharedPrefManager.getInstance(c).userImg != null && !SharedPrefManager.getInstance(c).userImg.isEmpty()){
         Picasso.with(c).load(SharedPrefManager.getInstance(c).userImg).into(dialog.img_user_pop)
     }
@@ -168,6 +212,26 @@ fun showEditDiaolg(c: Context, postContent: String){
     adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
     dialog.spin_privacy_pop.adapter = adapterPrivacy
     dialog.show()
+
+
+    dialog.btn_post_pop.setOnClickListener {
+        if(dialog.edt_post.text.toString().isEmpty())
+        {
+            Common.showToast(c,"Please type something to edit...")
+        }
+        else if(postContent.equals(dialog.edt_post.text.toString())){
+            Common.showToast(c,"Please update the content to edit...")
+
+        }
+        else{
+            if(CommonUtils.getConnectivityStatusString(c).equals("true")){
+              editPost(c,postId,layoutFeed,posts,position,dialog.edt_post.text.toString(),dialog)
+            }
+            else{
+                CommonUtils.openInternetDialog(c)
+            }
+        }
+    }
 }
     fun showDialogMsg(c: Context, id: String, layoutFeed: LinearLayout, post: MutableList<Post>, position: Int) {
         val globalDialog = Dialog(c, R.style.Theme_Dialog)
@@ -302,6 +366,49 @@ globalDialog.dismiss()
 
     }
 
+    private fun editPost(ctx: Context, id: String, layoutFeed: LinearLayout, post: MutableList<Post>, position: Int, content: String, dialog: Dialog){
+        var url = GlobalConstants.API_URL1+"?action=wall_post_edit_content"
+        val pd = ProgressDialog.show(ctx,"","Loading",false)
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = com.google.gson.stream.JsonReader(StringReader(response))
+            reader.isLenient = true
+            var  root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+
+            if(root1.status.equals("true")){
+                dialog.dismiss()
+                Common.showToast(ctx,root1.message)
+                //layoutFeed.visibility = View.GONE
+                post[position].postContent = content
+                notifyDataSetChanged()
+
+            }
+            else{
+                Common.showToast(ctx,root1.message)
+
+            }
+        },
+
+                Response.ErrorListener {
+                    pd.dismiss()
+                }){
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["post_content"] = content
+                map["post_id"] = id
+                Log.e("map edit post",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(ctx)
+        requestQueue.add(postRequest)
+
+    }
 
     class ViewHolder (itemView : View) : RecyclerView.ViewHolder(itemView){
         val imgUser = itemView.img_user_feed
@@ -328,5 +435,8 @@ globalDialog.dismiss()
         val spinActions = itemView.spin_actions
         val layoutFeed = itemView.layoutfeed
         val btnPlay = itemView.btn_play
+        val imgLayout = itemView.imgLayout
+        val videoView = itemView.video_view
+        val layActions = itemView.lay_actions
     }
 }

@@ -42,7 +42,9 @@ var v = LayoutInflater.from(ctx).inflate(R.layout.friends_adapter,parent,false)
         Common.setFontRegular(ctx,holder.txtSend)
 
         holder.txtName.text = listAll[position].displayName
-        holder.txtSend.text = listAll[position].requestStatusText
+       // holder.txtSend.text = listAll[position].requestStatusText
+
+
 
         if(listAll[position].image != null && !listAll[position].image.equals("")){
             Picasso.with(ctx).load(listAll[position].image).into(holder.imgUser)
@@ -50,25 +52,33 @@ var v = LayoutInflater.from(ctx).inflate(R.layout.friends_adapter,parent,false)
         if(listAll[position].rating != null){
             holder.rateBar.rating = listAll[position].rating.toFloat()
         }
-        if(listAll[position].requestStatus == 0){
+
 holder.lay_request.setOnClickListener {
-if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
-    sendRequest(listAll[position].userId,holder.txtSend,holder.lay_request)
-}
+    if(listAll[position].requestSent == 0) {
+        if (CommonUtils.getConnectivityStatusString(ctx).equals("true")) {
+            sendRequest(listAll[position].userId, holder.txtSend, holder.lay_request)
+        } else {
+            CommonUtils.openInternetDialog(ctx)
+        }
+    }
     else{
-    CommonUtils.openInternetDialog(ctx)
+       // Common.showToast(ctx,"")
     }
 }
-        }
-        else{
-            holder.lay_request.setBackgroundResource(R.drawable.green_bg)
 
-        }
-        if(listAll[position].requestSent.equals("2")){
+        if(listAll[position].requestSent == 2){
             holder.lay_request.visibility = View.GONE
         }
+        else if(listAll[position].requestSent == 1){
+            holder.txtSend.text = "Request Sent"
+           holder.lay_request.setBackgroundResource(R.drawable.green_bg)
+        }
         else{
+            holder.txtSend.text = "Send Friend Request"
+
             holder.lay_request.visibility = View.VISIBLE
+            holder.lay_request.setBackgroundResource(R.drawable.post_bg)
+
         }
     }
     fun sendRequest(id: String, txtSend: TextView, lay_request: RelativeLayout) {

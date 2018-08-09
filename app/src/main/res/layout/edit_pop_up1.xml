@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
-    android:background="@drawable/transbg">
+  >
+ <RelativeLayout
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:layout_centerInParent="true"
+     >
 <RelativeLayout
+    android:layout_marginTop="50dp"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
 
     >
-    <Button
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/layout"
-        android:layout_marginBottom="-10dp"
-        android:background="@drawable/close"
-        />
+
 
 <LinearLayout
     android:id="@+id/layout"
@@ -88,7 +85,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
             android:text="Post"
-            android:background="@drawable/login_bg"
+
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:layout_marginEnd="5dp"/>
@@ -98,7 +95,7 @@
             android:layout_height="45dp"
             android:layout_toStartOf="@+id/btn_post_pop"
             android:layout_marginEnd="10dp"
-            android:background="@drawable/popup_bg"
+
             android:layout_centerInParent="true">
             <Spinner
                 android:id="@+id/spin_privacy_pop"
@@ -124,4 +121,12 @@
 </LinearLayout>
 
 </RelativeLayout>
+     <ImageView
+         android:id="@+id/imageView1"
+         android:layout_width="50dp"
+         android:layout_height="50dp"
+         android:layout_alignParentTop="true"
+         android:layout_alignParentRight="true"
+         android:src="@drawable/close" />
+ </RelativeLayout>
 </RelativeLayout>

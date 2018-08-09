@@ -56,6 +56,7 @@ import java.io.IOException
 import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener,EventListener{
     override fun sendDataToActivity(data: String, pos: Int) {
@@ -88,6 +89,7 @@ class FeedsFragment : Fragment(),Imageutils.ImageAttachmentListener,EventListene
 lateinit var pd : ProgressDialog
      var mediaType : String =""
      val MY_PERMISSIONS_RECORD_AUDIO = 1
+    var linkname : String = ""
 
 lateinit var global : Global
     lateinit var builder: AlertDialog.Builder
@@ -143,6 +145,12 @@ if(global.videoList != null){
         adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
         v.spin_privacy_feed.adapter = adapterPrivacy
 
+        if(arguments != null){
+            linkname = arguments!!.getString("link")
+        }
+        else{
+            linkname = ""
+        }
         if(CommonUtils.getConnectivityStatusString(activity).equals("true")){
             getFeeds()
         }
@@ -169,28 +177,30 @@ v.lay_audio.setOnClickListener {
 
 }
     v.btn_post_feed.setOnClickListener {
-        if(CommonUtils.getConnectivityStatusString(activity).equals("true")){
-if(f == null) {
-    addPostAPI()
-}
-            else{
-    if(mediaType.equals("video")) {
-        Log.e("mediaType",mediaType)
-     //   uploadImage(f.absolutePath, f1.absolutePath)
-        pd = ProgressDialog.show(activity, "", "Uploading")
-
-        Thread(null, uploadimage, "").start()
-    }
-    else{
-        Log.e("mediaType1",mediaType)
-
-        uploadImage(f!!.absolutePath,"")
-
-    }
-            }
+        if(v.edt_post_data.text.toString().isEmpty()){
+            Common.showToast(activity!!,"Please type post content..")
         }
-        else{
-            CommonUtils.openInternetDialog(activity)
+        else {
+            if (CommonUtils.getConnectivityStatusString(activity).equals("true")) {
+                if (f == null) {
+                    addPostAPI()
+                } else {
+                    if (mediaType.equals("video")) {
+                        Log.e("mediaType", mediaType)
+                        //   uploadImage(f.absolutePath, f1.absolutePath)
+                        pd = ProgressDialog.show(activity, "", "Uploading")
+
+                        Thread(null, uploadimage, "").start()
+                    } else {
+                        Log.e("mediaType1", mediaType)
+
+                        uploadImage(f!!.absolutePath, "")
+
+                    }
+                }
+            } else {
+                CommonUtils.openInternetDialog(activity)
+            }
         }
     }
 }
@@ -280,12 +290,18 @@ file_path = filename
                 val fileSizeInBytes = f!!.length()
 
                 val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
-                Log.e("file", f.toString())
+                Log.e("file", f.toString()+fileSizeInKB)
 
                 thumbnail = ThumbnailUtils.createVideoThumbnail(f!!.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
                 Log.e("thumb", "aman" + thumbnail.toString())
                 f1 = saveImage.storeImage(thumbnail)
           // uploadImage(f1.getAbsolutePath())
+                if(global.videoList != null){
+                    global.videoList.clear()
+                }
+                else{
+                    global.videoList = ArrayList()
+                }
                 addVideo(f!!.absolutePath,uploadImage1(f!!.absolutePath).split(",")[0])
                 addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
 v.img_feed.setImageBitmap(thumbnail)
@@ -295,10 +311,19 @@ v.img_feed.setImageBitmap(thumbnail)
                 //   selectedPath = getPath(selectedImageUri, getActivity());
                 // System.out.println("SELECT_VIDEO : " + selectedPath);
                 f = File(selectedImageUri!!.path)
+                val fileSizeInBytes = f!!.length()
 
+                val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
+                Log.e("file", f.toString()+fileSizeInKB)
                 thumbnail = ThumbnailUtils.createVideoThumbnail(f!!.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
                 f1 = saveImage.storeImage(thumbnail)
                // uploadImage(f1.getAbsolutePath())
+                if(global.videoList != null){
+                    global.videoList.clear()
+                }
+                else{
+                    global.videoList = ArrayList()
+                }
                 addVideo(f!!.absolutePath,uploadImage1(f!!.absolutePath).split(",")[0])
                 addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
                 v.img_feed.setImageBitmap(thumbnail)
@@ -320,6 +345,12 @@ v.img_feed.setImageBitmap(thumbnail)
                     thumbnail = ThumbnailUtils.createVideoThumbnail(selectedPathVideo, MediaStore.Video.Thumbnails.MINI_KIND)
                     f1 = saveImage.storeImage(thumbnail)
                    // uploadImage(f1.getAbsolutePath())
+                    if(global.videoList != null){
+                        global.videoList.clear()
+                    }
+                    else{
+                        global.videoList = ArrayList()
+                    }
                     addVideo(f!!.absolutePath,uploadImage1(f!!.absolutePath).split(",")[0])
                     addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
                     v.img_feed.setImageBitmap(thumbnail)
@@ -334,6 +365,12 @@ v.img_feed.setImageBitmap(thumbnail)
                     thumbnail = ThumbnailUtils.createVideoThumbnail(f!!.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
                     f1 = saveImage.storeImage(thumbnail)
                   //  uploadImage(f1.getAbsolutePath())
+                    if(global.videoList != null){
+                        global.videoList.clear()
+                    }
+                    else{
+                        global.videoList = ArrayList()
+                    }
                     addVideo(f!!.absolutePath,uploadImage1(f!!.absolutePath).split(",")[0])
                     addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
                     v.img_feed.setImageBitmap(thumbnail)
@@ -442,7 +479,7 @@ v.img_feed.setImageBitmap(thumbnail)
                 val map = HashMap<String, String>()
 
                 map["user_id"] = SharedPrefManager.getInstance(activity).userId
-                map["linkname"] = ""
+                map["linkname"] = linkname
                 map["pst_srch_keyword"] = ""
                 Log.e("map feed",map.toString())
                 return map
@@ -558,7 +595,8 @@ v.img_feed.setImageBitmap(thumbnail)
                 // type="V";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     val a = Common.askForPermission(activity!!, Manifest.permission.CAMERA, CAMERA)
-                    if (a.equals("granted", ignoreCase = true)) {
+                    Log.e("a",a)
+                    if (a.equals("granted") || a.equals("true")) {
                         //captureImage();
                         val intent = Intent(MediaStore.ACTION_VIDEO_CAPTURE)
                         var file: File? = null
@@ -583,7 +621,7 @@ v.img_feed.setImageBitmap(thumbnail)
                 // type="V";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     val a = Common.askForPermission(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE, WRITE_EXST)
-                    if (a.equals("granted", ignoreCase = true)) {
+                    if (a.equals("granted")) {
                         val intent = Intent()
                         intent.type = "video/*"
                         intent.action = Intent.ACTION_GET_CONTENT
@@ -675,6 +713,8 @@ v.img_feed.setImageBitmap(thumbnail)
 
     //***********Method to add File Paths-----
     fun addVideo(path: String, name: String) {
+
+
         val map = HashMap<String, String>()
         map["key_path"] = path
         map["file_name"] = name

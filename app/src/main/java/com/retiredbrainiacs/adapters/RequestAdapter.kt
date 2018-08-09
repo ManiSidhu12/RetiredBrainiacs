@@ -52,7 +52,7 @@ class RequestAdapter(var ctx: Context, var list: MutableList<CommentCount>, var 
             holder.btnAccept.setOnClickListener {
 
                 if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
-                    acceptRequest(list[position].userId,"accept")
+                    acceptRequest(list[position].userId,"accept",list,position)
                 }
                 else{
                     CommonUtils.openInternetDialog(ctx)
@@ -61,7 +61,7 @@ class RequestAdapter(var ctx: Context, var list: MutableList<CommentCount>, var 
 
             holder.btnReject.setOnClickListener {
                 if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
-                    acceptRequest(list[position].userId,"reject")
+                    acceptRequest(list[position].userId, "reject", list, position)
                 }
                 else{
                     CommonUtils.openInternetDialog(ctx)
@@ -70,7 +70,7 @@ class RequestAdapter(var ctx: Context, var list: MutableList<CommentCount>, var 
         }
 
     }
-    fun acceptRequest(id: String,type : String) {
+    fun acceptRequest(id: String, type: String, list: MutableList<CommentCount>, position: Int) {
         val pd = ProgressDialog.show(ctx, "", "Loading", false)
         Log.e("parms",id+","+ SharedPrefManager.getInstance(ctx).userId)
         service.acceptRequest(SharedPrefManager.getInstance(ctx).userId,id,type)
@@ -89,6 +89,8 @@ class RequestAdapter(var ctx: Context, var list: MutableList<CommentCount>, var 
                         if(t != null ){
                             if(t.status.equals("true")) {
                                 Common.showToast(ctx,t.msg)
+                                list.removeAt(position)
+                                notifyDataSetChanged()
 
                             }
                             else{

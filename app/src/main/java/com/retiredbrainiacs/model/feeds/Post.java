@@ -36,6 +36,19 @@ public class Post implements Parcelable {
     @SerializedName("audio")
     @Expose
     private String audio;
+
+    public String getVideoImg() {
+        return videoImg;
+    }
+
+    public void setVideoImg(String videoImg) {
+        this.videoImg = videoImg;
+    }
+
+    @SerializedName("video_img")
+    @Expose
+    private String videoImg;
+
     @SerializedName("post_content_type")
     @Expose
     private String postContentType;

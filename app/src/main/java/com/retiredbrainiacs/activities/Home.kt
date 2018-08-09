@@ -20,7 +20,11 @@ class Home : AppCompatActivity() {
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_home -> {
-                supportFragmentManager.beginTransaction().replace(R.id.frame_layout,FeedsFragment()).commit()
+                var b = Bundle()
+                b.putString("link", "")
+                val detailsFragment = FeedsFragment()
+                detailsFragment.setArguments(b)
+                supportFragmentManager.beginTransaction().replace(R.id.frame_layout,detailsFragment).commit()
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_forum -> {
@@ -66,10 +70,13 @@ class Home : AppCompatActivity() {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
 
         BottomNavigationViewHelper.disableShiftMode(navigation);
-
+        var b = Bundle()
+        b.putString("link", "")
+        val detailsFragment = FeedsFragment()
+        detailsFragment.setArguments(b)
 
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout,FeedsFragment())
+        transaction.replace(R.id.frame_layout,detailsFragment)
         transaction.commit()
     }
 }

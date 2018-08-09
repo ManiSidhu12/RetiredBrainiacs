@@ -3,6 +3,9 @@ package com.retiredbrainiacs.adapters
 import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.Color
+import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,6 +18,7 @@ import com.retiredbrainiacs.apis.ApiInterface
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.SharedPrefManager
+import com.retiredbrainiacs.fragments.FeedsFragment
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.friend.ListFriend
 import com.squareup.picasso.Picasso
@@ -63,6 +67,24 @@ holder.lay_request.setBackgroundResource(R.drawable.memo_btn_bg)
             else{
                 CommonUtils.openInternetDialog(ctx)
             }
+        }
+        holder.itemView.setOnClickListener {
+           var b = Bundle()
+            b.putString("link", listFriends[position].userActivationKey)
+            val detailsFragment = FeedsFragment()
+            detailsFragment.setArguments(b)
+
+            val fragmentManager = (holder.itemView.context as AppCompatActivity).supportFragmentManager
+            fragmentManager.executePendingTransactions()
+            //Fragment currentFrag = fragmentManager.findFragmentById(c
+            //FragmentManager childFM = currentFrag.getChildFragmentManager();
+            val fragmentTransaction = fragmentManager.beginTransaction()
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            fragmentTransaction.addToBackStack(null)
+            fragmentTransaction.replace(R.id.frame_layout, detailsFragment, "friends")
+
+
+            fragmentTransaction.commit()
         }
 
     }
