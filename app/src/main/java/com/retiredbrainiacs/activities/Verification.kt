@@ -49,6 +49,7 @@ class Verification : Activity(){
         Common.setFontBtnRegular(this@Verification,btn_resend)
 
         sb = StringBuilder()
+        SharedPrefManager.getInstance(this@Verification).setVerifyStatus("false")
 
 
 
@@ -216,8 +217,8 @@ class Verification : Activity(){
             }
             else{
                 if(CommonUtils.getConnectivityStatusString(this@Verification).equals("true")){
-                   // verifyOTP()
-                    signUpWebService()
+                 verifyOTP()
+                 // signUpWebService()
                 }
                 else{
                     CommonUtils.openInternetDialog(this@Verification)
@@ -233,9 +234,8 @@ class Verification : Activity(){
             }
         }
     }
-
     private fun sendActivationKeyWebService(){
-        var url = GlobalConstants.API_URL+"send_activation_key"
+        var url = GlobalConstants.API_URL+"resend_key"
         val pd = ProgressDialog.show(this@Verification, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -246,6 +246,7 @@ class Verification : Activity(){
             rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
 
             if(rootLogin.status.equals("true")) {
+                Common.showToast(this@Verification,rootLogin.message)
 
             } else{
                 Common.showToast(this@Verification,rootLogin.message)
@@ -257,10 +258,55 @@ class Verification : Activity(){
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
 
-                map["user_email"] = SharedPrefManager.getInstance(this@Verification).userEmail
+                map["user_id"] = SharedPrefManager.getInstance(this@Verification).userId
                 map["username"] = SharedPrefManager.getInstance(this@Verification).name
                 map["password"] = SharedPrefManager.getInstance(this@Verification).password
                 Log.e("map key",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
+    }
+    private fun verifyOTP(){
+        var url = GlobalConstants.API_URL+"verified"
+        val pd = ProgressDialog.show(this@Verification, "", "Loading", false)
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+try{
+    var obj : JSONObject = JSONObject(response)
+    val status :  String = obj.getString("status")
+    val msg : String = obj.getString("message")
+    if(status.equals("true")) {
+        Common.showToast(this@Verification,"Verified Successfully...")
+        SharedPrefManager.getInstance(this@Verification).setVerifyStatus("true")
+      // signUpWebService()
+        val intent = Intent(this@Verification, ContactInfo::class.java)
+        intent.putExtra("type","verify")
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
+        finish()
+    } else{
+        Common.showToast(this@Verification,msg)
+
+    }
+}
+catch (exc : Exception){
+
+}
+
+        },
+
+                Response.ErrorListener { pd.dismiss() }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["activation_key"] = sb1.toString()
                 return map
             }
         }
@@ -283,7 +329,7 @@ class Verification : Activity(){
             rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
 
             if(rootLogin.status.equals("true")) {
-                Common.showToast(this@Verification,"Registered Successfully...")
+              //  Common.showToast(this@Verification,"Registered Successfully...")
                 SharedPrefManager.getInstance(this@Verification).setUserID(rootLogin.userId)
                 val intent = Intent(this@Verification, ContactInfo::class.java)
                 intent.putExtra("type","verify")

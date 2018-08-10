@@ -10,4 +10,4 @@
     android:singleLine="true"
     android:text="@string/gender"
     android:textColor="@android:color/darker_gray"
-    android:textSize="14sp" />
+    android:textSize="16sp" />

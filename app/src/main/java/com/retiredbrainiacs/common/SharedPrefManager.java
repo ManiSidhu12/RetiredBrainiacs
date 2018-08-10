@@ -31,6 +31,20 @@ public class SharedPrefManager {
     private static final String ZIPCODE = "zip";
     private static SharedPrefManager mInstance;
 
+
+    public  String getVerifyStatus() {
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(VerifyStatus, null);
+
+    }
+    public void setVerifyStatus(String status){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(VerifyStatus, status);
+        editor.apply();
+    }
+    public static final String VerifyStatus = "false";
+
     private static Context mCtx;
  
     private SharedPrefManager(Context context) {

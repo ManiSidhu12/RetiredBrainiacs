@@ -18,14 +18,21 @@ class Splash : Activity() {
         Thread(splashThread).start()
 
     }
-    internal var splashThread: Runnable = Runnable {
+     var splashThread: Runnable = Runnable {
         try {
             Thread.sleep(1000)
 
             if(SharedPrefManager.getInstance(this@Splash).isLoggedIn){
-                val intent = Intent(this, Home::class.java)
+                if(SharedPrefManager.getInstance(this@Splash).verifyStatus.equals("false")){
+                val intent = Intent(this, Verification::class.java)
                 startActivity(intent)
                 finish()
+                }
+                else{
+                    val intent = Intent(this, Home::class.java)
+                    startActivity(intent)
+                    finish()
+                }
             }
             else {
                 val intent = Intent(this, MainScreen::class.java)

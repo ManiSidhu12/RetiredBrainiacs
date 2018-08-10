@@ -141,9 +141,11 @@
     android:layout_marginStart="5dp"/>
         <Button
             android:id="@+id/btn_play"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
+            android:layout_width="27dp"
+            android:layout_height="27dp"
             android:layout_centerInParent="true"
+            android:background="@drawable/play"
+            android:backgroundTint="@android:color/white"
             android:visibility="gone"/>
         
     </RelativeLayout>

@@ -23,6 +23,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.activities.CommentListing
+import com.retiredbrainiacs.activities.FullImage
 import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.Post
@@ -129,12 +130,20 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
 
         }
         else{
-         //   holder.laySettings.visibility = View.VISIBLE
+         //  holder.laySettings.visibility = View.VISIBLE
             holder.layLikes.visibility = View.VISIBLE
             holder.layCmnts.visibility = View.VISIBLE
             val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1,privacyArray)
             adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
             holder.spinPrivacy.adapter = adapterPrivacy
+
+            if(posts[position].postType.equals("1")){
+               holder.spinPrivacy.setSelection(adapterPrivacy.getPosition("Private"))
+            }
+            else{
+                holder.spinPrivacy.setSelection(adapterPrivacy.getPosition("Public"))
+
+            }
 
             val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1,actionsArray)
             adapterActions.setDropDownViewResource(R.layout.spinner_txt)
@@ -183,6 +192,12 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
 
                 })
                 holder.videoView.start()
+            }
+        }
+
+        holder.imgPost.setOnClickListener {
+            if(posts[position].image != null && !posts[position].image.isEmpty()) {
+                ctx.startActivity(Intent(ctx, FullImage::class.java).putExtra("post", posts[position]))
             }
         }
 holder.layLike.setOnClickListener {
@@ -295,6 +310,7 @@ globalDialog.dismiss()
                     imgLike.setColorFilter(Color.parseColor("#90949C"), android.graphics.PorterDuff.Mode.SRC_IN)
                 post.likedByMe = "0"}
                 txtLikeCount.text = root.likeCount
+                post.likeCount = root.likeCount
             }
             else{
                 Common.showToast(ctx,root.message)

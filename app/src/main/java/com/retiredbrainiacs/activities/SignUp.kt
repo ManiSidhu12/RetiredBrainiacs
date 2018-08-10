@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.widget.ArrayAdapter
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -20,6 +19,7 @@ import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.*
+import com.retiredbrainiacs.common.MySpinnerAdapter
 import com.retiredbrainiacs.model.login.LoginRoot
 import kotlinx.android.synthetic.main.signup_screen.*
 import java.io.StringReader
@@ -47,7 +47,7 @@ class SignUp : Activity(){
         Common.setFontBtnRegular(this@SignUp,btn_signup)
         Common.setFontRegular(this@SignUp,txt_login)
 
-        val adapterGender = ArrayAdapter(this@SignUp, R.layout.spinner_txt1,genderArray)
+        /*val adapterGender = ArrayAdapter(this@SignUp, R.layout.spinner_txt1,genderArray)
         adapterGender.setDropDownViewResource(R.layout.spinner_txt)
         spin_gender.adapter = adapterGender
         spin_gender.adapter = NothingSelectedSpinnerAdapter(adapterGender, R.layout.gender, this@SignUp)
@@ -55,9 +55,43 @@ class SignUp : Activity(){
         val adapterMarital = ArrayAdapter(this@SignUp, R.layout.spinner_txt1,maritalArray)
         adapterMarital.setDropDownViewResource(R.layout.spinner_txt)
         spin_marital.adapter = adapterMarital
+        spin_marital.adapter = NothingSelectedSpinnerAdapter(adapterMarital, R.layout.marital, this@SignUp)*/
+/*var  adapterGender   =  object  : ArrayAdapter<String>(this@SignUp,
+                    R.layout.spinner_txt1, genderArray) {
+
+    override fun  getView(position : Int, convertView : View,  parent : ViewGroup) : View {
+                 var v = super.getView(position, convertView, parent)
+                Common.setFontRegular(this@SignUp,v as TextView)
+
+                 return v
+         }
+
+
+        override fun  getDropDownView( position : Int,   convertView : View,   parent : ViewGroup) : View{
+                  var v = super.getDropDownView(position, convertView, parent);
+
+             Common.setFontRegular(this@SignUp,v as TextView)
+
+
+             return v
+         }
+ };
+
+        spin_gender.adapter = NothingSelectedSpinnerAdapter(adapterGender, R.layout.gender, this@SignUp)
+
+     adapterGender.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spin_gender.adapter = adapterGender*/
+        val adapter  = MySpinnerAdapter(this@SignUp,R.layout.spin_txt1,genderArray)
+        adapter.setDropDownViewResource(R.layout.spinner_txt)
+        spin_gender.adapter = adapter
+
+        spin_gender.adapter = NothingSelectedSpinnerAdapter(adapter, R.layout.gender, this@SignUp)
+
+        val adapterMarital = MySpinnerAdapter(this@SignUp,R.layout.spin_txt1,maritalArray)
+        adapterMarital.setDropDownViewResource(R.layout.spinner_txt)
+
+        spin_marital.adapter = adapterMarital
         spin_marital.adapter = NothingSelectedSpinnerAdapter(adapterMarital, R.layout.marital, this@SignUp)
-
-
         work()
     }
 
@@ -247,7 +281,9 @@ class SignUp : Activity(){
 
             if(rootLogin.status.equals("true")) {
                 Common.showToast(this@SignUp,"Registered Successfully...")
-                SharedPrefManager.getInstance(this@SignUp).setUserID(rootLogin.userId)
+                SharedPrefManager.getInstance(this@SignUp).userLogin(rootLogin.userId,edt_name_signup.text.toString().trim(),edt_email_signup.text.toString().trim(),"","",edt_pswd_signup.text.toString().trim(),edt_dob_signup.text.toString().trim())
+                SharedPrefManager.getInstance(this@SignUp).gender = spin_gender.selectedItem.toString()
+                SharedPrefManager.getInstance(this@SignUp).maritalStatus = spin_marital.selectedItem.toString()
                 val intent = Intent(this@SignUp, Verification::class.java)
                 startActivity(intent)
             } else{

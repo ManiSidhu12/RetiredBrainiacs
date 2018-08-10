@@ -8,6 +8,6 @@
     android:singleLine="true"
     android:textColor="@android:color/black"
     android:text="kkhh"
-    android:textSize="14sp" >
+    android:textSize="16sp" >
 
 </CheckedTextView>

@@ -242,6 +242,8 @@ Log.e("twitter result",result1?.data)
             rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
 
             if(rootLogin.status.equals("true")) {
+                SharedPrefManager.getInstance(this@MainScreen).setVerifyStatus("true")
+
                 Common.showToast(this@MainScreen,"Logged In Successfully...")
                 SharedPrefManager.getInstance(this@MainScreen).userLogin(rootLogin.data.userId,rootLogin.data.displayName,email,"",rootLogin.data.image,pswd,"")
                 val intent = Intent(this@MainScreen, Home::class.java)

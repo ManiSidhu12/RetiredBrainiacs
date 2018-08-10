@@ -38,6 +38,7 @@ import com.retiredbrainiacs.adapters.FeedsAdapter
 import com.retiredbrainiacs.apis.AddPostAPI
 import com.retiredbrainiacs.apis.ApiClient
 import com.retiredbrainiacs.apis.ApiInterface
+import com.retiredbrainiacs.apis.RegisterWebService
 import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.common.EventListener
 import com.retiredbrainiacs.model.ResponseRoot
@@ -128,7 +129,7 @@ if(global.videoList != null){
 
      Log.e("id",   SharedPrefManager.getInstance(activity).userId)
         //======= Font =========
-        Common.setFontRegular(activity!!,v.status)
+        Common.setFontRegular(activity!!,v.video)
         Common.setFontRegular(activity!!,v.audio)
         Common.setFontRegular(activity!!,v.image)
         Common.setFontEditRegular(activity!!,v.edt_srch)
@@ -171,7 +172,7 @@ fun work(){
         mediaType = "image"
         imageUtils.imagepicker(1)
     }
-v.lay_audio.setOnClickListener {
+v.lay_video.setOnClickListener {
     mediaType = "video"
     openVideoPickerAlert(activity)
 
@@ -304,7 +305,7 @@ file_path = filename
                 }
                 addVideo(f!!.absolutePath,uploadImage1(f!!.absolutePath).split(",")[0])
                 addVideo(f1.absolutePath,uploadImage1(f1.absolutePath).split(",")[0])
-v.img_feed.setImageBitmap(thumbnail)
+            v.img_feed.setImageBitmap(thumbnail)
 
             } else {
                 val selectedImageUri = data!!.getData()
@@ -420,8 +421,8 @@ v.img_feed.setImageBitmap(thumbnail)
                 map["user_id"] = SharedPrefManager.getInstance(activity).userId
                 map["to_user_id"] = ""
                 map["post_content"] = edt_post_data.text.toString()
-                if(spin_privacy_feed.selectedItem != null) {
-                    if (spin_privacy_feed.selectedItem.equals("Public")) {
+                if(v.spin_privacy_feed.selectedItem != null) {
+                    if (v.spin_privacy_feed.selectedItem.equals("Public")) {
                         map["post_type"] = "0"
                     }
                     else{
@@ -536,10 +537,27 @@ v.img_feed.setImageBitmap(thumbnail)
         var res = ""
         try {
             val fis = FileInputStream(f)
+            var postType = ""
+            if(v.spin_privacy_feed.selectedItem != null){
+                if (spin_privacy_feed.selectedItem.toString().equals("Public")) {
+                 postType = "0"
+                }
+                else{
+                  postType = "1"
 
-
-            val edit = AddPostAPI(activity,SharedPrefManager.getInstance(activity).userId,"", edt_post_data.text.toString().trim(),"", filetype, filename,mediaType,global.videoList)
-            res = edit.doStart(fis)
+                }            }
+            else{
+                postType = ""
+            }
+Log.e("type",postType)
+if(mediaType.equals("image")) {
+    val edit = AddPostAPI(activity, SharedPrefManager.getInstance(activity).userId, "", edt_post_data.text.toString().trim(), postType, filetype, filename, mediaType, global.videoList)
+    res = edit.doStart(fis)
+}
+            else if(mediaType.equals("video")){
+    val edit = RegisterWebService(activity, SharedPrefManager.getInstance(activity).userId, "", edt_post_data.text.toString().trim(), postType, filetype, filename, mediaType, global.videoList)
+    res = edit.doStart(fis)
+            }
 
         } catch (e: Exception) {
             e.printStackTrace()
@@ -557,6 +575,7 @@ v.img_feed.setImageBitmap(thumbnail)
             try {
                 res = msg.obj.toString()
                 val status = res.split(",")[0]
+                f = null
                 if (status.equals("true", ignoreCase = true)) {
                     // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
                     Common.showToast(activity!!,res.split(",")[1])

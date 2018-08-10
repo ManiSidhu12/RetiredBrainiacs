@@ -545,10 +545,12 @@ public class Imageutils
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
         Intent intent1 = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent1.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+        Log.e("imageuri",imageUri+","+intent1.toString());
 
         if(isFragment)
             current_fragment.startActivityForResult(intent1,0);
         else
+            Log.e("imageelse","else"+intent1);
             current_activity.startActivityForResult(intent1, 0);
     }
 
@@ -623,7 +625,7 @@ public class Imageutils
                 if(resultCode==current_activity.RESULT_OK)
                 {
 
-                    Log.i("Camera Selected","Photo");
+                    Log.e("Camera Selected","Photo");
 
                     try
                     {
@@ -647,7 +649,7 @@ public class Imageutils
             case 1:
                 if(resultCode==current_activity.RESULT_OK)
                 {
-                    Log.i("Gallery","Photo");
+                    Log.e("Gallery","Photo");
                     Uri selectedImage=data.getData();
 
                     try
@@ -736,12 +738,12 @@ public class Imageutils
         File file = new File(path,file_name);
         if (file.exists ())
         {
-            Log.i("file","exists");
+            Log.e("file","exists");
             flag=true;
         }
         else
         {
-            Log.i("file","not exist");
+            Log.e("file","not exist");
             flag=false;
         }
 

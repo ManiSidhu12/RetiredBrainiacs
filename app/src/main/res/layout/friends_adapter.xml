@@ -103,7 +103,7 @@
                android:layout_toStartOf="@+id/btn_reject"
                 android:layout_centerInParent="true"
                 android:layout_marginEnd="10dp"
-                android:background="@drawable/accept1"
+                android:background="@drawable/checked"
                 />
             <Button
                 android:id="@+id/btn_reject"
@@ -111,7 +111,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_centerInParent="true"
-                android:background="@drawable/reject1"
+                android:background="@drawable/error"
                 />
         </RelativeLayout>
     </LinearLayout>

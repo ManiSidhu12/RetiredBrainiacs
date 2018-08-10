@@ -74,8 +74,11 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
             post = CommentListing.posts[positionPost]
             txt_like_count_detail.text = post.likeCount
             txt_cmnt_count_detail.text = post.commentCount
+            Log.e("count",post.likeCount)
             if(post.likedByMe.equals("1")){
-               txt_like_count_detail.setTextColor(ContextCompat.getColor(this, R.color.theme_color_orange))
+                txt_like_count_detail.text = post.likeCount
+
+                txt_like_count_detail.setTextColor(ContextCompat.getColor(this, R.color.theme_color_orange))
                 txt_like_detail.setTextColor(ContextCompat.getColor(this, R.color.theme_color_orange))
                 img_like_detail.setColorFilter(ContextCompat.getColor(this, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
 
