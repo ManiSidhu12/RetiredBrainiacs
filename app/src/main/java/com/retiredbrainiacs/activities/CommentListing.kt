@@ -148,9 +148,14 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
                     adap = CommentsAdapter(this@CommentListing, commentList,edt_cmnt,btn_post,post_id)
                     recycler_cmnts.adapter = adap
 
-                 CommentListing.posts[CommentListing.positionPost].commentList = root1.commentList
+                // CommentListing.posts[CommentListing.positionPost].commentList = root1.commentList
                   GlobalConstants.count = root1.commentList.size.toString()
                     listner.sendDataToActivity(commentList.size.toString(),pos)
+                    post.commentCount = root1.commentList.size.toString()
+                    post.commentList = root1.commentList
+
+                    txt_cmnt_count_detail.text = post.commentCount
+
                 }
 
             }
@@ -205,6 +210,8 @@ post.likedByMe = "1"
 
                 }
                 txt_like_count_detail.text = root.likeCount
+                post.likeCount = root.likeCount
+
             }
             else{
                 Common.showToast(this@CommentListing,root.message)

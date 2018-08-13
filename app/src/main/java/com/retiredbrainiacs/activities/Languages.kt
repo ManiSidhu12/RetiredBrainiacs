@@ -318,16 +318,21 @@ map["user_id"] = "81"
                       if(modelList[i].heading.equals("spoken_languages")) {
                           if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
                               map["spoken_other_lang"] = modelList[i].listChild[j].other
+                              sb.append("10,")
                           }
                       }
                           else if(modelList[i].heading.equals("known_languages")) {
                           if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
                               map["known_other_lang"] = modelList[i].listChild[j].other
+                              sb.append("10,")
+
                           }
                       }
                               else if(modelList[i].heading.equals("preferred_languages")){
                                   if(modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
                                       map["pref_other_lang"] = modelList[i].listChild[j].other
+                                      sb.append("10,")
+
                                   }
                       }
 
@@ -337,7 +342,7 @@ map["user_id"] = "81"
             if(sb.length > 0){
                 sb.deleteCharAt(sb.length -1)
             }
-map[modelList[i].heading]= sb.toString()
+         map[modelList[i].heading]= sb.toString()
         }
 
     }

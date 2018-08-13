@@ -23,7 +23,7 @@ class Splash : Activity() {
             Thread.sleep(1000)
 
             if(SharedPrefManager.getInstance(this@Splash).isLoggedIn){
-                if(SharedPrefManager.getInstance(this@Splash).verifyStatus.equals("false")){
+                if(SharedPrefManager.getInstance(this@Splash).verifyStatus != null && SharedPrefManager.getInstance(this@Splash).verifyStatus.equals("false")){
                 val intent = Intent(this, Verification::class.java)
                 startActivity(intent)
                 finish()

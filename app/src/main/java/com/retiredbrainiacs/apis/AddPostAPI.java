@@ -176,109 +176,18 @@ if(mediaType.equalsIgnoreCase("image")) {
     dos.writeBytes(lineEnd);
 
 }
-if(mediaType.equalsIgnoreCase("video")) {
+if(mediaType.equalsIgnoreCase("audio")) {
     Log.e("type", mediaType);
-    //  dos.writeBytes("Content-Disposition: form-data; name=\"video\";filename=\"" + filename + "\"" + lineEnd);
-    //  dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + lineEnd);
-    dos.writeBytes("Content-Disposition: form-data; name=\"audio\";filename=\"" + lineEnd);
-    if (listVideo != null && listVideo.size() > 0) {
-        Log.e("sizesss", listVideo.toString() + "," + listVideo.size());
-        String[] keys = {"video", "image"};
-        for (int i = 0; i < listVideo.size(); i++) {
-            File f = new File(listVideo.get(i).get("key_path"));
-            exsistingFileName = f.getName();
-            Log.e("exsistingFileName", exsistingFileName);
-
-            fileInputStream = new FileInputStream(f);
-            Log.e("stream", fileInputStream.toString());
-            dos.writeBytes("Content-Disposition: form-data; name=\"" + keys[i] + "\";filename=\"" + exsistingFileName + "\"" + lineEnd);
-
-            //dos.writeBytes("Content-Disposition: form-data; name=\"" + "videos" + "\";filename=\"" + exsistingFileName + "\"" + lineEnd);
-            if (exsistingFileName.endsWith(".mp4")) {
-                Log.i("videotype", "1");
-                dos.writeBytes("Content-type: video/mp4;" + lineEnd);
-                //     dos.writeBytes(lineEnd);
-
-            }
-            if (exsistingFileName.endsWith(".avi")) {
-                Log.i("videotype", "2");
-                dos.writeBytes("Content-type: video/avi;" + lineEnd);
-                //  dos.writeBytes(lineEnd);
-
-            }
-            if (exsistingFileName.endsWith(".ogg")) {
-                Log.i("videotype", "3");
-                dos.writeBytes("Content-type: video/ogg;" + lineEnd);
-                // dos.writeBytes(lineEnd);
-
-            }
-            if (exsistingFileName.endsWith(".3gp")) {
-                Log.e("videotype", "4");
-                dos.writeBytes("Content-type: video/3gp;" + lineEnd);
-                // dos.writeBytes(lineEnd);
-
-            }
-            if (exsistingFileName.endsWith(".jpg")) {
-                Log.i("imagetype", "1");
-                dos.writeBytes("Content-type: image/jpg;" + lineEnd);
-                //  dos.writeBytes(lineEnd);
-
-            }
-            if (exsistingFileName.endsWith(".png")) {
-                Log.i("imagetype", "2");
-                dos.writeBytes("Content-type: image/png;" + lineEnd);
-                // dos.writeBytes(lineEnd);
-
-            }
-            if (exsistingFileName.endsWith(".gif")) {
-                Log.i("imagetype", "3");
-            dos.writeBytes("Content-type: image/gif;" + lineEnd);
-
-            }
-            if (exsistingFileName.endsWith(".jpeg")) {
-                Log.i("imagetype", "4");
-                dos.writeBytes("Content-type: image/jpeg;" + lineEnd);
-                //  dos.writeBytes(lineEnd);
-
-            }
-            dos.writeBytes(lineEnd);
-
-            //====
-            int bytesAvailable = fileInputStream.available();
-            int maxBufferSize = 1024 * 1024;
-            int bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            byte[] buffer = new byte[bufferSize];
-
-            int bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
-            while (bytesRead > 0) {
-                dos.write(buffer, 0, bufferSize);
-                bytesAvailable = fileInputStream.available();
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-            }
-
-            if (i < listVideo.size()) {
-                dos.writeBytes(lineEnd);
-                dos.writeBytes(twoHyphens + boundary + lineEnd);
-                //dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-                Log.e("VALUE", "" + i);
-            } else {
-                if (i + 1 == listVideo.size()) {
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-                    Log.e("VALUE12", "" + i);
-                } else {
-                    dos.writeBytes(lineEnd);
-                    dos.writeBytes(twoHyphens + boundary + lineEnd);
-                    Log.e("VALUE334", "" + i);
-
-                }
-
-            }
-
-        }
+   dos.writeBytes("Content-Disposition: form-data; name=\"audio\";filename=\"" + filename + "\"" + lineEnd);
+   dos.writeBytes("Content-Disposition: form-data; name=\"image\";filename=\"" + lineEnd);
+    dos.writeBytes("Content-Disposition: form-data; name=\"video\";filename=\"" + lineEnd);
+    if (imagetype.equalsIgnoreCase("mp3")) {
+        Log.i("imagetype", "1");
+        dos.writeBytes("Content-type: audio/mp3;" + lineEnd);
+    }
+    if (imagetype.equalsIgnoreCase("3gp")) {
+        Log.i("imagetype", "2");
+        dos.writeBytes("Content-type: audio/3gp;" + lineEnd);
     }
 }
             int bytesAvailable = fileInputStream.available();
