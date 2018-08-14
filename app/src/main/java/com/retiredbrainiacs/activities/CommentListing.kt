@@ -125,6 +125,10 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
                     CommonUtils.openInternetDialog(this@CommentListing)
                 }
             }
+
+            backLay.setOnClickListener {
+                finish()
+            }
     }
     private fun comment(){
         var url = GlobalConstants.API_URL1+"?action=post_comment"

@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
@@ -35,7 +36,9 @@ class WorkDetails : AppCompatActivity(){
 
     lateinit var root : ResponseRoot
     var map = HashMap<String, String>()
-    val workArray = arrayOf("Government Agency","Industry","Military","Academia")
+    var listWork : ArrayList<String> ?= null
+    var listWorkValue : ArrayList<String> ?= null
+   // val workArray = arrayOf("Government Agency","Industry","Military","Academia")
     val professionalArray = arrayOf("Corporate Lawyer","Patent Lawyer","Lobbyist","Engineer","Scientist","Medical Practitioner","Artist")
 lateinit var header : View
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,6 +62,7 @@ lateinit var header : View
         btn_save_edu.setOnClickListener {
             getCheckedStatus()
         }
+
 
 
         btn_pre_edu.setOnClickListener {
@@ -87,7 +91,8 @@ lateinit var header : View
             pd.dismiss()
             Log.e("resp",response)
             var obj = JSONObject(response)
-
+listWork = ArrayList()
+listWorkValue = ArrayList()
             if(obj.getString("status").equals("true")){
                 val arr = obj.getJSONArray("work_experience")
                 var obj1 : JSONObject?= null
@@ -118,9 +123,13 @@ lateinit var header : View
                             objChild.other = obj2.getString("other_val")
 
                         }
-
                         listChild.add(objChild)
-
+if(objModel.heading.equals("work_details")){
+    if(!objChild.title.equals("Other (please specify)")) {
+        listWork!!.add(objChild.title)
+        listWorkValue!!.add(objChild.value_id)
+    }
+}
                     }
 
                     objModel.listChild = listChild
@@ -135,10 +144,17 @@ modelList = listMain
                 header.education.visibility = View.GONE
                 header.workdetails.visibility = View.VISIBLE
 
-                val adapterWork = ArrayAdapter(this@WorkDetails, R.layout.spinner_txt1,workArray)
+                val adapterWork = ArrayAdapter(this@WorkDetails, R.layout.spinner_txt1,listWork)
                 adapterWork.setDropDownViewResource(R.layout.spinner_txt)
                 header.spin_work.adapter = adapterWork
                header.spin_work.adapter = NothingSelectedSpinnerAdapter(adapterWork, R.layout.work, this@WorkDetails)
+                if(objModel.heading.equals("work_details")){
+                    for(i in 0 until objModel.listChild.size){
+                        if(objModel.listChild[i].chkStatus.equals("1")){
+                            header.spin_work.setSelection(adapterWork.getPosition(objModel.listChild[i].title))
+                        }
+                    }
+                }
 
                 val adapterProfessional = ArrayAdapter(this@WorkDetails, R.layout.spinner_txt1,professionalArray)
                 adapterProfessional.setDropDownViewResource(R.layout.spinner_txt)
@@ -165,7 +181,7 @@ modelList = listMain
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
 
-                map["user_id"] = "81"
+                map["user_id"] = SharedPrefManager.getInstance(this@WorkDetails).userId
                 return map
             }
         }
@@ -219,12 +235,24 @@ modelList = listMain
     {
         if(modelList != null && modelList.size > 0){
             map = HashMap()
-            map["user_id"] = "81"
+            map["user_id"] = SharedPrefManager.getInstance(this@WorkDetails).userId
             if(header.spin_work.selectedItem != null) {
-                map["work_detail"] = header.spin_work.selectedItem.toString()
+                //map["work_detail"] = listWorkValue!![header.spin_work.selectedItemPosition]
+                for(i in 0 until modelList.size) {
+                    if(modelList[i].heading.equals("work_details")) {
+                        if (modelList[i].listChild != null) {
+                            for(j in 0 until modelList[i].listChild.size) {
+if(modelList[i].listChild[j].title.equals(header.spin_work.selectedItem.toString())) {
+    modelList[i].listChild[header.spin_work.selectedItemPosition].chkStatus = "1"
+}
+                            }
+                        }
+                    }
+
+                }
             }
             else{
-                map["work_detail"] = ""
+              //  map["work_detail"] = ""
 
             }
                 map["work_detail_other"] = header.edt_work_other.text.toString()
@@ -249,8 +277,10 @@ modelList = listMain
                 sb = StringBuilder()
                 if(modelList[i].listChild != null && modelList[i].listChild.size > 0){
                     for(j in 0  until modelList[i].listChild.size){
-                        if(modelList[i].listChild[j].chkStatus.equals("1")){
-                            sb.append(modelList[i].listChild[j].value_id+",")
+                        if(modelList[i].listChild[j].chkStatus != null) {
+                            if (modelList[i].listChild[j].chkStatus.equals("1")) {
+                                sb.append(modelList[i].listChild[j].value_id + ",")
+                            }
                         }
                         if(modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
                             map[modelList[i].heading+"_other"] = modelList[i].listChild[j].other

@@ -105,13 +105,13 @@
                 <LinearLayout
                     android:id="@+id/layedit"
                     android:layout_width="wrap_content"
-                    android:layout_height="20dp"
+                    android:layout_height="23dp"
                     android:layout_below="@+id/txtcmnt"
                     android:layout_centerHorizontal="true"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="5dp"
                     android:layout_marginTop="3dp"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="7dp"
                     android:orientation="horizontal">
                     <Button
                         android:id="@+id/edit_cmnt"
@@ -120,8 +120,9 @@
                         android:background="@drawable/edit"/>
                     <Button
                         android:id="@+id/delete_cmnt"
-                        android:layout_width="20dp"
+                        android:layout_width="18dp"
                         android:layout_height="match_parent"
+                        android:layout_marginStart="7dp"
                         android:background="@drawable/delete"/>
 
                 </LinearLayout>

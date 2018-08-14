@@ -74,7 +74,7 @@ holder.lay_request.setOnClickListener {
            holder.lay_request.setBackgroundResource(R.drawable.green_bg)
         }
         else{
-            holder.txtSend.text = "Send Friend Request"
+            holder.txtSend.text = "Send Request"
 
             holder.lay_request.visibility = View.VISIBLE
             holder.lay_request.setBackgroundResource(R.drawable.post_bg)
@@ -83,7 +83,7 @@ holder.lay_request.setOnClickListener {
     }
     fun sendRequest(id: String, txtSend: TextView, lay_request: RelativeLayout) {
         val pd = ProgressDialog.show(ctx, "", "Sending", false)
-     Log.e("parms",id+","+SharedPrefManager.getInstance(ctx).userId)
+        Log.e("parms",id+","+SharedPrefManager.getInstance(ctx).userId)
         service.sendRequest(SharedPrefManager.getInstance(ctx).userId,id)
                 //.timeout(1,TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -104,7 +104,7 @@ holder.lay_request.setOnClickListener {
                                 lay_request.setBackgroundResource(R.drawable.green_bg)
                             }
                             else{
-Common.showToast(ctx,t.message)
+                             Common.showToast(ctx,t.message)
                             }
                         }
                     }

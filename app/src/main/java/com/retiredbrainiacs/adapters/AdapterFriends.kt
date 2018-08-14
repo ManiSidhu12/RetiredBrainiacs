@@ -71,6 +71,7 @@ holder.lay_request.setBackgroundResource(R.drawable.memo_btn_bg)
         holder.itemView.setOnClickListener {
            var b = Bundle()
             b.putString("link", listFriends[position].userActivationKey)
+            b.putString("id", listFriends[position].userId)
             val detailsFragment = FeedsFragment()
             detailsFragment.setArguments(b)
 

@@ -154,7 +154,7 @@ work()
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
 
-                map["user_id"] = "81"
+                map["user_id"] = SharedPrefManager.getInstance(this@Education).userId
                 return map
             }
         }
@@ -207,7 +207,7 @@ work()
     {
         if(modelList != null && modelList.size > 0){
             map = HashMap()
-            map["user_id"] = "81"
+            map["user_id"] = SharedPrefManager.getInstance(this@Education).userId
             map["eh_technical_or_vocational_training"] = header.edt_tech_training.text.toString()
             map["eh_technical_speciality"] = header.edt_tech_speciality.text.toString()
             map["eh_associate_degree_specify"] = header.edt_degree.text.toString()

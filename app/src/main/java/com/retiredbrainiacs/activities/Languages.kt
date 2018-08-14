@@ -88,7 +88,9 @@ getCheckedStatus()
 btn_skip1_language.setOnClickListener {
 startActivity(Intent(this@Languages,Interests::class.java))
 }
-
+btn_pre_language.setOnClickListener {
+    finish()
+}
 
     }
 
@@ -166,8 +168,7 @@ modelList = listMain
             override fun getParams(): Map<String, String> {
                 val map = java.util.HashMap<String, String>()
 
-              //  map["user_id"] = SharedPrefManager.getInstance(this@Languages).userId
-                map["user_id"] = "81"
+              map["user_id"] = SharedPrefManager.getInstance(this@Languages).userId
                 return map
             }
         }
@@ -222,7 +223,7 @@ modelList = listMain
     //======= set Language in signUp API ====
     fun setLanguageAPI() {
         val map = HashMap<String, String>()
-        map["user_id"] = "81"
+        map["user_id"] = ""
         /*map["first_name"] = ""
         map["last_name"] = ""
         map["dob"] = ""
@@ -304,7 +305,7 @@ fun getCheckedStatus()
 {
     if(modelList != null && modelList.size > 0){
         map = HashMap()
-map["user_id"] = "81"
+map["user_id"] = SharedPrefManager.getInstance(this@Languages).userId
         for(i in 0 until modelList.size)
         {
                 Log.e("title",modelList[i].heading)

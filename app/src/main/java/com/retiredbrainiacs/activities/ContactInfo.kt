@@ -253,8 +253,9 @@ contri = ""
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
-
-                map["user_id"]="81"
+                map["first_name"] = edt_name.text.toString()
+                map["last_name"] = ""
+                map["user_id"]= SharedPrefManager.getInstance(this@ContactInfo).userId
                 map["phone"] = edt_phn.text.toString().trim()
                 map["skype_id"] = edt_skype.text.toString().trim()
 
@@ -292,7 +293,6 @@ contri = ""
         filename = "Image" + System.currentTimeMillis() + "." + filetype
         pd = ProgressDialog.show(this, "", "Uploading")
         Thread(null, uploadimage, "").start()
-        //signUp();
 
     }
 
@@ -313,7 +313,7 @@ contri = ""
                 country = spin_country.selectedItem.toString()
             }
 
-            val edit = SendImage(this@ContactInfo,"81",edt_phn.text.toString().trim(), edt_skype.text.toString().trim(),code, edt_city.text.toString().trim(), edt_adrs1.text.toString().trim(), edt_adrs2.text.toString().trim(),edt_zipccode.text.toString().trim(), filetype, filename,country)
+            val edit = SendImage(this@ContactInfo,SharedPrefManager.getInstance(this@ContactInfo).userId,edt_phn.text.toString().trim(), edt_skype.text.toString().trim(),code, edt_city.text.toString().trim(), edt_adrs1.text.toString().trim(), edt_adrs2.text.toString().trim(),edt_zipccode.text.toString().trim(), filetype, filename,country,edt_name.text.toString())
             res = edit.doStart(fis)
 
         } catch (e: Exception) {
@@ -332,8 +332,7 @@ contri = ""
             try {
                 res = msg.obj.toString()
                 val status = res.split(",")[0]
-                if (status.equals("true", ignoreCase = true)) {
-                   // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
+                if (status.equals("true")) {
                     Common.showToast(this@ContactInfo,res.split(",")[1])
                     startActivity(Intent(this@ContactInfo,Languages::class.java))
 
@@ -353,6 +352,9 @@ contri = ""
 
 
     fun setdata(){
+        if(SharedPrefManager.getInstance(this@ContactInfo).name != null) {
+            edt_name.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).name)
+        }
         if(SharedPrefManager.getInstance(this@ContactInfo).phnNo != null) {
             edt_phn.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).phnNo)
         }

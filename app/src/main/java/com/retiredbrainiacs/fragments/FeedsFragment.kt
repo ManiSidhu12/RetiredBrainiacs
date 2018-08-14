@@ -94,6 +94,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
     var file_path: String = ""
     var fileType1: String = ""
     var fileName1: String = ""
+    var toUserId : String = ""
     var f: File? = null
     lateinit var f1: File
     lateinit var pd: ProgressDialog
@@ -159,6 +160,9 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
 
         if (arguments != null) {
             linkname = arguments!!.getString("link")
+            if(arguments!!.getString("id") != null) {
+                toUserId = arguments!!.getString("id")
+            }
         } else {
             linkname = ""
         }
@@ -417,7 +421,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
                 map["user_id"] = SharedPrefManager.getInstance(activity).userId
-                map["to_user_id"] = ""
+                map["to_user_id"] = toUserId
                 map["post_content"] = edt_post_data.text.toString()
                 if (v.spin_privacy_feed.selectedItem != null) {
                     if (v.spin_privacy_feed.selectedItem.equals("Public")) {
@@ -571,10 +575,10 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
             // /storage/emulated/0/DCIM/Camera/IMG_20180811_191654.jpg
             Log.e("type", "amannn")
             if (mediaType.equals("image") || mediaType.equals("audio")) {
-                val edit = AddPostAPI(activity, SharedPrefManager.getInstance(activity).userId, "", edt_post_data.text.toString().trim(), postType, filetype, filename, mediaType, global.videoList)
+                val edit = AddPostAPI(activity, SharedPrefManager.getInstance(activity).userId, toUserId, edt_post_data.text.toString().trim(), postType, filetype, filename, mediaType, global.videoList)
                 res = edit.doStart(fis)
             } else if (mediaType.equals("video")) {
-                val edit = RegisterWebService(activity, SharedPrefManager.getInstance(activity).userId, "", edt_post_data.text.toString().trim(), postType, filetype, filename, mediaType, global.videoList)
+                val edit = RegisterWebService(activity, SharedPrefManager.getInstance(activity).userId, toUserId, edt_post_data.text.toString().trim(), postType, filetype, filename, mediaType, global.videoList)
                 res = edit.doStart(fis)
             }
 
@@ -882,13 +886,13 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
         mRecorder = MediaRecorder()
         mRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
         mRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-        val root = android.os.Environment.getExternalStorageDirectory()
-        val file = File(root.absolutePath + "/VoiceRecorderSimplifiedCoding/Audios")
+        val root2 = android.os.Environment.getExternalStorageDirectory()
+        val file = File(root2.absolutePath + "/VoiceRecorderSimplifiedCoding/Audios")
         if (!file.exists()) {
             file.mkdirs()
         }
 
-        mFileName = root.absolutePath + "/VoiceRecorderSimplifiedCoding/Audios/" + (System.currentTimeMillis().toString() + ".mp3")
+        mFileName = root2.absolutePath + "/VoiceRecorderSimplifiedCoding/Audios/" + (System.currentTimeMillis().toString() + ".mp3")
         Log.e("filename", mFileName)
         mRecorder!!.setOutputFile(mFileName)
         mRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)

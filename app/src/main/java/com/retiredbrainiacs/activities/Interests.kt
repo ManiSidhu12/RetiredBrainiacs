@@ -48,7 +48,7 @@ class Interests : AppCompatActivity(){
         supportActionBar?.setCustomView(R.layout.custom_action_bar)
 
         var v = supportActionBar!!.customView
-        v.titletxt.text = "Interests"
+        v.titletxt.text = "Interests/Hobbies"
 
         //recycler_language.layoutManager = LinearLayoutManager(this@Interests)
 
@@ -157,7 +157,7 @@ objModel.listChild = listChild
     {
         if(modelList != null && modelList.size > 0){
             map = HashMap()
-            map["user_id"] = "81"
+            map["user_id"] = SharedPrefManager.getInstance(this@Interests).userId
             for(i in 0 until modelList.size)
             {
                 Log.e("title",modelList[i].heading)

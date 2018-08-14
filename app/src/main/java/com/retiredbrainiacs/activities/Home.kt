@@ -22,6 +22,7 @@ class Home : AppCompatActivity() {
             R.id.navigation_home -> {
                 var b = Bundle()
                 b.putString("link", "")
+                b.putString("id", "")
                 val detailsFragment = FeedsFragment()
                 detailsFragment.setArguments(b)
                 supportFragmentManager.beginTransaction().replace(R.id.frame_layout,detailsFragment).commit()
@@ -72,6 +73,7 @@ class Home : AppCompatActivity() {
         BottomNavigationViewHelper.disableShiftMode(navigation);
         var b = Bundle()
         b.putString("link", "")
+        b.putString("id", "")
         val detailsFragment = FeedsFragment()
         detailsFragment.setArguments(b)
 

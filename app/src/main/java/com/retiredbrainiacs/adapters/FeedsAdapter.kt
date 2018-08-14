@@ -63,8 +63,9 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         holder.txtUserName.text = posts[position].wallPostUserName
         holder.txtLikeCount.text = posts[position].likeCount
         holder.txtCmntCount.text = posts[position].commentList.size.toString()
-        holder.txtTime.text = posts[position].postingDate
-
+        val date = posts[position].postingDate.replace(" ",",")
+        holder.txtTime.text = date.split(",")[0]
+Log.e("date",date)
         if(SharedPrefManager.getInstance(ctx).userId.equals(posts[position].fromUserId)){
             holder.laySettings.visibility = View.VISIBLE
             holder.layActions.visibility = View.VISIBLE

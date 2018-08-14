@@ -23,7 +23,7 @@ import java.net.URL;
 public class SendImage
 {
 	private URL connectURL;
-	private String phn,skype,country,city,adrs1,adrs2,zipcode,imagetype,filename,contri;
+	private String phn,skype,country,city,adrs1,adrs2,zipcode,imagetype,filename,contri,name;
 	private String response;
 	byte[] dataToServer;
 	Context ctx;
@@ -31,7 +31,7 @@ public class SendImage
 	String status,category;
 	String open,close;
 	String user_id;
-	public SendImage(Context c,String u_id, String phone, String skypeId, String contry, String city1, String adress1, String address2, String pin, String filetype, String filename1,String cont) {
+	public SendImage(Context c,String u_id, String phone, String skypeId, String contry, String city1, String adress1, String address2, String pin, String filetype, String filename1,String cont,String nm) {
 		try 
 		{
 			connectURL = new URL(GlobalConstants.API_URL+"sign_next_4_steps");
@@ -54,6 +54,7 @@ public class SendImage
 		imagetype=filetype;
 		this.filename=filename1;
 		contri = cont;
+		name = nm;
 		Log.e("img", imagetype+filename);
 	}
 
@@ -88,6 +89,18 @@ public class SendImage
 			//conn.setRequestProperty("Accept", "application/json");
 
 			DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+			dos.writeBytes(twoHyphens + boundary + lineEnd);
+
+			dos.writeBytes("Content-Disposition: form-data; name=\"first_name\"" + lineEnd);
+			dos.writeBytes("Content-Type: text/plain;charset=UTF-8" + lineEnd);
+			dos.writeBytes(lineEnd);
+			dos.writeBytes(name + lineEnd);
+			dos.writeBytes(twoHyphens + boundary + lineEnd);
+
+			dos.writeBytes("Content-Disposition: form-data; name=\"last_name\"" + lineEnd);
+			dos.writeBytes("Content-Type: text/plain;charset=UTF-8" + lineEnd);
+			dos.writeBytes(lineEnd);
+			dos.writeBytes("" + lineEnd);
 			dos.writeBytes(twoHyphens + boundary + lineEnd);
 
 			dos.writeBytes("Content-Disposition: form-data; name=\"user_id\"" + lineEnd);
