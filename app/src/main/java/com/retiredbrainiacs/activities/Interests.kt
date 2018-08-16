@@ -201,6 +201,8 @@ objModel.listChild = listChild
             Log.e("msg",root.status+root.message)
             if(root.status.equals("true")) {
                 Common.showToast(this@Interests,root.message)
+                SharedPrefManager.getInstance(this@Interests).rating = root.rating
+
                 startActivity(Intent(this@Interests,Education::class.java))
 
 

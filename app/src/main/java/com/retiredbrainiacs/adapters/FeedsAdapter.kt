@@ -36,7 +36,7 @@ import java.io.StringReader
 class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : String): RecyclerView.Adapter<FeedsAdapter.ViewHolder>(){
     val privacyArray = arrayOf("Public","Private")
     val actionsArray = arrayOf("Edit","Delete")
-
+ var mediaPlayer : MediaPlayer ?= null
     lateinit var root: ResponseRoot
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -74,6 +74,9 @@ Log.e("date",date)
             holder.laySettings.visibility = View.GONE
             holder.layActions.visibility = View.GONE
         }
+        if(posts[position].usersWallPostRating != null){
+            holder.rateBar.rating = posts[position].usersWallPostRating.toFloat()
+        }
    if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserImage.isEmpty()){
     Picasso.with(ctx).load(posts[position].wallPostUserImage).into(holder.imgUser)
    }
@@ -95,8 +98,10 @@ Log.e("date",date)
             holder.imgPost.visibility = View.VISIBLE
             Picasso.with(ctx).load(posts[position].videoImg).into(holder.imgPost)
         }
-        else{
-            holder.btnPlay.visibility = View.GONE
+        else if(posts[position].audio != null && !posts[position].audio.isEmpty()){
+            holder.btnPlay.visibility = View.VISIBLE
+            holder.btnPlay.setBackgroundResource(R.drawable.audioplay)
+
             holder.imgPost.visibility = View.GONE
         }
 
@@ -163,6 +168,11 @@ Log.e("date",date)
             }
             else{
                 showEditDiaolg(ctx,posts[position].postContent, posts[position].usersWallPostId,holder.layoutFeed, posts, position)
+                val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1,actionsArray)
+                adapterActions.setDropDownViewResource(R.layout.spinner_txt)
+                holder.spinActions.adapter = adapterActions
+                holder.spinActions.adapter = NothingSelectedSpinnerAdapter(adapterActions, R.layout.actions, ctx)
+
             }
         }
     }
@@ -174,9 +184,10 @@ Log.e("date",date)
         }
 
         holder.btnPlay.setOnClickListener {
-            holder.imgLayout.visibility = View.GONE
-            holder.videoView.visibility = View.VISIBLE
+
             if(posts[position].video != null && !posts[position].video.isEmpty()) {
+                holder.imgLayout.visibility = View.GONE
+                holder.videoView.visibility = View.VISIBLE
                 holder.videoView.setVideoURI(Uri.parse(posts[position].video))
                 holder.videoView.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
                     override fun onPrepared(mp: MediaPlayer?) {
@@ -193,6 +204,20 @@ Log.e("date",date)
 
                 })
                 holder.videoView.start()
+            }
+            else if(posts[position].audio != null && !posts[position].audio.isEmpty()){
+                if(mediaPlayer != null){
+                    try {
+                        mediaPlayer!!.release()
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+
+                }
+                mediaPlayer = MediaPlayer()
+                mediaPlayer!!.setDataSource(posts[position].audio)
+                mediaPlayer!!.prepare()
+                mediaPlayer!!.start()
             }
         }
 
@@ -228,8 +253,15 @@ fun showEditDiaolg(c: Context, postContent: String, postId: String, layoutFeed: 
     adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
     dialog.spin_privacy_pop.adapter = adapterPrivacy
     dialog.show()
-
-
+dialog.drop.setOnClickListener {
+    dialog.spin_privacy_pop.performClick()
+}
+dialog.imageView1.setOnClickListener {
+    dialog.dismiss()
+}
+    dialog.dialoglay.setOnClickListener {
+        dialog.dismiss()
+    }
     dialog.btn_post_pop.setOnClickListener {
         if(dialog.edt_post.text.toString().isEmpty())
         {

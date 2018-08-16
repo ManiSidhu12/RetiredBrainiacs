@@ -39,6 +39,17 @@ private String message;
     @Expose
     private String image;
 
+    public String getRating() {
+        return rating;
+    }
+
+    public void setRating(String rating) {
+        this.rating = rating;
+    }
+
+    @SerializedName("rating")
+    @Expose
+    private String rating;
     public String getMsg() {
         return msg;
     }

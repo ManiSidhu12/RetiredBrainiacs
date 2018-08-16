@@ -40,6 +40,10 @@ class  Account : AppCompatActivity(){
         else{
            img_user_account.setImageResource(R.drawable.dummyuser)
         }
+
+        if (SharedPrefManager.getInstance(this@Account).rating != null){
+            rate_bar_account.rating = SharedPrefManager.getInstance(this@Account).rating.toFloat()
+        }
             work()
     }
 

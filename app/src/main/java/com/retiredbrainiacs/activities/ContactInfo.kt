@@ -240,6 +240,8 @@ contri = ""
                 }
                 Log.e("country",spin_country.selectedItem.toString())
                 SharedPrefManager.getInstance(this@ContactInfo).setContactInfo(edt_phn.text.toString().trim(), edt_skype.text.toString().trim(), contri, edt_city.text.toString().trim(), edt_adrs1.text.toString(), edt_adrs2.text.toString(), edt_zipccode.text.toString().trim())
+                SharedPrefManager.getInstance(this@ContactInfo).rating = root.rating
+
                 startActivity(Intent(this@ContactInfo,Languages::class.java))
 
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="match_parent"
+    android:id="@+id/dialoglay"
   >
  <RelativeLayout
      android:layout_width="wrap_content"
@@ -75,7 +76,7 @@
         android:background="@android:color/darker_gray"/>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="35dp"
         android:layout_gravity="center_horizontal"
         android:layout_margin="10dp">
         <Button
@@ -85,24 +86,33 @@
             android:layout_alignParentEnd="true"
             android:layout_centerInParent="true"
             android:text="Post"
-
+          android:background="@drawable/login_bg"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:layout_marginEnd="5dp"/>
         <LinearLayout
             android:id="@+id/lay_settings_pop"
-            android:layout_width="wrap_content"
-            android:layout_height="45dp"
+            android:layout_width="90dp"
+            android:layout_height="35dp"
             android:layout_toStartOf="@+id/btn_post_pop"
             android:layout_marginEnd="10dp"
-
+            android:background="@drawable/edit_bg"
+            android:orientation="horizontal"
             android:layout_centerInParent="true">
             <Spinner
                 android:id="@+id/spin_privacy_pop"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
-                ></Spinner>
+              android:background="@android:color/transparent"  ></Spinner>
+            <ImageView
+                android:id="@+id/drop"
+                android:layout_width="20dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="7dp"
+                android:layout_gravity="center"
+                android:tint="@android:color/darker_gray"
+                android:src="@drawable/drop"/>
         </LinearLayout>
 
     </RelativeLayout>

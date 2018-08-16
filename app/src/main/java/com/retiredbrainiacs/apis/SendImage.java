@@ -224,7 +224,9 @@ public class SendImage
 			if(status.equalsIgnoreCase("true"))
 			{
 				String img = job.getString("avt");
+				String rate = job.getString("rating");
 SharedPrefManager.getInstance(ctx).setUserImage(img);
+SharedPrefManager.getInstance(ctx).setRating(rate);
 SharedPrefManager.getInstance(ctx).setContactInfo(phn,skype,contri,city,adrs1,adrs2,zipcode);
 
 			}

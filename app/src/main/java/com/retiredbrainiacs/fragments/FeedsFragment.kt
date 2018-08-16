@@ -76,6 +76,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
 
     // Requesting permission to RECORD_AUDIO
     private val REQUEST_RECORD_AUDIO_PERMISSION = 200
+    var RQS_RECORDING = 12
 
 
     val privacyArray = arrayOf("Public", "Private")
@@ -359,13 +360,25 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
                 //the selected audio.
                 var uri = data!!.data
                selectedPath = getPath1(uri)
-                v.img_feed.setImageResource(R.drawable.dummyuser)
+               // v.img_feed.setImageResource(R.drawable.dummyuser)
 
                 Log.e("SELECT_AUDIO Path : ",selectedPath)
                 f =  File(selectedPath)
                 Log.e("audio file",f.toString())
             }
 
+        }
+        else if (requestCode == RQS_RECORDING){
+if(resultCode == RESULT_OK){
+    var uri = data!!.data
+    Log.e("uri",uri.toString())
+    selectedPath = getPath1(uri)
+ //   v.img_feed.setImageResource(R.drawable.dummyuser)
+
+    Log.e("SELECT_AUDIO Path : ",selectedPath)
+    f =  File(selectedPath)
+    Log.e("audio file",f.toString())
+}
         }
 
     }
@@ -883,26 +896,28 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
     }
 
     private fun startRecording() {
-        mRecorder = MediaRecorder()
+      /*  mRecorder = MediaRecorder()
         mRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
         mRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
         val root2 = android.os.Environment.getExternalStorageDirectory()
-        val file = File(root2.absolutePath + "/VoiceRecorderSimplifiedCoding/Audios")
+        val file = File(root2.absolutePath + "/RetiredBrainiacs/Audios")
         if (!file.exists()) {
             file.mkdirs()
         }
 
-        mFileName = root2.absolutePath + "/VoiceRecorderSimplifiedCoding/Audios/" + (System.currentTimeMillis().toString() + ".mp3")
+        mFileName = root2.absolutePath + "/RetiredBrainiacs/Audios/" + (System.currentTimeMillis().toString() + ".mp3")
         Log.e("filename", mFileName)
         mRecorder!!.setOutputFile(mFileName)
         mRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
 
         try {
             mRecorder!!.prepare()
-            mRecorder!!.start()
         } catch (e: IOException) {
             e.printStackTrace()
         }
+        mRecorder!!.start()*/
+        val intent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
+        startActivityForResult(intent, RQS_RECORDING)
 
         //lastProgress = 0
         // seekBar.setProgress(0)

@@ -1,6 +1,8 @@
 package com.retiredbrainiacs.adapters;
 
 import android.content.Context;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,7 +76,6 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 
 
 		final ImageView expandedImage = convertView.findViewById(R.id.collapseButton);
-		Log.e("isexpand",""+isExpanded);
 		final int resId = isExpanded ? R.drawable.ic_expand_less_black_24dp : R.drawable.ic_expand_more_black_24dp;
 		expandedImage.setImageResource(resId);
 
@@ -114,10 +115,31 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 		text.setText(model.getTitle());
 		if(model.getOther() != null && !model.getOther().isEmpty()){
 			edt_add.setText(model.getOther());
+			Log.e("text1",edt_add.getText().toString());
+
 		}
 		if(!edt_add.getText().toString().isEmpty()){
 			model.setOther(edt_add.getText().toString());
+			Log.e("text2",edt_add.getText().toString());
+
 		}
+		edt_add.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+			}
+
+			@Override
+			public void afterTextChanged(Editable s) {
+				model.setOther(s.toString());
+			}
+		});
+		Log.e("text",edt_add.getText().toString());
 		if(model.getTitle().equalsIgnoreCase("Other (Please Specify)")){
 		edt_add.setVisibility(View.VISIBLE);
 		img_nxt.setVisibility(View.GONE);

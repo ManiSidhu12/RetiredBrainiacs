@@ -29,6 +29,7 @@ public class SharedPrefManager {
     private static final String ADRS1 = "adrs1";
     private static final String ADRS2 = "adrs2";
     private static final String ZIPCODE = "zip";
+    private static final String RATING = "rating";
     private static SharedPrefManager mInstance;
 
 
@@ -90,6 +91,13 @@ public void setContactInfo(String phn, String skype,String contry,String city,St
         editor.putString(USER_ID, id);
         editor.apply();
     }
+    public void setRating(String rating){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(RATING, rating);
+        editor.apply();
+    }
+
     public void setGender(String gender){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -108,6 +116,11 @@ public void setContactInfo(String phn, String skype,String contry,String city,St
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(USER_IMG, img);
         editor.apply();
+    }
+    public String getRating(){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+
+        return sharedPreferences.getString(RATING, null);
     }
     public String getUserImg(){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);

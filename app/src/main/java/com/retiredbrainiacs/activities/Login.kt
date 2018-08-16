@@ -22,6 +22,11 @@ import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.login.LoginRoot
+import com.twitter.sdk.android.core.Callback
+import com.twitter.sdk.android.core.Result
+import com.twitter.sdk.android.core.TwitterException
+import com.twitter.sdk.android.core.TwitterSession
+import com.twitter.sdk.android.core.identity.TwitterAuthClient
 import kotlinx.android.synthetic.main.forgot_password.*
 import kotlinx.android.synthetic.main.login_screen.*
 import org.json.JSONException
@@ -37,6 +42,7 @@ class Login : Activity(){
     lateinit var fb_name : String
     lateinit var fb_img : String
     lateinit var fb_email : String
+    var authClient : TwitterAuthClient ?= null
 
     private val EMAIL_ADDRESS_PATTERN = Pattern.compile(
             "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
@@ -66,6 +72,9 @@ class Login : Activity(){
                         Common.showToast(this@Login,exception.toString())
                     }
                 })
+
+        authClient = TwitterAuthClient()
+
         setContentView(R.layout.login_screen)
 
         Common.setFontRegular(this@Login,txt_logo_login)
@@ -78,11 +87,31 @@ class Login : Activity(){
         Common.setFontEditRegular(this@Login,edt_pswd_login)
 
         Common.setFontBtnRegular(this@Login,btn_login)
+        login_button.callback = object : Callback<TwitterSession>() {
+            override fun  success(result : Result<TwitterSession>) {
+                val twitterSession : TwitterSession  = result.data
+                authClient!!.requestEmail(twitterSession,object :  com.twitter.sdk.android.core.Callback<String>() {
+                    override fun success(result1: Result<String>) {
+                        Log.e("twitter result",result1.response.isSuccessful.toString())
 
+                    }
+
+                    override fun failure(exception: TwitterException?) {
+                    }
+
+                })
+            }
+
+            override  fun failure( exception : TwitterException) {
+            }
+        }
         work()
     }
 
     fun work(){
+        lay_google.setOnClickListener {
+            login_button.performClick()
+        }
         txt_signup.setOnClickListener {
             val intent = Intent(this@Login, SignUp::class.java)
             startActivity(intent)
@@ -132,11 +161,24 @@ txt_forgot.setOnClickListener {
             LoginManager.getInstance().logInWithReadPermissions(this@Login, Arrays.asList("public_profile", "email"))
 
         }
+       /* var authClient = TwitterAuthClient()
+        var session = TwitterSession()
+        authClient.requestEmail(session, object : Callback<String>() {
+            override fun success(result: Result<String>) {
+                // Do something with the result, which provides the email address
+            }
+
+            override fun failure(exception: TwitterException) {
+                // Do something on failure
+            }
+        })*/
     }
+
     fun requestData() {
         val request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken()
         ) { `object`, response ->
             val json = response.jsonObject
+            Log.e("json",response.toString())
             if (json != null) {
                 if (!json.has("email")) {
                     Common.showToast(this@Login,"Unable to get your email..")
@@ -161,7 +203,7 @@ txt_forgot.setOnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
         Log.e("data",data.toString())
-
+        login_button.onActivityResult(requestCode, resultCode, data)
     }
     private fun checkUserWebService(email : String,pswd : String) {
         val url = GlobalConstants.API_URL + "check_email"

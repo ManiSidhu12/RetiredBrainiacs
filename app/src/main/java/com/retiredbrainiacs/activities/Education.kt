@@ -178,6 +178,8 @@ work()
             Log.e("msg",root.status+root.message)
             if(root.status.equals("true")) {
                 Common.showToast(this@Education,root.message)
+                SharedPrefManager.getInstance(this@Education).rating = root.rating
+
                 startActivity(Intent(this@Education,WorkDetails::class.java))
 
 

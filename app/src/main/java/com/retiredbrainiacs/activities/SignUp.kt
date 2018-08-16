@@ -235,6 +235,7 @@ class SignUp : Activity(){
                 SharedPrefManager.getInstance(this@SignUp).userLogin(null,edt_name_signup.text.toString().trim(),edt_email_signup.text.toString().trim(),"","",edt_pswd_signup.text.toString().trim(),edt_dob_signup.text.toString().trim())
                 SharedPrefManager.getInstance(this@SignUp).gender = spin_gender.selectedItem.toString()
                 SharedPrefManager.getInstance(this@SignUp).maritalStatus = spin_marital.selectedItem.toString()
+                SharedPrefManager.getInstance(this@SignUp).rating = "0"
                 val intent = Intent(this@SignUp, Verification::class.java)
               //  intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
@@ -275,6 +276,7 @@ class SignUp : Activity(){
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
             pd.dismiss()
             val gson = Gson()
+            Log.e("response signp",response)
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
             rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
@@ -284,6 +286,8 @@ class SignUp : Activity(){
                 SharedPrefManager.getInstance(this@SignUp).userLogin(rootLogin.userId,edt_name_signup.text.toString().trim(),edt_email_signup.text.toString().trim(),"","",edt_pswd_signup.text.toString().trim(),edt_dob_signup.text.toString().trim())
                 SharedPrefManager.getInstance(this@SignUp).gender = spin_gender.selectedItem.toString()
                 SharedPrefManager.getInstance(this@SignUp).maritalStatus = spin_marital.selectedItem.toString()
+                SharedPrefManager.getInstance(this@SignUp).rating = "0"
+
                 val intent = Intent(this@SignUp, Verification::class.java)
                 startActivity(intent)
             } else{

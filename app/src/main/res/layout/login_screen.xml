@@ -186,7 +186,11 @@
                     android:layout_weight="1"
                     android:background="@drawable/gicon"
       >
-
+                    <com.twitter.sdk.android.core.identity.TwitterLoginButton
+                        android:id="@+id/login_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone"/>
                     <ImageView
                         android:id="@+id/imageView3"
                         android:layout_width="25dp"

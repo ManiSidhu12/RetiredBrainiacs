@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.retiredbrainiacs.activities.Interests;
 
 import java.util.List;
 
@@ -18,6 +19,18 @@ public class Post implements Parcelable {
     @SerializedName("users_wall_post_id")
     @Expose
     private String usersWallPostId;
+
+    public Integer getUsersWallPostRating() {
+        return usersWallPostRating;
+    }
+
+    public void setUsersWallPostRating(Integer usersWallPostRating) {
+        this.usersWallPostRating = usersWallPostRating;
+    }
+
+    @SerializedName("wall_post_user_rating")
+    @Expose
+    private Integer usersWallPostRating;
     @SerializedName("from_user_id")
     @Expose
     private String fromUserId;

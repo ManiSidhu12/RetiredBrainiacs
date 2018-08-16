@@ -191,6 +191,8 @@ modelList = listMain
             Log.e("msg",root.status+root.message)
             if(root.status.equals("true")) {
                 Common.showToast(this@Languages,root.message)
+                SharedPrefManager.getInstance(this@Languages).rating = root.rating
+
                 startActivity(Intent(this@Languages,Interests::class.java))
 
 
