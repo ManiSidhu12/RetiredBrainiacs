@@ -99,7 +99,7 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		if(convertView == null) {
 			convertView = mLayoutInflater.inflate(R.layout.sub_cat_viewholder, parent, false);
 		}
@@ -136,7 +136,7 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				model.setOther(s.toString());
+				listMain.get(groupPosition).getListChild().get(childPosition).setOther(s.toString());
 			}
 		});
 		Log.e("text",edt_add.getText().toString());

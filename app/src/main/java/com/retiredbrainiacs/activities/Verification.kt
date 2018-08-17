@@ -18,11 +18,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
-import com.retiredbrainiacs.common.Common
-import com.retiredbrainiacs.common.CommonUtils
-import com.retiredbrainiacs.common.GlobalConstants
-import com.retiredbrainiacs.common.GoEditTextListener
-import com.retiredbrainiacs.common.SharedPrefManager
+import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.login.LoginRoot
 import kotlinx.android.synthetic.main.otp_screen.*
 import org.json.JSONObject
@@ -50,7 +46,6 @@ class Verification : Activity(){
 
         sb = StringBuilder()
         SharedPrefManager.getInstance(this@Verification).setVerifyStatus("false")
-
 
 
         work()
@@ -116,88 +111,141 @@ class Verification : Activity(){
         });
         edt1.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
-                if(sb.length == 0){
+               /* if(sb.length == 0){
                     edt1.requestFocus()
+                }*/
+
+                if (s.toString().length == 1){
+                    edt2.requestFocus()}
+                else{
+                    edt1.setSelection(edt1.text.length)
                 }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if(sb.length == 1){
+               /* if(sb.length == 1){
                     sb.deleteCharAt(0)
+                }*/
+                if (s.toString().length == 1) {
+                    edt2.requestFocus()
+                    edt2.setSelection(edt2.text.length)
+                }
+                else{
+                    edt1.requestFocus()
                 }
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (sb.length == 0  && edt1.text.toString().length == 1) {
+                /*if (sb.length == 0  && edt1.text.toString().length == 1) {
                     sb.append(s)
                     // edt1.clearFocus();
                     edt2.requestFocus()
                     edt2.isCursorVisible = true
 
-                }
+                }*/
             }
 
         })
 
         edt2.addTextChangedListener(object  : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
-                if (sb.length == 0) {
+               /* if (sb.length == 0) {
 
                     edt2.requestFocus()
+                }*/
+
+                if (s.toString().length == 1) {
+                    edt3.requestFocus()
+                }
+                else if (s.toString().length == 0) {
+                    edt1.requestFocus()
+                    edt1.setSelection(edt1.text.length)
                 }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if (sb.length == 1) {
+                /*if (sb.length == 1) {
 
                     sb.deleteCharAt(0)
 
-                }            }
+                }  */
+                if (s.toString().length == 0) {
+                    edt1.requestFocus();
+                    edt1.setSelection(edt1.text.length)
+                }
+            }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (sb.length == 0 && edt2.text.toString().length == 1) {
+               /* if (sb.length == 0 && edt2.text.toString().length == 1) {
                     sb.append(s)
                     edt2.clearFocus()
                     edt3.requestFocus()
                     edt3.isCursorVisible = true
 
-                }         }
+                }   */      }
 
         })
 
         edt3.addTextChangedListener(object  : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
-                if (sb.length == 0 && edt3.text.toString().length == 1) {
+              /*  if (sb.length == 0 && edt3.text.toString().length == 1) {
                     sb.append(s)
                     edt3.clearFocus()
                     edt4.requestFocus()
                     edt4.isCursorVisible = true
 
+                }*/
+                if (s.toString().length == 1) {
+                    edt4.requestFocus()
+
+                }
+                else if (s.toString().length== 0) {
+                    edt2.requestFocus()
+                    edt2.setSelection(edt2.text.length)
                 }
 
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                if (sb.length == 1) {
+                /*if (sb.length == 1) {
 
                     sb.deleteCharAt(0)
 
-                }            }
+                }*/
+                if (s.toString().length == 0) {
+                    edt2.requestFocus()
+                    edt2.setSelection(edt2.text.length)
+                }}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (sb.length == 0) {
+                /*if (sb.length == 0) {
 
                     edt3.requestFocus()
-                }
+                }*/
             }
 
         })
         edt4.addTextChangedListener(object : TextWatcher{
             override fun afterTextChanged(s: Editable?) {
-
+                if (s.toString().length == 0) {
+                    edt3.requestFocus();
+                    edt3.setSelection(edt3.text.length)
+                }
+                else{
+                    edt4.clearFocus()
+                    edt3.clearFocus()
+                }
             }
 
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                if (s.toString().length == 0) {
+                    edt3.requestFocus();
+                    edt3.setSelection(edt3.text.length)
+                }
+                else{
+                    edt4.clearFocus()
+                    edt3.clearFocus()
+                }
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
@@ -257,10 +305,9 @@ class Verification : Activity(){
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
-
                 map["user_id"] = SharedPrefManager.getInstance(this@Verification).userId
-                map["username"] = SharedPrefManager.getInstance(this@Verification).name
-                map["password"] = SharedPrefManager.getInstance(this@Verification).password
+                map["username"] = SharedPrefManager.getInstance(this@Verification).name.trim()
+                map["password"] = SharedPrefManager.getInstance(this@Verification).password.trim()
                 Log.e("map key",map.toString())
                 return map
             }

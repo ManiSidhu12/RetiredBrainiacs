@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
@@ -24,6 +25,7 @@ import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.login.ChildModel
 import com.retiredbrainiacs.model.login.MainModel
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
+import kotlinx.android.synthetic.main.education_header.*
 import kotlinx.android.synthetic.main.education_header.view.*
 import kotlinx.android.synthetic.main.education_screen.*
 import org.json.JSONObject
@@ -40,7 +42,7 @@ class WorkDetails : AppCompatActivity() {
     var listProfessionalValue: ArrayList<String>? = null
     var listWorkValue: ArrayList<String>? = null
     // val workArray = arrayOf("Government Agency","Industry","Military","Academia")
-    //   val professionalArray = arrayOf("Corporate Lawyer","Patent Lawyer","Lobbyist","Engineer","Scientist","Medical Practitioner","Artist")
+    // val professionalArray = arrayOf("Corporate Lawyer","Patent Lawyer","Lobbyist","Engineer","Scientist","Medical Practitioner","Artist")
     lateinit var header: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -107,6 +109,7 @@ class WorkDetails : AppCompatActivity() {
 
                 val iterator = obj1!!.keys()
                 var listMain: ArrayList<MainModel> = ArrayList()
+                var listMain1: ArrayList<MainModel> = ArrayList()
                 lateinit var objModel: MainModel
                 while (iterator.hasNext()) {
                     val key = iterator.next() as String
@@ -136,11 +139,13 @@ class WorkDetails : AppCompatActivity() {
                                 listWork!!.add(objChild.title)
                                 listWorkValue!!.add(objChild.value_id)
                             }
+
                         } else if (objModel.heading.equals("professional_traits")) {
                             if (!objChild.title.equals("Other (please specify)")) {
                                 listProfessional!!.add(objChild.title)
                                 listProfessionalValue!!.add(objChild.value_id)
                             }
+
                         }
                     }
 
@@ -150,7 +155,8 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
     listMain.add(objModel)
 
 }
-                    modelList = listMain
+                    listMain1.add(objModel)
+                    modelList = listMain1
                 }
                 val inflater = layoutInflater
 
@@ -202,9 +208,9 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
                 Common.showToast(this@WorkDetails, root.message)
                 SharedPrefManager.getInstance(this@WorkDetails).rating = root.rating
                 val intent = Intent(this@WorkDetails, Home::class.java)
-              //  intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
-                //startActivity(intent)
-               // finish()
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+               startActivity(intent)
+                finish()
 
 
             } else {
@@ -240,7 +246,7 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
                         if (modelList[i].listChild != null) {
                             for (j in 0 until modelList[i].listChild.size) {
 
-                                if (modelList[i].listChild[j].title.equals(header.spin_work.selectedItem.toString())) {
+                                if (modelList[i].listChild[j].title.equals(header.spin_work.selectedItem.toString())&& !header.spin_work.selectedItem.toString().equals("Select")) {
                                     modelList[i].listChild[j].chkStatus = "1"
                                 } else {
                                     modelList[i].listChild[j].chkStatus = "0"
@@ -259,7 +265,7 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
                     if (modelList[i].heading.equals("professional_traits")) {
                         if (modelList[i].listChild != null) {
                             for (j in 0 until modelList[i].listChild.size) {
-                                if (modelList[i].listChild[j].title.equals(header.spin_professional.selectedItem.toString())) {
+                                if (modelList[i].listChild[j].title.equals(header.spin_professional.selectedItem.toString()) && !header.spin_professional.selectedItem.toString().equals("Select")) {
                                     modelList[i].listChild[j].chkStatus = "1"
                                 } else {
                                     modelList[i].listChild[j].chkStatus = "0"
@@ -274,12 +280,7 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
             }
 
             map["work_detail_other"] = header.edt_work_other.text.toString()
-            if (header.spin_professional.selectedItem != null) {
-                map["professional_traits"] = header.spin_professional.selectedItem.toString()
 
-            } else {
-                map["professional_traits"] = ""
-            }
             map["professional_traits_other"] = header.edt_profess_other.text.toString()
             /*   map["professional_skills"] = ""
                map["professional_skills_other"] = ""
@@ -315,7 +316,11 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
                 if (modelList[i].heading.equals("work_details")) {
                     map["work_detail"] = sb.toString()
 
-                } else {
+                } else  if (modelList[i].heading.equals("areas_expertise")) {
+                    map["areas_of_expertise"] = sb.toString()
+
+                }
+                else {
                     map[modelList[i].heading] = sb.toString()
                 }
             }
@@ -340,9 +345,18 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
         //   header.spin_professional.adapter = NothingSelectedSpinnerAdapter(adapterProfessional, R.layout.work, this@WorkDetails)
 
         if (modelList != null && modelList.size > 0) {
+            Log.e("method1", "in")
+
             for (i in 0 until modelList.size) {
+                Log.e("method2", "in")
+
                 if (modelList[i].heading.equals("work_details")) {
+                    Log.e("method3", "in")
+
+                    Log.e("list child",modelList[i].listChild.toString())
                     if (modelList[i].listChild != null) {
+                        Log.e("method4", "in")
+
                         for (j in 0 until modelList[i].listChild.size) {
                             Log.e("model", modelList[i].listChild[j].chkStatus + "akk")
 
@@ -352,6 +366,9 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
                             } else {
                                 //header.spin_work.adapter = NothingSelectedSpinnerAdapter(adapterWork, R.layout.work, this@WorkDetails)
 
+                            }
+                            if(modelList[i].listChild[j].title.equals("Other (please specify)")&& modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
+                                header.edt_work_other.text = Editable.Factory.getInstance().newEditable(modelList[i].listChild[j].other)
                             }
                         }
                     }
@@ -370,14 +387,22 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
                                 //     header.spin_professional.adapter = NothingSelectedSpinnerAdapter(adapterProfessional, R.layout.work, this@WorkDetails)
 
                             }
+                            if(modelList[i].listChild[j].title.equals("Other (please specify)")&& modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
+                                header.edt_profess_other.text = Editable.Factory.getInstance().newEditable(modelList[i].listChild[j].other)
+                            }
                         }
                     }
                 }
 
+
+
+                }
+
             }
+
         }
 
 
 
-    }
+
 }

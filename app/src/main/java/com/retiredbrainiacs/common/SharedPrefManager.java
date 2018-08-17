@@ -91,6 +91,18 @@ public void setContactInfo(String phn, String skype,String contry,String city,St
         editor.putString(USER_ID, id);
         editor.apply();
     }
+    public void setUserName(String nm){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(USERNAME, nm);
+        editor.apply();
+    }
+    public void setPassword(String ps){
+        SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(PASSWORD, ps);
+        editor.apply();
+    }
     public void setRating(String rating){
         SharedPreferences sharedPreferences = mCtx.getSharedPreferences(SHARED_PREF_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

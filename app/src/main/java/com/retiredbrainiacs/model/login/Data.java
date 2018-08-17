@@ -30,6 +30,17 @@ private String status;
 @Expose
 private String userType;
 
+    public String getRatingUser() {
+        return ratingUser;
+    }
+
+    public void setRatingUser(String ratingUser) {
+        this.ratingUser = ratingUser;
+    }
+
+    @SerializedName("wall_post_user_rating")
+    @Expose
+    private String ratingUser;
 public String getUserId() {
 return userId;
 }

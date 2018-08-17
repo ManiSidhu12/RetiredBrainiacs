@@ -78,7 +78,7 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         supportActionBar?.setCustomView(R.layout.custom_action_bar)
 
         var v = supportActionBar!!.customView
-        v.titletxt.text = "Basic Information"
+        v.titletxt.text = "Contact Information"
 
         // ============ Retrofit ===========
         service = ApiClient.getClient().create(ApiInterface::class.java)

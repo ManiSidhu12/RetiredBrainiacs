@@ -92,7 +92,7 @@ class Login : Activity(){
                 val twitterSession : TwitterSession  = result.data
                 authClient!!.requestEmail(twitterSession,object :  com.twitter.sdk.android.core.Callback<String>() {
                     override fun success(result1: Result<String>) {
-                        Log.e("twitter result",result1.response.isSuccessful.toString())
+                        Log.e("twitter result",result1.data.toString())
 
                     }
 
@@ -203,7 +203,7 @@ txt_forgot.setOnClickListener {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
         Log.e("data",data.toString())
-        login_button.onActivityResult(requestCode, resultCode, data)
+        authClient!!.onActivityResult(requestCode, resultCode, data)
     }
     private fun checkUserWebService(email : String,pswd : String) {
         val url = GlobalConstants.API_URL + "check_email"
@@ -285,16 +285,21 @@ txt_forgot.setOnClickListener {
 
             if(rootLogin.status.equals("true")) {
                 Common.showToast(this@Login,"Logged In Successfully...")
-                SharedPrefManager.getInstance(this@Login).setVerifyStatus("true")
+                SharedPrefManager.getInstance(this@Login).verifyStatus = "true"
 
                 SharedPrefManager.getInstance(this@Login).userLogin(rootLogin.data.userId,rootLogin.data.displayName,email,"",rootLogin.data.image,pswd,"")
+                SharedPrefManager.getInstance(this@Login).rating = rootLogin.data.ratingUser
                 val intent = Intent(this@Login, Home::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
                 startActivity(intent)
                 finish()
             } else{
                 Common.showToast(this@Login,rootLogin.message)
+if(rootLogin.message.equals("YOUR ACCOUNT IS NOT VERIFIED")){
+    val intent = Intent(this@Login, Verification::class.java)
+    startActivity(intent)
 
+}
             }
         },
 

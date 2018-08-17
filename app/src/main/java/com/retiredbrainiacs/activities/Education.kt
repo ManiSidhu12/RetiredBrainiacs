@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import com.android.volley.AuthFailureError
@@ -102,6 +103,7 @@ work()
 
                 val iterator = obj1!!.keys()
                 var listMain : ArrayList<MainModel> = ArrayList()
+                var listMain1 : ArrayList<MainModel> = ArrayList()
                 lateinit  var objModel : MainModel
                 while (iterator.hasNext()) {
                     val key = iterator.next() as String
@@ -125,10 +127,10 @@ work()
                     }
 
                     objModel.listChild = listChild
-                    Log.e("map",objModel.listChild.toString())
-
-                    listMain.add(objModel)
-                    modelList = listMain
+if(!objModel.heading.equals("education_history")) {
+    listMain.add(objModel)
+}
+                    modelList = listMain1
 
                 }
                 val inflater = layoutInflater
@@ -137,11 +139,40 @@ work()
                 header.education.visibility = View.VISIBLE
                 header.workdetails.visibility = View.GONE
                 recycle_education.addHeaderView(header)
+
+
                 val adapter = SampleAdapter(this@Education,listMain)
                 val wrapperAdapter = WrapperExpandableListAdapter(adapter)
                 recycle_education.setAdapter(wrapperAdapter)
 
-
+//===
+                if(modelList != null && modelList.size > 0) {
+                    Log.e("yes","inn")
+                    for (i in 0 until modelList.size) {
+                        if (modelList[i].listChild != null && modelList[i].listChild.size > 0) {
+                            for (j in 0 until modelList[i].listChild.size) {
+                                if (modelList[i].listChild[j].title.equals("Technical/vocational training")) {
+                                    if (modelList[i].listChild[j].value_id != null && !modelList[i].listChild[j].value_id.isEmpty()) {
+                                        header.edt_tech_training.text = Editable.Factory.getInstance().newEditable(modelList[i].listChild[j].value_id)
+                                    }
+                                } else if (modelList[i].listChild[j].title.equals("Technical speciality  specify")) {
+                                    if (modelList[i].listChild[j].value_id != null && !modelList[i].listChild[j].value_id.isEmpty()) {
+                                        header.edt_tech_speciality.text = Editable.Factory.getInstance().newEditable(modelList[i].listChild[j].value_id)
+                                    }
+                                } else if (modelList[i].listChild[j].title.equals("Associate degree specify")) {
+                                    if (modelList[i].listChild[j].value_id != null && !modelList[i].listChild[j].value_id.isEmpty()) {
+                                        header.edt_degree.text = Editable.Factory.getInstance().newEditable(modelList[i].listChild[j].value_id)
+                                    }
+                                } else if (modelList[i].listChild[j].title.equals("Other specify")) {
+                                    if (modelList[i].listChild[j].value_id != null && !modelList[i].listChild[j].value_id.isEmpty()) {
+                                        header.edt_other.text = Editable.Factory.getInstance().newEditable(modelList[i].listChild[j].value_id)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                //==
 
             }
         },

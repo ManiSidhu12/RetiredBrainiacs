@@ -292,6 +292,10 @@ class SignUp : Activity(){
                 startActivity(intent)
             } else{
                 Common.showToast(this@SignUp,rootLogin.message)
+                if(rootLogin.message.equals("Email already Exists!..")){
+                    SharedPrefManager.getInstance(this@SignUp).setUserName(edt_name_signup.text.toString().trim())
+                    SharedPrefManager.getInstance(this@SignUp).setPassword(edt_name_signup.text.toString().trim())
+                }
 
             }
         },
