@@ -7,10 +7,14 @@ import android.graphics.Typeface
 import android.support.design.widget.TextInputLayout
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.view.Gravity
 import android.view.View
 import android.view.WindowManager
 import android.widget.*
 import com.retiredbrainiacs.R
+import android.widget.Toast
+
+
 
 class Common{
     companion object {
@@ -133,7 +137,9 @@ class Common{
             return true
         }
         fun showToast(ctx : Context,msg : String){
-           Toast.makeText(ctx,msg,Toast.LENGTH_SHORT).show()
+            val toast = Toast.makeText(ctx, msg, Toast.LENGTH_SHORT)
+            toast.setGravity(Gravity.CENTER, 0, 0)
+            toast.show()
         }
 
         fun validateGender(c : Context,spin : Spinner) : Boolean{

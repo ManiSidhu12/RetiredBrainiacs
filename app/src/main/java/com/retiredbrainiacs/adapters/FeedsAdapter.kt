@@ -36,7 +36,7 @@ import java.io.StringReader
 class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : String): RecyclerView.Adapter<FeedsAdapter.ViewHolder>(){
     val privacyArray = arrayOf("Public","Private")
     val actionsArray = arrayOf("Edit","Delete")
- var mediaPlayer : MediaPlayer ?= null
+    var mediaPlayer : MediaPlayer ?= null
     lateinit var root: ResponseRoot
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -331,7 +331,7 @@ globalDialog.dismiss()
             root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if(root.status.equals("true")){
-                Common.showToast(ctx,root.message)
+              //  Common.showToast(ctx,root.message)
                 if(root.message.equals("like")) {
                     txtLike.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
                     txtLikeCount.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))

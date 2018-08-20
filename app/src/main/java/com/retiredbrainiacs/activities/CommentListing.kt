@@ -199,7 +199,7 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
        var   root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if(root.status.equals("true")){
-                Common.showToast(this@CommentListing,root.message)
+              //  Common.showToast(this@CommentListing,root.message)
                 if(root.message.equals("like")) {
                     txt_like_count_detail.setTextColor(ContextCompat.getColor(this@CommentListing, R.color.theme_color_orange))
                     txt_like_detail.setTextColor(ContextCompat.getColor(this@CommentListing, R.color.theme_color_orange))

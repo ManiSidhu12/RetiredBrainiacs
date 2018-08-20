@@ -24,7 +24,7 @@
         android:layout_height="70dp"
         android:layout_alignParentStart="true"
         android:layout_centerHorizontal="true"
-        android:src="@drawable/user"/>
+        android:src="@drawable/dummyuser"/>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,8 +63,8 @@
     </LinearLayout>
 <Button
     android:id="@+id/btn_edit"
-    android:layout_width="25dp"
-    android:layout_height="25dp"
+    android:layout_width="32dp"
+    android:layout_height="32dp"
     android:layout_alignParentEnd="true"
     android:layout_centerInParent="true"
     android:background="@drawable/edit"
@@ -81,7 +81,6 @@
                 android:id="@+id/lay_chng_pswd"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-
                 android:layout_gravity="center_horizontal">
 
                 <ImageView
@@ -126,7 +125,6 @@
                     android:id="@+id/lay_suggestion"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-
                     android:layout_gravity="center_horizontal">
 
                     <ImageView
@@ -171,7 +169,6 @@
                     android:id="@+id/lay_advertise"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
-
                     android:layout_gravity="center_horizontal">
 
                     <ImageView

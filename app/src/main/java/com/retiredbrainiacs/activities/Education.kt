@@ -39,8 +39,8 @@ import java.io.StringReader
 
 class Education : AppCompatActivity(){
 
-    lateinit var sb : StringBuilder
-    lateinit var modelList : java.util.ArrayList<MainModel>
+     var sb : StringBuilder? = null
+    lateinit var modelList : ArrayList<MainModel>
 
     lateinit var root : ResponseRoot
     var map = HashMap<String, String>()
@@ -130,6 +130,7 @@ work()
 if(!objModel.heading.equals("education_history")) {
     listMain.add(objModel)
 }
+                    listMain1.add(objModel)
                     modelList = listMain1
 
                 }
@@ -238,7 +239,9 @@ if(!objModel.heading.equals("education_history")) {
 
     fun getCheckedStatus()
     {
+        Log.e("list",modelList.size.toString())
         if(modelList != null && modelList.size > 0){
+
             map = HashMap()
             map["user_id"] = SharedPrefManager.getInstance(this@Education).userId
             map["eh_technical_or_vocational_training"] = header.edt_tech_training.text.toString()
@@ -249,25 +252,33 @@ if(!objModel.heading.equals("education_history")) {
           //  map["bachelors_degrees_other"] = ""
          //   map["advanced_degrees"] = ""
           //  map["advanced_degrees_other"] = ""
+            Log.e("maps",map.toString())
             for(i in 0 until modelList.size)
             {
                 Log.e("title",modelList[i].heading)
                 sb = StringBuilder()
-                if(modelList[i].listChild != null && modelList[i].listChild.size > 0){
-                    for(j in 0  until modelList[i].listChild.size){
-                        if(modelList[i].listChild[j].chkStatus.equals("1")){
-                            sb.append(modelList[i].listChild[j].value_id+",")
-                        }
-                        if(modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
-                            map[modelList[i].heading+"_other"] = modelList[i].listChild[j].other
+                if(!modelList[i].heading.equals("education_history")) {
+                    if (modelList[i].listChild != null && modelList[i].listChild.size > 0) {
+                        for (j in 0 until modelList[i].listChild.size) {
+                            if (modelList[i].listChild[j].chkStatus.equals("1")) {
+                                sb!!.append(modelList[i].listChild[j].value_id + ",")
+                            }
+                            if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
+                                if (modelList[i].heading.equals("bachelor_degrees")) {
+                                    map["bachelors_degrees_other"] = modelList[i].listChild[j].other
+
+                                } else {
+                                    map[modelList[i].heading + "_other"] = modelList[i].listChild[j].other
+                                }
+                            }
                         }
                     }
-                }
 
-                if(sb.length > 0){
-                    sb.deleteCharAt(sb.length -1)
+                    if (sb!!.length > 0) {
+                        sb!!.deleteCharAt(sb!!.length - 1)
+                    }
+                    map[modelList[i].heading] = sb.toString()
                 }
-                map[modelList[i].heading]= sb.toString()
             }
 
         }

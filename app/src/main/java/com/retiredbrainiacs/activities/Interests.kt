@@ -31,7 +31,7 @@ import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.language_screen.*
 import org.json.JSONObject
 import java.io.StringReader
-import java.util.ArrayList
+import java.util.*
 
 class Interests : AppCompatActivity(){
     lateinit var sb : StringBuilder
@@ -227,5 +227,6 @@ objModel.listChild = listChild
         requestQueue.add(postRequest)
 
     }
+
 
 }

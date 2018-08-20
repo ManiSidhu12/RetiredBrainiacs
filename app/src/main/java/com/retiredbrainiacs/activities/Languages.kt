@@ -319,22 +319,23 @@ map["user_id"] = SharedPrefManager.getInstance(this@Languages).userId
                       }
 
                       if(modelList[i].heading.equals("spoken_languages")) {
+                          Log.e("values","inside"+modelList[i].listChild.size)
                           if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
                               map["spoken_other_lang"] = modelList[i].listChild[j].other
-                              sb.append("10,")
+                             // sb.append("10,")
                           }
                       }
                           else if(modelList[i].heading.equals("known_languages")) {
                           if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
                               map["known_other_lang"] = modelList[i].listChild[j].other
-                              sb.append("10,")
+                            //  sb.append("10,")
 
                           }
                       }
                               else if(modelList[i].heading.equals("preferred_languages")){
                                   if(modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
                                       map["pref_other_lang"] = modelList[i].listChild[j].other
-                                      sb.append("10,")
+                                    //  sb.append("10,")
 
                                   }
                       }

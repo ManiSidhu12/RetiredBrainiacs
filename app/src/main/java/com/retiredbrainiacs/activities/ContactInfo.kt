@@ -95,19 +95,19 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         imageutils = Imageutils(this@ContactInfo)
 
         handleCountryJson()
-        if(intent != null && intent.extras != null) {
+       /* if(intent != null && intent.extras != null) {
             if (intent.extras.getString("type").equals("edit")) {
                 setdata()
             }
-        }
-
+        }*/
+setdata()
         work()
     }
 
     fun work(){
 
         btn_save_profile.setOnClickListener {
-if(edt_phn.text.toString().isEmpty() && edt_skype.text.toString().isEmpty() && spin_country.selectedItem == null && edt_city.text.toString().isEmpty() && edt_adrs1.text.toString().isEmpty() && edt_adrs2.text.toString().isEmpty() && edt_zipccode.text.toString().isEmpty()  && file_path.equals("")){
+if(edt_name.text.toString().isEmpty() && edt_phn.text.toString().isEmpty() && edt_skype.text.toString().isEmpty() && spin_country.selectedItem == null && edt_city.text.toString().isEmpty() && edt_adrs1.text.toString().isEmpty() && edt_adrs2.text.toString().isEmpty() && edt_zipccode.text.toString().isEmpty()  && file_path.equals("")){
     Common.showToast(this@ContactInfo,"Please fill atleast one field to save...")
 }
             else{
@@ -238,7 +238,7 @@ contri = ""
                 else{
                    contri = spin_country.selectedItem.toString()
                 }
-                Log.e("country",spin_country.selectedItem.toString())
+              //  Log.e("country",spin_country.selectedItem.toString())
                 SharedPrefManager.getInstance(this@ContactInfo).setContactInfo(edt_phn.text.toString().trim(), edt_skype.text.toString().trim(), contri, edt_city.text.toString().trim(), edt_adrs1.text.toString(), edt_adrs2.text.toString(), edt_zipccode.text.toString().trim())
                 SharedPrefManager.getInstance(this@ContactInfo).rating = root.rating
 

@@ -110,20 +110,12 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 		ImageView img_nxt = convertView.findViewById(R.id.next);
 		EditText edt_add = convertView.findViewById(R.id.edt_add);
 		RelativeLayout lay_end = convertView.findViewById(R.id.lay_end);
+		RelativeLayout lay_main = convertView.findViewById(R.id.lay_name);
 		final ChildModel model = listMain.get(groupPosition).getListChild().get(childPosition);
 
 		text.setText(model.getTitle());
-		if(model.getOther() != null && !model.getOther().isEmpty()){
-			edt_add.setText(model.getOther());
-			Log.e("text1",edt_add.getText().toString());
 
-		}
-		if(!edt_add.getText().toString().isEmpty()){
-			model.setOther(edt_add.getText().toString());
-			Log.e("text2",edt_add.getText().toString());
-
-		}
-		edt_add.addTextChangedListener(new TextWatcher() {
+	/*	edt_add.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -136,18 +128,42 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 
 			@Override
 			public void afterTextChanged(Editable s) {
-				listMain.get(groupPosition).getListChild().get(childPosition).setOther(s.toString());
+				model.setOther(s.toString());
 			}
 		});
-		Log.e("text",edt_add.getText().toString());
+*/
+
 		if(model.getTitle().equalsIgnoreCase("Other (Please Specify)")){
 		edt_add.setVisibility(View.VISIBLE);
 		img_nxt.setVisibility(View.GONE);
 		img_chk.setVisibility(View.GONE);
 		lay_end.setVisibility(View.VISIBLE);
 		text.setVisibility(View.GONE);
-			img_chk.setImageDrawable(c.getResources().getDrawable(R.drawable.sel));
+			if(model.getOther() != null && !model.getOther().isEmpty()){
+				edt_add.setText(model.getOther());
+				//Log.e("text1",edt_add.getText().toString());
 
+			}
+
+			edt_add.addTextChangedListener(new TextWatcher() {
+				@Override
+				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+				}
+
+				@Override
+				public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+				}
+
+				@Override
+				public void afterTextChanged(Editable s) {
+					if(!s.toString().equalsIgnoreCase(model.getOther())){
+						model.setOther(s.toString());
+						Log.e("text2",model.getOther());
+
+					}				}
+			});
 		}
 		else{
         edt_add.setVisibility(View.GONE);
@@ -171,14 +187,29 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 			public void onClick(View v) {
 				if(model.getChkStatus().equalsIgnoreCase("1")){
 					model.setChkStatus("0");
+					notifyDataSetChanged();
 				}
 				else{
 					model.setChkStatus("1");
-
+					notifyDataSetChanged();
 				}
-				notifyDataSetChanged();
+
 			}
 		});
+        lay_main.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(model.getChkStatus().equalsIgnoreCase("1")){
+                    model.setChkStatus("0");
+                    notifyDataSetChanged();
+                }
+                else{
+                    model.setChkStatus("1");
+                    notifyDataSetChanged();
+                }
+
+            }
+        });
 		
 		return convertView;
 	}

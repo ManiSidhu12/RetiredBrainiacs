@@ -41,8 +41,6 @@ class WorkDetails : AppCompatActivity() {
     var listProfessional: ArrayList<String>? = null
     var listProfessionalValue: ArrayList<String>? = null
     var listWorkValue: ArrayList<String>? = null
-    // val workArray = arrayOf("Government Agency","Industry","Military","Academia")
-    // val professionalArray = arrayOf("Corporate Lawyer","Patent Lawyer","Lobbyist","Engineer","Scientist","Medical Practitioner","Artist")
     lateinit var header: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -345,13 +343,10 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
         //   header.spin_professional.adapter = NothingSelectedSpinnerAdapter(adapterProfessional, R.layout.work, this@WorkDetails)
 
         if (modelList != null && modelList.size > 0) {
-            Log.e("method1", "in")
 
             for (i in 0 until modelList.size) {
-                Log.e("method2", "in")
 
                 if (modelList[i].heading.equals("work_details")) {
-                    Log.e("method3", "in")
 
                     Log.e("list child",modelList[i].listChild.toString())
                     if (modelList[i].listChild != null) {
@@ -374,17 +369,16 @@ if(!objModel.heading.equals("work_details") &&  !objModel.heading.equals("profes
                     }
                 }
 
-                if (modelList[i].heading.equals("professional_traits")) {
-                    if (modelList[i].listChild != null) {
+               else if (modelList[i].heading.equals("professional_traits")) {
+                    if (modelList[i].listChild != null && modelList[i].listChild.size > 0) {
                         for (j in 0 until modelList[i].listChild.size) {
-                            Log.e("model", modelList[i].listChild[j].chkStatus + "akk")
-                            if (modelList[i].listChild[j].chkStatus != null) {
-                                if (modelList[i].listChild[j].chkStatus.equals("1")) {
-                                    header.spin_professional.setSelection(adapterWork.getPosition(modelList[i].listChild[j].title))
+                            Log.e("aman",""+j)
 
-                                }
-                            } else {
-                                //     header.spin_professional.adapter = NothingSelectedSpinnerAdapter(adapterProfessional, R.layout.work, this@WorkDetails)
+                            Log.e("modelvalues", modelList[i].listChild[j].chkStatus)
+                                    if (modelList[i].listChild[j].chkStatus != null && modelList[i].listChild[j].chkStatus.equals("1")) {
+
+                                    header.spin_professional.setSelection(adapterProfessional.getPosition(modelList[i].listChild[j].title))
+
 
                             }
                             if(modelList[i].listChild[j].title.equals("Other (please specify)")&& modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()){
