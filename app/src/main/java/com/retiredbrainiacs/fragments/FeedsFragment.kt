@@ -74,7 +74,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
 
     }
 
-    // Requesting permission to RECORD_AUDIO
+    // Requesting permission to RECORD_AUDIOcc
     private val REQUEST_RECORD_AUDIO_PERMISSION = 200
     var RQS_RECORDING = 12
 
@@ -93,11 +93,10 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
     var filetype: String = ""
     var filename: String = ""
     var file_path: String = ""
-    var fileType1: String = ""
     var fileName1: String = ""
     var toUserId : String = ""
     var f: File? = null
-    lateinit var f1: File
+     var f1: File ? = null
     lateinit var pd: ProgressDialog
     var mediaType: String = ""
     var linkname: String = ""
@@ -183,15 +182,42 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
 
     fun work() {
         v.lay_image_add.setOnClickListener {
+            f = null
+            fileName1 = ""
+            filetype = ""
+            filename = ""
+            file_path= ""
+            f1 = null
+            if(global.videoList != null){
+                global.videoList.clear()
+            }
             mediaType = "image"
             imageUtils.imagepicker(1)
         }
         v.lay_video.setOnClickListener {
+            f = null
+            fileName1 = ""
+            filetype = ""
+            filename = ""
+            file_path= ""
+            f1 = null
+            if(global.videoList != null){
+                global.videoList.clear()
+            }
             mediaType = "video"
             openVideoPickerAlert(activity)
 
         }
         v.lay_audio.setOnClickListener {
+            f = null
+            fileName1 = ""
+            filetype = ""
+            filename = ""
+            file_path= ""
+            f1 = null
+            if(global.videoList != null){
+                global.videoList.clear()
+            }
             mediaType = "audio"
             openAudioPickerAlert(activity)
         }
@@ -291,7 +317,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
                     global.videoList = ArrayList()
                 }
                 addVideo(f!!.absolutePath, uploadImage1(f!!.absolutePath).split(",")[0])
-                addVideo(f1.absolutePath, uploadImage1(f1.absolutePath).split(",")[0])
+                addVideo(f1!!.absolutePath, uploadImage1(f1!!.absolutePath).split(",")[0])
                 v.img_feed.setImageBitmap(thumbnail)
 
             } else {
@@ -309,7 +335,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
                     global.videoList = ArrayList()
                 }
                 addVideo(f!!.absolutePath, uploadImage1(f!!.absolutePath).split(",")[0])
-                addVideo(f1.absolutePath, uploadImage1(f1.absolutePath).split(",")[0])
+                addVideo(f1!!.absolutePath, uploadImage1(f1!!.absolutePath).split(",")[0])
                 v.img_feed.setImageBitmap(thumbnail)
 
             }
@@ -330,7 +356,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
                         global.videoList = ArrayList()
                     }
                     addVideo(f!!.absolutePath, uploadImage1(f!!.absolutePath).split(",")[0])
-                    addVideo(f1.absolutePath, uploadImage1(f1.absolutePath).split(",")[0])
+                    addVideo(f1!!.absolutePath, uploadImage1(f1!!.absolutePath).split(",")[0])
                     v.img_feed.setImageBitmap(thumbnail)
                 }
 
@@ -348,7 +374,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
                         global.videoList = ArrayList()
                     }
                     addVideo(f!!.absolutePath, uploadImage1(f!!.absolutePath).split(",")[0])
-                    addVideo(f1.absolutePath, uploadImage1(f1.absolutePath).split(",")[0])
+                    addVideo(f1!!.absolutePath, uploadImage1(f1!!.absolutePath).split(",")[0])
                     v.img_feed.setImageBitmap(thumbnail)
                 }
             }
@@ -604,14 +630,15 @@ if(resultCode == RESULT_OK){
     }
 
     //********** Implementing handler for upload image thread*****
-    var imageHandler: Handler = object : Handler() {
+    var imageHandler: Handler = object : Handler()
+    {
         override fun handleMessage(msg: Message) {
             var res = ""
             try {
                 res = msg.obj.toString()
                 val status = res.split(",")[0]
                 f = null
-                if (status.equals("true", ignoreCase = true)) {
+                if (status.equals("true")) {
                     // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
                     Common.showToast(activity!!, res.split(",")[1])
                     edt_post_data.text = Editable.Factory.getInstance().newEditable("")
@@ -620,7 +647,15 @@ if(resultCode == RESULT_OK){
                     } else {
                         v.img_feed.setImageResource(R.drawable.dummyuser)
                     }
-
+                    f = null
+                    fileName1 = ""
+                    filetype = ""
+                    filename = ""
+                    file_path= ""
+                    f1 = null
+                    if(global.videoList != null){
+                        global.videoList.clear()
+                    }
                     getFeeds()
 
                 } else {
@@ -896,36 +931,10 @@ if(resultCode == RESULT_OK){
     }
 
     private fun startRecording() {
-      /*  mRecorder = MediaRecorder()
-        mRecorder!!.setAudioSource(MediaRecorder.AudioSource.MIC)
-        mRecorder!!.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-        val root2 = android.os.Environment.getExternalStorageDirectory()
-        val file = File(root2.absolutePath + "/RetiredBrainiacs/Audios")
-        if (!file.exists()) {
-            file.mkdirs()
-        }
 
-        mFileName = root2.absolutePath + "/RetiredBrainiacs/Audios/" + (System.currentTimeMillis().toString() + ".mp3")
-        Log.e("filename", mFileName)
-        mRecorder!!.setOutputFile(mFileName)
-        mRecorder!!.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-
-        try {
-            mRecorder!!.prepare()
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-        mRecorder!!.start()*/
         val intent = Intent(MediaStore.Audio.Media.RECORD_SOUND_ACTION)
         startActivityForResult(intent, RQS_RECORDING)
 
-        //lastProgress = 0
-        // seekBar.setProgress(0)
-        // stopPlaying()
-        // making the imageview a stop button
-        //starting the chronometer
-        //chronometer.setBase(SystemClock.elapsedRealtime())
-        // chronometer.start()
     }
 
 }

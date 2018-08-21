@@ -57,6 +57,7 @@ holder.layEdit.visibility = View.VISIBLE
     GlobalConstants.cmntid = commentList[position].commentId
     GlobalConstants.pos = position
     edt_cmnt.text = Editable.Factory.getInstance().newEditable(commentList[position].comment)
+edt_cmnt.setSelection(edt_cmnt.text.toString().length)
     }
 
         holder.btnDelete.setOnClickListener {
@@ -89,8 +90,6 @@ holder.layEdit.visibility = View.VISIBLE
             }
             else{
                 Common.showToast(ctx,root.message)
-
-
             }
         },
 

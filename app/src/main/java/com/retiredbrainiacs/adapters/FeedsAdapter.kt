@@ -37,7 +37,7 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
     val privacyArray = arrayOf("Public","Private")
     val actionsArray = arrayOf("Edit","Delete")
     var mediaPlayer : MediaPlayer ?= null
-    lateinit var root: ResponseRoot
+    lateinit var root : ResponseRoot
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v = LayoutInflater.from(ctx).inflate(R.layout.home_feed_adapter,parent,false)
@@ -57,7 +57,6 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         Common.setFontRegular(ctx,holder.txtComment)
         Common.setFontBtnRegular(ctx,holder.btnPost)
         Common.setFontRegular(ctx,holder.edtCmnt)
-       // Log.e("content",posts[position].postContent)
         holder.txtPost.text = posts[position].postContent
 
         holder.txtUserName.text = posts[position].wallPostUserName
@@ -65,7 +64,6 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         holder.txtCmntCount.text = posts[position].commentList.size.toString()
         val date = posts[position].postingDate.replace(" ",",")
         holder.txtTime.text = date.split(",")[0]
-Log.e("date",date)
         if(SharedPrefManager.getInstance(ctx).userId.equals(posts[position].fromUserId)){
             holder.laySettings.visibility = View.VISIBLE
             holder.layActions.visibility = View.VISIBLE

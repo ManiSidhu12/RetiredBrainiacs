@@ -26,6 +26,7 @@ import com.retiredbrainiacs.R
 import com.retiredbrainiacs.apis.*
 import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.ResponseRoot
+import com.retiredbrainiacs.model.login.ProfileRoot
 import com.squareup.picasso.Picasso
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -67,6 +68,7 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     var file_name : String = ""
     var file_path : String = ""
     lateinit var root : ResponseRoot
+    lateinit var root1 : ProfileRoot
     lateinit var filetype : String
     lateinit var filename : String
     lateinit var f : File
@@ -100,7 +102,12 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
                 setdata()
             }
         }*/
-setdata()
+if(CommonUtils.getConnectivityStatusString(this@ContactInfo).equals("true")){
+    getProfile()
+}
+        else{
+            CommonUtils.openInternetDialog(this@ContactInfo)
+        }
         work()
     }
 
@@ -133,7 +140,6 @@ if(edt_name.text.toString().isEmpty() && edt_phn.text.toString().isEmpty() && ed
         }
         btn_pre.setOnClickListener {
             startActivity(Intent(this@ContactInfo,Home::class.java))
-
             finish()
         }
 
@@ -217,6 +223,47 @@ imageutils.imagepicker(1)
 
     }
 
+    private fun getProfile(){
+        var url = GlobalConstants.API_URL+"getprofile"
+        val pd = ProgressDialog.show(this@ContactInfo, "", "Loading", false)
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, com.android.volley.Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            root1 = gson.fromJson<ProfileRoot>(reader, ProfileRoot::class.java)
+            Log.e("msg",root1.status+root1.message)
+            if(root1.status.equals("true")) {
+              //  Common.showToast(this@ContactInfo,root1.message)
+              SharedPrefManager.getInstance(this@ContactInfo).setContactInfo(root1.data[0].phone, root1.data[0].skypeId, root1.data[0].iso, root1.data[0].city,root1.data[0].streetAddressLine1, root1.data[0].streetAddressLine2,root1.data[0].zipCode)
+                SharedPrefManager.getInstance(this@ContactInfo).setUserImage(root1.data[0].image)
+
+           setdata()
+
+
+            } else{
+                Common.showToast(this@ContactInfo,root1.message)
+
+            }
+        },
+
+                com.android.volley.Response.ErrorListener { pd.dismiss() }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+                map["user_id"]= SharedPrefManager.getInstance(this@ContactInfo).userId
+
+                Log.e("map profile",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
+    }
 
     private fun signup1(){
         var url = GlobalConstants.API_URL+"sign_next_4_steps"
@@ -384,9 +431,9 @@ contri = ""
 if(SharedPrefManager.getInstance(this@ContactInfo).country != null && !SharedPrefManager.getInstance(this@ContactInfo).country.isEmpty()){
 
 
-        for (i in 0 until list_country.size) {
+        for (i in 0 until list_code.size) {
             // Log.e("ii",""+i);
-            if (list_country[i].equals(SharedPrefManager.getInstance(this@ContactInfo).country)) {
+            if (list_code[i].equals(SharedPrefManager.getInstance(this@ContactInfo).country)) {
                 spin_country.setSelection(i + 1)
             }
         }

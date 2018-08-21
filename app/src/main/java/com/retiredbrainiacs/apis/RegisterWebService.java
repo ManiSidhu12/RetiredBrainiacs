@@ -259,15 +259,15 @@ for(int i=0;i < listVideo.size();i++) {
 				JSONObject job = new JSONObject(s);
 				 status = job.getString("status");
 				
-				if(status.equalsIgnoreCase("Success"))
+				if(status.equalsIgnoreCase("true"))
 				{
 				
-					response = job.getString("msg");
+					response = job.getString("message");
 
 				}
 				else
 				{
-					response = job.getString("msg");
+					response = job.getString("message");
 
 				}
 			} catch (JSONException e) {

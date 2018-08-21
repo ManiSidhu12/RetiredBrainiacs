@@ -5,7 +5,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.util.Log
 import android.view.View
@@ -15,20 +14,16 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
-import com.bignerdranch.expandablerecyclerview.Model.ParentListItem
 import com.diegocarloslima.fgelv.lib.WrapperExpandableListAdapter
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.SampleAdapter
-import com.retiredbrainiacs.adapters.SimpleExpandableAdapter
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.ResponseRoot
-import com.retiredbrainiacs.model.SimpleChild
-import com.retiredbrainiacs.model.SimpleParentItem
 import com.retiredbrainiacs.model.login.ChildModel
 import com.retiredbrainiacs.model.login.MainModel
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
@@ -221,7 +216,7 @@ if(!objModel.heading.equals("education_history")) {
             }
         },
 
-                com.android.volley.Response.ErrorListener { pd.dismiss() }) {
+                Response.ErrorListener { pd.dismiss() }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
 

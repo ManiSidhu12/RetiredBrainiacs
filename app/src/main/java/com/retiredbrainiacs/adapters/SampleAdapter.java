@@ -99,7 +99,7 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView( int groupPosition,  int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		if(convertView == null) {
 			convertView = mLayoutInflater.inflate(R.layout.sub_cat_viewholder, parent, false);
 		}
@@ -114,7 +114,8 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 		final ChildModel model = listMain.get(groupPosition).getListChild().get(childPosition);
 
 		text.setText(model.getTitle());
-
+Log.e("pos",groupPosition+","+childPosition);
+int p = groupPosition;
 	/*	edt_add.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -134,6 +135,7 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 */
 
 		if(model.getTitle().equalsIgnoreCase("Other (Please Specify)")){
+		//	Log.e("group",groupPosition+","+childPosition);
 		edt_add.setVisibility(View.VISIBLE);
 		img_nxt.setVisibility(View.GONE);
 		img_chk.setVisibility(View.GONE);
@@ -144,8 +146,10 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 				//Log.e("text1",edt_add.getText().toString());
 
 			}
-
-			edt_add.addTextChangedListener(new TextWatcher() {
+/*if(!edt_add.getText().toString().equalsIgnoreCase(model.getOther())){
+	listMain.get(groupPosition).getListChild().get(childPosition).setOther(edt_add.getText().toString());
+}*/
+		/*	edt_add.addTextChangedListener(new TextWatcher() {
 				@Override
 				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -158,12 +162,13 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 
 				@Override
 				public void afterTextChanged(Editable s) {
+					Log.e("positions",p+","+childPosition+"");
 					if(!s.toString().equalsIgnoreCase(model.getOther())){
 						model.setOther(s.toString());
 						Log.e("text2",model.getOther());
 
 					}				}
-			});
+			});*/
 		}
 		else{
         edt_add.setVisibility(View.GONE);

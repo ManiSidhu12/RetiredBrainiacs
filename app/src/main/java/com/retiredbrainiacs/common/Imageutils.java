@@ -472,6 +472,7 @@ public class Imageutils
         }
 
         if(code==1)
+
             camera_call();
         else if(code==2)
             galley_call();
@@ -540,6 +541,7 @@ public class Imageutils
 
     public void camera_call()
     {
+        Log.e("values","in");
         ContentValues values = new ContentValues();
         imageUri = current_activity.getContentResolver().insert(
                 MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
@@ -547,11 +549,14 @@ public class Imageutils
         intent1.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         Log.e("imageuri",imageUri+","+intent1.toString());
 
-        if(isFragment)
-            current_fragment.startActivityForResult(intent1,0);
-        else
-            Log.e("imageelse","else"+intent1);
+        if(isFragment) {
+            Log.e("values", "in");
+            current_fragment.startActivityForResult(intent1, 0);
+        }
+        else {
+            Log.e("imageelse", "else" + intent1);
             current_activity.startActivityForResult(intent1, 0);
+        }
     }
 
     /**
@@ -807,12 +812,16 @@ public class Imageutils
             {
                 file.delete ();
                 file = new File(path,file_name);
+                Log.e("file",file +","+bitmap);
+
                 store_image(file,bitmap);
-                Log.i("file","replaced");
             }
         }
         else
         {
+
+            Log.e("file1",file +","+bitmap);
+
             store_image(file,bitmap);
         }
 
@@ -827,13 +836,15 @@ public class Imageutils
      */
     public void store_image(File file, Bitmap bmp)
     {
+        FileOutputStream out;
         try {
-            FileOutputStream out = new FileOutputStream(file);
-            bmp.compress(Bitmap.CompressFormat.PNG, 80, out);
+             out = new FileOutputStream(file);
+            bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
             out.flush();
             out.close();
 
         } catch (Exception e) {
+            Log.e("excee",e.getMessage());
             e.printStackTrace();
         }
     }
@@ -841,7 +852,7 @@ public class Imageutils
     // Image Attachment Callback
 
     public interface ImageAttachmentListener {
-        public void image_attachment(int from, String filename, Bitmap file, Uri uri);
+         void image_attachment(int from, String filename, Bitmap file, Uri uri);
     }
 
 
