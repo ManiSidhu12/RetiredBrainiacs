@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/transbg"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        >
+        <RelativeLayout
+            android:layout_marginTop="50dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+
+            >
+
+
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:orientation="vertical"
+                android:background="@drawable/bg1"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#F5F5F5">
+
+<TextView
+    android:id="@+id/title1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:text="Post a Forum"
+    android:textColor="@android:color/black"
+    android:textSize="16sp"/>
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginEnd="5dp"
+                    android:background="@android:color/white"
+                    android:layout_marginTop="12dp">
+
+                    <RelativeLayout
+                        android:id="@+id/subject"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                       android:layout_alignParentStart="true"
+                        android:layout_centerHorizontal="true"
+                        android:background="#F5F5F5">
+                        <EditText
+                            android:id="@+id/edt_post_forum"
+                            android:layout_width="match_parent"
+                            android:layout_height="45dp"
+                            android:layout_centerHorizontal="true"
+                            android:background="@android:color/transparent"
+                            android:hint="Subject"
+                            android:textSize="14sp"
+                            android:layout_margin="7dp"
+                            android:padding="3dp"
+                            android:singleLine="true"
+                            android:textColor="@android:color/black"
+                            android:gravity="start|top"/>
+                    </RelativeLayout>
+                    <ScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/subject"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="15dp"
+                        android:background="#F5F5F5"   >
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                       >
+                        <EditText
+                            android:id="@+id/edt_post_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerHorizontal="true"
+                            android:background="@android:color/transparent"
+                            android:hint="Content"
+                            android:textSize="14sp"
+                            android:layout_margin="7dp"
+                            android:padding="3dp"
+                            android:textColor="@android:color/black"
+                            android:gravity="start|top"/>
+                    </RelativeLayout>
+                    </ScrollView>
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:background="@android:color/darker_gray"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp">
+                    <Button
+                        android:id="@+id/btn_post_forum"
+                        android:layout_width="150dp"
+                        android:layout_height="40dp"
+                        android:layout_centerInParent="true"
+                        android:text="Submit"
+                        android:textAllCaps="false"
+                        android:textColor="@android:color/white"
+                        android:background="@color/theme_color_orange"
+                        android:layout_marginEnd="5dp"/>
+
+                </RelativeLayout>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_margin="10dp"
+                    android:background="@android:color/darker_gray"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:layout_gravity="center_horizontal"
+                    android:background="#F5F5F5"/>
+
+            </LinearLayout>
+
+        </RelativeLayout>
+        <ImageView
+            android:id="@+id/imageView1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/close" />
+    </RelativeLayout>
+
+</RelativeLayout>

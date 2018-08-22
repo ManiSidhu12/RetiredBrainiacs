@@ -611,8 +611,6 @@ if(resultCode == RESULT_OK){
             } else {
                 postType = ""
             }
-            // /storage/emulated/0/DCIM/Camera/IMG_20180811_191654.jpg
-            Log.e("type", "amannn")
             if (mediaType.equals("image") || mediaType.equals("audio")) {
                 val edit = AddPostAPI(activity, SharedPrefManager.getInstance(activity).userId, toUserId, edt_post_data.text.toString().trim(), postType, filetype, filename, mediaType, global.videoList)
                 res = edit.doStart(fis)

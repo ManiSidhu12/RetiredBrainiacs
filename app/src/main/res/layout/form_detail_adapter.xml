@@ -1,0 +1,151 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layoutfeed"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp">
+
+        <ImageView
+            android:id="@+id/img_user_forum"
+            android:layout_width="50dp"
+            android:layout_height="60dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_toEndOf="@+id/img_user_forum"
+            android:layout_toStartOf="@+id/rightLay_forum"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_name_forum"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:paddingStart="3dp"
+                android:paddingTop="3dp"
+                android:singleLine="true"
+                android:text="Jasper Shintu"
+                android:textColor="@android:color/black"
+                android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/txt_time_forum"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                   android:layout_gravity="center_horizontal"
+                    android:paddingStart="3dp"
+                    android:singleLine="true"
+                    android:text="23 minutes ago"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
+        </LinearLayout>
+        <RelativeLayout
+            android:id="@+id/rightLay_forum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="7dp"
+            android:visibility="gone"
+            android:layout_marginStart="3dp"
+            >
+
+
+            <LinearLayout
+                android:id="@+id/lay_actions_forum"
+                android:layout_width="90dp"
+                android:layout_height="25dp"
+                android:layout_toStartOf="@+id/lay_settings"
+                android:layout_centerInParent="true"
+                android:layout_marginEnd="5dp"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/spin_bg">
+
+                <Spinner
+                    android:id="@+id/spin_actions"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:padding="0dp"></Spinner>
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/txt_post_forum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="7dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:padding="3dp"
+        android:text="Lorem ipsum is a dummy text standard for typesettings."
+        android:textColor="@color/create_color"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="See more..."
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/imgLayout_forum"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/img_post_forum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:scaleType="centerCrop"
+            />
+
+        <Button
+            android:id="@+id/btn_play_forum"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/play"
+
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <VideoView
+        android:id="@+id/video_view_forum"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:visibility="gone" />
+
+
+</LinearLayout>

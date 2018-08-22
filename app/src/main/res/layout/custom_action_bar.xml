@@ -22,7 +22,7 @@
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
-        android:text="Logout"
+        android:text="Add Forum"
         android:textColor="@android:color/white"
         android:textSize="14sp"
         android:textAllCaps="false"

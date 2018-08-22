@@ -43,7 +43,7 @@ class ForumAdapter(var ctx: Context, var listForm: MutableList<ListForm>) : Recy
         }
 
         holder.lay_adap.setOnClickListener {
-            ctx.startActivity(Intent(ctx,ForumDetails::class.java))
+            ctx.startActivity(Intent(ctx,ForumDetails::class.java).putExtra("linkname",listForm[position].linkname).putExtra("title",listForm[position].subject).putExtra("content",listForm[position].content))
         }
     }
 

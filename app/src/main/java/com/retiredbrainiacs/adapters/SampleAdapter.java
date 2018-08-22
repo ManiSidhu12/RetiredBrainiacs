@@ -108,7 +108,7 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 
 		ImageView img_chk = convertView.findViewById(R.id.img_chk);
 		ImageView img_nxt = convertView.findViewById(R.id.next);
-		EditText edt_add = convertView.findViewById(R.id.edt_add);
+		final EditText edt_add = convertView.findViewById(R.id.edt_add);
 		RelativeLayout lay_end = convertView.findViewById(R.id.lay_end);
 		RelativeLayout lay_main = convertView.findViewById(R.id.lay_name);
 		final ChildModel model = listMain.get(groupPosition).getListChild().get(childPosition);

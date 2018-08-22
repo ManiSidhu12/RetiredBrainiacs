@@ -79,12 +79,14 @@ work()
     //===== Get Education API =====
     private fun getEducation(){
         var url = GlobalConstants.API_URL+"education_history"
-        progress_edu.visibility = View.VISIBLE
+        val pd = ProgressDialog.show(this@Education, "", "Loading", false)
+
         recycle_education.visibility = View.GONE
         lay_bottom_edu.visibility = View.GONE
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
             progress_edu.visibility = View.GONE
+            pd.dismiss()
             recycle_education.visibility = View.VISIBLE
             lay_bottom_edu.visibility = View.VISIBLE
             var obj = JSONObject(response)
@@ -174,6 +176,7 @@ if(!objModel.heading.equals("education_history")) {
         },
 
                 Response.ErrorListener {
+                    pd.dismiss()
                     progress_edu.visibility = View.GONE
                     recycle_education.visibility = View.GONE
                     lay_bottom_edu.visibility = View.GONE }) {
