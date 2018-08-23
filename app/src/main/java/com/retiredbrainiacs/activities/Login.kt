@@ -3,11 +3,13 @@ package com.retiredbrainiacs.activities
 import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.inputmethod.InputMethodManager
 import com.android.volley.*
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -207,7 +209,7 @@ txt_forgot.setOnClickListener {
     }
     private fun checkUserWebService(email : String,pswd : String) {
         val url = GlobalConstants.API_URL + "check_email"
-        var progressDialog = CommonUtils.createProgressDialog(this@Login)
+        val progressDialog = CommonUtils.createProgressDialog(this@Login)
 
         progressDialog!!.show()
 
@@ -258,7 +260,7 @@ txt_forgot.setOnClickListener {
                 }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
-                val map = java.util.HashMap<String, String>()
+                val map = HashMap<String, String>()
                 map["email"] = email.trim()
                 //Log.e("map", map.toString());
                 return map
@@ -340,7 +342,7 @@ if(rootLogin.message.equals("YOUR ACCOUNT IS NOT VERIFIED")){
                 dialog.dismiss()
 
                 if(CommonUtils.getConnectivityStatusString(this@Login).equals("true")){
-                    //forgotPasswordWebService(dialog,dialog.edt_email_forgot)
+                   forgotPassword(dialog.edt_email_forgot.text.toString().trim(),dialog)
                 }
                 else{
                     CommonUtils.openInternetDialog(this@Login)
@@ -348,6 +350,42 @@ if(rootLogin.message.equals("YOUR ACCOUNT IS NOT VERIFIED")){
             }
         }
         dialog.btn_cancel.setOnClickListener{ dialog.dismiss() }
+    }
+    private fun forgotPassword(email : String,dialog: Dialog){
+        var url = GlobalConstants.API_URL+"forget_password"
+        val pd = ProgressDialog.show(this@Login, "", "Loading", false)
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            rootLogin = gson.fromJson<LoginRoot>(reader, LoginRoot::class.java)
+
+            if(rootLogin.status.equals("true")) {
+                val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                imm.hideSoftInputFromWindow(dialog.edt_email_forgot.getWindowToken(), 0)
+                dialog.dismiss()
+            } else{
+                Common.showToast(this@Login,rootLogin.message)
+
+            }
+        },
+
+                Response.ErrorListener { pd.dismiss() }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["user_email"] = email
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
     }
 
 }

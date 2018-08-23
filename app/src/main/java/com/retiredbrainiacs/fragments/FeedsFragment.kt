@@ -835,7 +835,8 @@ if(resultCode == RESULT_OK){
         builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
             if (items[item] == "Record Audio") {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                    if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+                    {
 
                         // Permission is not granted
                         // Should we show an explanation?
@@ -875,6 +876,9 @@ if(resultCode == RESULT_OK){
                         startRecording()
                     }
                 } else {
+                    mFileName = Environment.getExternalStorageDirectory().absolutePath + "/audiorecordtest.3gp"
+
+                    startRecording()
                 }
             } else if (items[item] == "Choose Audio") {
                 // type="V";

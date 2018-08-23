@@ -97,6 +97,51 @@ public class AddForum {
                 Log.i("imagetype", "4");
                 dos.writeBytes("Content-type: image/jpeg;" + lineEnd);
             }
+            if (imagetype.equalsIgnoreCase("mp4"))
+            {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: video/mp4;" + lineEnd);
+            }
+            if (imagetype.equalsIgnoreCase("m4a"))
+            {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: audio/m4a;" + lineEnd);
+            }
+            if (imagetype.equalsIgnoreCase("doc"))
+            {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: file/doc;" + lineEnd);
+            }
+            if (imagetype.equalsIgnoreCase("docx"))
+            {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: file/docx;" + lineEnd);
+            }
+            if (imagetype.equalsIgnoreCase("xml"))
+            {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: file/xml;" + lineEnd);
+            }
+            if (imagetype.equalsIgnoreCase("xls"))
+            {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: file/xls;" + lineEnd);
+            }
+            if (imagetype.equalsIgnoreCase("xlsx"))
+            {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: file/xlsx;" + lineEnd);
+            }
+            if (imagetype.equalsIgnoreCase("pdf"))
+            {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: file/pdf;" + lineEnd);
+            }
+            if (imagetype.equalsIgnoreCase("txt"))
+            {
+                Log.i("imagetype", "4");
+                dos.writeBytes("Content-type: file/txt;" + lineEnd);
+            }
             dos.writeBytes(lineEnd);
 
             int bytesAvailable = fileInputStream.available();
@@ -137,7 +182,7 @@ public class AddForum {
             JSONObject job = new JSONObject(s);
             status = job.getString("status");
             msg = job.getString("message");
-
+mediaName = "";
             if(status.equalsIgnoreCase("true"))
             {
       mediaName = job.getString("media_name");
@@ -163,7 +208,7 @@ public class AddForum {
             e.printStackTrace();
         }
         Log.e("msg",status+","+msg);
-        return status+","+msg;
+        return status+","+msg+","+mediaName;
 
 
 
