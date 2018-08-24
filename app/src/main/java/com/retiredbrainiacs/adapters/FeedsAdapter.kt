@@ -97,9 +97,10 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
             Picasso.with(ctx).load(posts[position].videoImg).into(holder.imgPost)
         }
         else if(posts[position].audio != null && !posts[position].audio.isEmpty()){
-            holder.btnPlay.visibility = View.VISIBLE
-            holder.btnPlay.setBackgroundResource(R.drawable.audioplay)
-
+            holder.btnPlay.visibility = View.GONE
+         //   holder.btnPlay.setBackgroundResource(R.drawable.mp3)
+holder.audioImg.visibility = View.VISIBLE
+            holder.audioImg.setImageResource(R.drawable.mp3)
             holder.imgPost.visibility = View.GONE
         }
 
@@ -485,5 +486,6 @@ globalDialog.dismiss()
         val imgLayout = itemView.imgLayout
         val videoView = itemView.video_view
         val layActions = itemView.lay_actions
+        val audioImg = itemView.audio_img
     }
 }

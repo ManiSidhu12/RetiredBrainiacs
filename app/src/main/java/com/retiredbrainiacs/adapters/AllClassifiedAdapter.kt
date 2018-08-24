@@ -1,17 +1,13 @@
 package com.retiredbrainiacs.adapters
 
 import android.content.Context
-import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.retiredbrainiacs.R
-import com.retiredbrainiacs.activities.ClassifiedDetail
 import com.retiredbrainiacs.common.Common
-import com.retiredbrainiacs.fragments.PagerFragment
 import com.retiredbrainiacs.model.classified.Datalist
 import com.retiredbrainiacs.model.classified.ListClassified
 import kotlinx.android.synthetic.main.all_classified_adapter.view.*
