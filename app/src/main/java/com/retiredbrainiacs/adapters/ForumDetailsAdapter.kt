@@ -1,20 +1,39 @@
 package com.retiredbrainiacs.adapters
 
+import android.app.Activity
+import android.app.Dialog
+import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import com.android.volley.AuthFailureError
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Request
+import com.android.volley.Response
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.activities.ForumDetails
+import com.retiredbrainiacs.common.Common
+import com.retiredbrainiacs.common.CommonUtils
+import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.NothingSelectedSpinnerAdapter
+import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.forum.FormMessage
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.dialog_global.*
 import kotlinx.android.synthetic.main.form_detail_adapter.view.*
+import java.io.StringReader
 
-class ForumDetailsAdapter(var ctx: Context, var formMain: MutableList<FormMessage>) : RecyclerView.Adapter<ForumDetailsAdapter.ViewHolder>(){
+class ForumDetailsAdapter(var ctx: Context, var formMain: ArrayList<FormMessage>, var linkname: String, var title: String, var  content: String) : RecyclerView.Adapter<ForumDetailsAdapter.ViewHolder>(){
    lateinit var listAttach : ArrayList<HashMap<String,String>>
     val actionsArray = arrayOf("Edit","Delete")
 
@@ -31,35 +50,6 @@ class ForumDetailsAdapter(var ctx: Context, var formMain: MutableList<FormMessag
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.txtName.text = formMain[position].displayName
         holder.txtData.text = formMain[position].comment
-        if(formMain[position].userImage != null && !formMain[position].userImage.isEmpty()){
-            Picasso.with(ctx).load(formMain[position].userImage).into(holder.imgUser)
-        }
-        else{
-            holder.imgUser.setImageResource(R.drawable.dummyuser)
-        }
-        val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1,actionsArray)
-        adapterActions.setDropDownViewResource(R.layout.spinner_txt)
-        holder.spinnerAction.adapter = adapterActions
-        holder.spinnerAction.adapter = NothingSelectedSpinnerAdapter(adapterActions, R.layout.actions, ctx)
-        holder.spinnerAction.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-            }
-
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                if(holder.spinnerAction.selectedItem != null) {
-                    if (holder.spinnerAction.selectedItem.equals("Delete")) {
-                       // showDialogMsg(ctx, formMain[position].usersWallPostId, holder.layoutFeed, formMain, position)
-                    }
-                    else{
-
-
-                    }
-                }
-            }
-
-
-        }
-
         listAttach = ArrayList()
         if(formMain[position].attachmentImage != null && formMain[position].attachmentImage.size > 0){
             val map = HashMap<String,String>()
@@ -70,6 +60,7 @@ class ForumDetailsAdapter(var ctx: Context, var formMain: MutableList<FormMessag
                 map.put("type", "image")
             }
             listAttach.add(map)
+            Log.e("lista",listAttach.toString())
         }
         if(formMain[position].pdfUrl != null && formMain[position].pdfUrl.size > 0){
             val map = HashMap<String,String>()
@@ -159,18 +150,134 @@ class ForumDetailsAdapter(var ctx: Context, var formMain: MutableList<FormMessag
             listAttach.add(map)
 
         }
-listMain.add(listAttach)
+        listMain.add(listAttach)
 //Log.e("list",listAttach[position].toString())
-if(listMain[position].size > 0) {
-    initializeViews(listMain[position], holder, position)
-}
+        if(listMain[position].size > 0) {
+            initializeViews(listMain[position], holder, position)
+        }
         else{
-holder.viewPager.visibility = View.GONE
+            holder.viewPager.visibility = View.GONE
+        }
+        if(formMain[position].userImage != null && !formMain[position].userImage.isEmpty()){
+            Picasso.with(ctx).load(formMain[position].userImage).into(holder.imgUser)
+        }
+        else{
+            holder.imgUser.setImageResource(R.drawable.dummyuser)
+        }
+        if(formMain[position].userCanEdit == 1) {
+            holder.layActions.visibility = View.VISIBLE
+            val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1, actionsArray)
+            adapterActions.setDropDownViewResource(R.layout.spinner_txt)
+            holder.spinnerAction.adapter = adapterActions
+            holder.spinnerAction.adapter = NothingSelectedSpinnerAdapter(adapterActions, R.layout.actions, ctx)
+            holder.spinnerAction.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
+                }
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                    if (holder.spinnerAction.selectedItem != null) {
+                        if (holder.spinnerAction.selectedItem.equals("Delete")) {
+                          showDialogMsg(ctx, formMain[position].commentId,position,formMain)
+                        } else {
+                            ForumDetails.setImagesComment(listMain[position])
+                            val intent = Intent(ctx, ForumDetails::class.java)
+                            intent.putExtra("type", "edit").putExtra("linkname", linkname).putExtra("title", title).putExtra("content", content).putParcelableArrayListExtra("list", formMain).putExtra("pos", position).putExtra("commentId",formMain[position].commentId)
+                            ctx.startActivity(intent)
+                            (ctx as Activity).finish()
+
+                        }
+                    }
+                }
+
+
+            }
+
+        }
+        else{
+            holder.layActions.visibility = View.GONE
         }
 holder.itemView.setOnClickListener {
-
 }
 
+
+    }
+    fun showDialogMsg(c: Context, id: String, position: Int, formMain: ArrayList<FormMessage>) {
+        val globalDialog = Dialog(c, R.style.Theme_Dialog)
+        globalDialog.setContentView(R.layout.dialog_global)
+        globalDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+
+
+
+        globalDialog.text.text = "Are you sure you want to delete?"
+
+
+
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(globalDialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        globalDialog.show()
+        globalDialog.window!!.attributes = lp
+        globalDialog.ok.text = "Yes"
+        globalDialog.cancel.text = "No"
+
+        globalDialog.cancel.setOnClickListener{
+
+            globalDialog.dismiss()
+
+
+        }
+
+
+        globalDialog.ok.setOnClickListener {
+            globalDialog.dismiss()
+            if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
+              deleteComment(c,id,position,formMain)
+            }
+        }
+
+
+    }
+    private fun deleteComment(ctx: Context, id: String, position: Int, formMain: ArrayList<FormMessage>){
+        var url = GlobalConstants.API_URL1+"?action=deletecomment"
+        val pd = ProgressDialog.show(ctx,"","Loading",false)
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = com.google.gson.stream.JsonReader(StringReader(response))
+            reader.isLenient = true
+            var  root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+
+            if(root1.status.equals("true")){
+                Common.showToast(ctx,root1.message)
+                //layoutFeed.visibility = View.GONE
+                formMain.removeAt(position)
+                notifyDataSetChanged()
+
+            }
+            else{
+                Common.showToast(ctx,root1.message)
+
+            }
+        },
+
+                Response.ErrorListener {
+                    pd.dismiss()
+                }){
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["comment_id"] = id
+                Log.e("map delete comment",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(ctx)
+        requestQueue.add(postRequest)
 
     }
 
@@ -187,12 +294,12 @@ holder.itemView.setOnClickListener {
 
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-val imgUser = itemView.img_user_forum
+        val imgUser = itemView.img_user_forum
         val txtName = itemView.txt_name_forum
         val txtTime = itemView.txt_time_forum
         val txtData = itemView.txt_post_forum
         val viewPager = itemView.vp_slider
-        val layActions = itemView.lay_actions_forum
+        val layActions = itemView.rightLay_forum
         val spinnerAction = itemView.spin_actions
     }
 }

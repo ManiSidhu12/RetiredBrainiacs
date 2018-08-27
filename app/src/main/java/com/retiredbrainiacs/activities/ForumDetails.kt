@@ -32,7 +32,10 @@ import com.retiredbrainiacs.adapters.AttachmentAdapter
 import com.retiredbrainiacs.adapters.ForumDetailsAdapter
 import com.retiredbrainiacs.apis.AddForum
 import com.retiredbrainiacs.common.*
+import com.retiredbrainiacs.model.ImagesModel
+import com.retiredbrainiacs.model.ModelImages
 import com.retiredbrainiacs.model.ResponseRoot
+import com.retiredbrainiacs.model.forum.FormMessage
 import com.retiredbrainiacs.model.forum.ForumDetailRoot
 import kotlinx.android.synthetic.main.forum_details_screen.*
 import java.io.File
@@ -41,6 +44,8 @@ import java.io.IOException
 import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 class ForumDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     var file_name :String = ""
@@ -51,7 +56,8 @@ class ForumDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     var selectedPath = ""
     var videoPath: String = ""
     var pd : ProgressDialog ? = null
-    var listImages : ArrayList<Bitmap> ?= null
+    lateinit var  model : ModelImages
+   var listImages : ArrayList<Bitmap> ?= null
     private val PERMISSION = 200
     val CAMERA = 0x5
     private val VIDEO_CAPTURE_CODE = 100
@@ -61,6 +67,16 @@ class ForumDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     val SELECT_VIDEO = 4
     var sb : StringBuilder ? = null
     var forumId  : String = ""
+  var listComments :   ArrayList<FormMessage> ?= null
+  var listImagesComment : ArrayList<HashMap<String,String>> ? = null
+    var commentId = ""
+    companion object {
+        lateinit var  listNew : ArrayList<HashMap<String, String>>
+
+        fun setImagesComment(arrayList: ArrayList<HashMap<String, String>>) {
+            listNew = arrayList
+        }
+    }
 
     override fun image_attachment(from: Int, filename: String, file: Bitmap, uri: Uri) {
      bitmap = file
@@ -81,6 +97,9 @@ class ForumDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     var content : String = ""
     lateinit var builder: AlertDialog.Builder
     lateinit var imageUtils: Imageutils
+    var position  : Int  = 0
+var type : String = ""
+    var list = ArrayList<ImagesModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,15 +109,55 @@ class ForumDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         recycler_forum_details.layoutManager = LinearLayoutManager(this@ForumDetails)
         recycler_media.layoutManager  = LinearLayoutManager(this@ForumDetails,LinearLayoutManager.HORIZONTAL,false)
         imageUtils = Imageutils(this)
-        listImages = ArrayList()
+        model = ModelImages()
+
+         listImages = ArrayList()
         if(intent != null && intent.extras != null){
             linkname = intent.extras.getString("linkname")
             title = intent.extras.getString("title")
             content = intent.extras.getString("content")
-
+commentId = intent.extras.getString("commentId")
             discoveries.text = title
             discoveries_content.text = content
+            type = intent.extras.getString("type")
+if(intent.extras.getString("type").equals("edit")){
+    listComments = ArrayList()
+    if(intent.extras.getParcelableArrayList<FormMessage>("list") != null){
+        listComments = intent.extras.getParcelableArrayList<FormMessage>("list")
+        position = intent.extras.getInt("pos")
 
+        edt_forum_data.text = Editable.Factory.getInstance().newEditable(listComments!![position].comment)
+        listImagesComment = ArrayList()
+ listImagesComment = listNew
+        Log.e("listImages",listImagesComment.toString())
+        if(listImagesComment != null && listImagesComment!!.size > 0) {
+            recycler_media.visibility = View.VISIBLE
+for (i in 0 until listImagesComment!!.size){
+
+    var m = ImagesModel()
+
+    m.id =  listImagesComment!![i].get("id")
+    m.url =  listImagesComment!![i].get("url")
+    m.type =  listImagesComment!![i].get("type")
+    m.value =  "edit"
+    m.imageBitmap = null
+   /* model.model[i].id = listImagesComment!![i].get("id")
+    model.model[i].url = listImagesComment!![i].get("url")
+    model.model[i].type = listImagesComment!![i].get("type")
+    model.model[i].imageBitmap = null*/
+
+    list.add(m)
+}
+           model.model = list
+            recycler_media.adapter = AttachmentAdapter(this@ForumDetails,model, type)
+        }
+        else{
+            recycler_media.visibility = View.GONE
+
+        }
+
+    }
+}
         }
         sb = StringBuilder()
 
@@ -138,7 +197,7 @@ class ForumDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener{
             root = gson.fromJson<ForumDetailRoot>(reader, ForumDetailRoot::class.java)
 
             if(root.status.equals("true")) {
-                recycler_forum_details.adapter = ForumDetailsAdapter(this@ForumDetails,root.formMessages)
+                recycler_forum_details.adapter = ForumDetailsAdapter(this@ForumDetails,root.formMessages,linkname,title,content)
                  forumId = root.formMain[0].forumId
             } else{
                 Common.showToast(this@ForumDetails,root.message)
@@ -498,13 +557,36 @@ val edit = AddForum(this@ForumDetails,filetype,filename)
 
                     // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
                     Common.showToast(this@ForumDetails, res.split(",")[1])
-                    listImages!!.add(bitmap)
-                    recycler_media.visibility = View.VISIBLE
+                    listImages = ArrayList()
+                 listImages!!.add(bitmap)
+                    Log.e("list",listImages.toString()+","+bitmap)
+
+                    if(listImages != null && listImages!!.size > 0) {
+
+    for (i in 0 until listImages!!.size) {
+
+        var m = ImagesModel()
+
+        m.imageBitmap =  listImages!![i]
+        m.id = ""
+        m.type = ""
+        m.url = ""
+        m.value = "new"
+      list.add(m)
+    }
+    model.model = list
+}
+                    //model.model.
                     if(!media.equals("")){
                         sb!!.append(media +",")
                     }
+                    recycler_media.visibility = View.VISIBLE
+                   // listImagesComment = ArrayList()
+                    recycler_media.adapter = AttachmentAdapter(this@ForumDetails,model,"new")
+
+                  //  Log.e("list",listImages!!.toString())
                     //  img_feed_forum.setImageBitmap(file)
-                    recycler_media.adapter = AttachmentAdapter(this@ForumDetails,listImages!!,"add")
+
                 } else {
                     Common.showToast(this@ForumDetails, res.split(",")[1])
                 }
@@ -643,7 +725,7 @@ val edit = AddForum(this@ForumDetails,filetype,filename)
 
             if(root1.status.equals("true")) {
                 Common.showToast(this@ForumDetails,root1.message)
-                listImages!!.clear()
+                model = ModelImages()
                 sb = StringBuilder()
                 edt_forum_data.text = Editable.Factory.getInstance().newEditable("")
                 recycler_media.visibility = View.GONE
@@ -663,7 +745,7 @@ val edit = AddForum(this@ForumDetails,filetype,filename)
                 map["user_id"] =  SharedPrefManager.getInstance(this@ForumDetails).userId
                 map["forum_id"] = forumId
                 map["comment"] =  edt_forum_data.text.toString()
-                map["comment_id"] = ""
+                map["comment_id"] = commentId
                 map["attachment"] = sb!!.deleteCharAt(sb!!.length-1).toString()
                 Log.e("map upload forum",map.toString())
                 return map

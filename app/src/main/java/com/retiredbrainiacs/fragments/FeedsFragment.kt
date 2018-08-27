@@ -29,6 +29,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ArrayAdapter
 import android.widget.ImageView
 import com.android.volley.AuthFailureError
@@ -262,6 +263,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
         v.img_feed.setImageBitmap(file)
         v.img_feed.scaleType = ImageView.ScaleType.FIT_XY
         v.img_feed.isClickable = true
+        v.img_feed.startAnimation(AnimationUtils.loadAnimation(activity!!, R.anim.shake))
 
         v.img_feed.setOnClickListener {
             imageUtils.imagepicker(1)

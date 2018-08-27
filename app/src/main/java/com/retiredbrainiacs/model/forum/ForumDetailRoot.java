@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.model.forum;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -20,7 +21,7 @@ private List<FormMain> formMain = null;
 private List<Object> proposalData = null;
 @SerializedName("form_messages")
 @Expose
-private List<FormMessage> formMessages = null;
+private ArrayList<FormMessage> formMessages = null;
 
 public String getStatus() {
 return status;
@@ -54,11 +55,11 @@ public void setProposalData(List<Object> proposalData) {
 this.proposalData = proposalData;
 }
 
-public List<FormMessage> getFormMessages() {
+public ArrayList<FormMessage> getFormMessages() {
 return formMessages;
 }
 
-public void setFormMessages(List<FormMessage> formMessages) {
+public void setFormMessages(ArrayList<FormMessage> formMessages) {
 this.formMessages = formMessages;
 }
 

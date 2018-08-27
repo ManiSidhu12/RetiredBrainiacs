@@ -1,10 +1,13 @@
 package com.retiredbrainiacs.model.forum;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class FormMessage {
+public class FormMessage implements Parcelable {
 
 @SerializedName("user_image")
 @Expose
@@ -21,6 +24,18 @@ private String contentVideoSrc;
 @SerializedName("comment")
 @Expose
 private String comment;
+
+    public String getCommentId() {
+        return commentId;
+    }
+
+    public void setCommentId(String commentId) {
+        this.commentId = commentId;
+    }
+
+    @SerializedName("comment_id")
+    @Expose
+    private String commentId;
 @SerializedName("posted_date")
 @Expose
 private String postedDate;
@@ -55,7 +70,37 @@ private List<SongUrl> songUrl = null;
 @Expose
 private List<VideoUrl> videoUrl = null;
 
-public String getUserImage() {
+    protected FormMessage(Parcel in) {
+        userImage = in.readString();
+        if (in.readByte() == 0) {
+            rating = null;
+        } else {
+            rating = in.readInt();
+        }
+        displayName = in.readString();
+        contentVideoSrc = in.readString();
+        comment = in.readString();
+        postedDate = in.readString();
+        if (in.readByte() == 0) {
+            userCanEdit = null;
+        } else {
+            userCanEdit = in.readInt();
+        }
+    }
+
+    public static final Creator<FormMessage> CREATOR = new Creator<FormMessage>() {
+        @Override
+        public FormMessage createFromParcel(Parcel in) {
+            return new FormMessage(in);
+        }
+
+        @Override
+        public FormMessage[] newArray(int size) {
+            return new FormMessage[size];
+        }
+    };
+
+    public String getUserImage() {
 return userImage;
 }
 
@@ -183,4 +228,29 @@ public void setVideoUrl(List<VideoUrl> videoUrl) {
 this.videoUrl = videoUrl;
 }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(userImage);
+        if (rating == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(rating);
+        }
+        dest.writeString(displayName);
+        dest.writeString(contentVideoSrc);
+        dest.writeString(comment);
+        dest.writeString(postedDate);
+        if (userCanEdit == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeInt(userCanEdit);
+        }
+    }
 }

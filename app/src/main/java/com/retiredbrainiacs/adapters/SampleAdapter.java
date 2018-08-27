@@ -99,7 +99,7 @@ public class SampleAdapter extends BaseExpandableListAdapter {
 	}
 
 	@Override
-	public View getChildView( int groupPosition,  int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+	public View getChildView(final int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
 		if(convertView == null) {
 			convertView = mLayoutInflater.inflate(R.layout.sub_cat_viewholder, parent, false);
 		}
@@ -143,13 +143,9 @@ int p = groupPosition;
 		text.setVisibility(View.GONE);
 			if(model.getOther() != null && !model.getOther().isEmpty()){
 				edt_add.setText(model.getOther());
-				//Log.e("text1",edt_add.getText().toString());
-
+Log.e("model",model.getOther());
 			}
-/*if(!edt_add.getText().toString().equalsIgnoreCase(model.getOther())){
-	listMain.get(groupPosition).getListChild().get(childPosition).setOther(edt_add.getText().toString());
-}*/
-		/*	edt_add.addTextChangedListener(new TextWatcher() {
+edt_add.addTextChangedListener(new TextWatcher() {
 				@Override
 				public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -162,13 +158,15 @@ int p = groupPosition;
 
 				@Override
 				public void afterTextChanged(Editable s) {
-					Log.e("positions",p+","+childPosition+"");
+
 					if(!s.toString().equalsIgnoreCase(model.getOther())){
-						model.setOther(s.toString());
-						Log.e("text2",model.getOther());
+						Log.e("iiiiiii",groupPosition+","+childPosition);
+					model.setOther(s.toString());
+					//notifyDataSetChanged();
+						//Log.e("text2",model.getOther());
 
 					}				}
-			});*/
+			});
 		}
 		else{
         edt_add.setVisibility(View.GONE);
