@@ -36,6 +36,7 @@ import java.io.StringReader
 class ForumDetailsAdapter(var ctx: Context, var formMain: ArrayList<FormMessage>, var linkname: String, var title: String, var  content: String) : RecyclerView.Adapter<ForumDetailsAdapter.ViewHolder>(){
    lateinit var listAttach : ArrayList<HashMap<String,String>>
     val actionsArray = arrayOf("Edit","Delete")
+    var page = 0
 
     var listMain : ArrayList<ArrayList<HashMap<String,String>>> = ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -51,107 +52,127 @@ class ForumDetailsAdapter(var ctx: Context, var formMain: ArrayList<FormMessage>
         holder.txtName.text = formMain[position].displayName
         holder.txtData.text = formMain[position].comment
         listAttach = ArrayList()
-        if(formMain[position].attachmentImage != null && formMain[position].attachmentImage.size > 0){
+
+        if(formMain[position].contentVideoSrc != null && !formMain[position].contentVideoSrc.isEmpty()){
+            val u2 = formMain[position].contentVideoSrc .split("/")
+            Log.e("length", "" + u2.size)
+            val u = u2[u2.size - 1]
+            val u1 = "http://img.youtube.com/vi/"+u+"/0.jpg"
+
             val map = HashMap<String,String>()
+            map.put("id",u1)
+            map.put("url", formMain[position].contentVideoSrc)
+            map.put("type", "youtube")
+            Log.e("map",map.toString())
+            listAttach.add(map)
+        }
+        if(formMain[position].attachmentImage != null && formMain[position].attachmentImage.size > 0){
 
             for( i  in 0 until formMain[position].attachmentImage.size) {
+                val map = HashMap<String,String>()
                 map.put("id", formMain[position].attachmentImage[i].id)
                 map.put("url", formMain[position].attachmentImage[i].url)
                 map.put("type", "image")
+                Log.e("map",map.toString())
+                listAttach.add(map)
+
             }
-            listAttach.add(map)
             Log.e("lista",listAttach.toString())
+        //    listMain.add(listAttach)
         }
         if(formMain[position].pdfUrl != null && formMain[position].pdfUrl.size > 0){
-            val map = HashMap<String,String>()
 
             for( i  in 0 until formMain[position].pdfUrl.size) {
+                val map = HashMap<String,String>()
                 map.put("id", formMain[position].pdfUrl[i].id)
                 map.put("url", formMain[position].pdfUrl[i].url)
                 map.put("type", "pdf")
-            }
-            listAttach.add(map)
+                listAttach.add(map)
 
+            }
+listMain.add(listAttach)
         }
         if(formMain[position].xlsUrl != null && formMain[position].xlsUrl.size > 0){
-            val map = HashMap<String,String>()
 
             for( i  in 0 until formMain[position].xlsUrl.size) {
+                val map = HashMap<String,String>()
                 map.put("id", formMain[position].xlsUrl[i].id)
                 map.put("url", formMain[position].xlsUrl[i].url)
                 map.put("type", "xls")
+                listAttach.add(map)
+
             }
-            listAttach.add(map)
 
         }
         if(formMain[position].xlsxUrl!= null && formMain[position].xlsxUrl.size > 0){
-            val map = HashMap<String,String>()
 
             for( i  in 0 until formMain[position].xlsxUrl.size) {
+                val map = HashMap<String,String>()
                 map.put("id", formMain[position].xlsxUrl[i].id)
                 map.put("url", formMain[position].xlsxUrl[i].url)
                 map.put("type", "xlsx")
+                listAttach.add(map)
             }
-            listAttach.add(map)
 
         }
         if(formMain[position].textUrl != null && formMain[position].textUrl.size > 0){
             val map = HashMap<String,String>()
 
             for( i  in 0 until formMain[position].textUrl.size) {
+                val map = HashMap<String,String>()
                 map.put("id", formMain[position].textUrl[i].id)
                 map.put("url", formMain[position].textUrl[i].url)
                 map.put("type", "text")
+                listAttach.add(map)
             }
-            listAttach.add(map)
 
         }
         if(formMain[position].docUrl != null && formMain[position].docUrl.size > 0){
-            val map = HashMap<String,String>()
 
             for( i  in 0 until formMain[position].docUrl.size) {
+                val map = HashMap<String,String>()
                 map.put("id", formMain[position].docUrl[i].id)
                 map.put("url", formMain[position].docUrl[i].url)
                 map.put("type", "doc")
+                listAttach.add(map)
             }
-            listAttach.add(map)
 
         }
         if(formMain[position].docxUrl != null && formMain[position].docxUrl.size > 0){
-            val map = HashMap<String,String>()
 
             for( i  in 0 until formMain[position].docxUrl.size) {
+                val map = HashMap<String,String>()
                 map.put("id", formMain[position].docxUrl[i].id)
                 map.put("url", formMain[position].docxUrl[i].url)
                 map.put("type", "doc")
+                listAttach.add(map)
             }
-            listAttach.add(map)
 
         }
         if(formMain[position].songUrl != null && formMain[position].songUrl.size > 0){
-            val map = HashMap<String,String>()
 
             for( i  in 0 until formMain[position].songUrl.size) {
+                val map = HashMap<String,String>()
                 map.put("id", formMain[position].songUrl[i].id)
                 map.put("url", formMain[position].songUrl[i].url)
                 map.put("type", "mp3")
+                listAttach.add(map)
             }
-            listAttach.add(map)
 
         }
         if(formMain[position].videoUrl != null && formMain[position].videoUrl.size > 0){
-            val map = HashMap<String,String>()
 
             for( i  in 0 until formMain[position].videoUrl.size) {
+                val map = HashMap<String,String>()
                 map.put("id", formMain[position].videoUrl[i].id)
                 map.put("url", formMain[position].videoUrl[i].url)
                 map.put("type", "mp4")
+                listAttach.add(map)
             }
-            listAttach.add(map)
 
         }
         listMain.add(listAttach)
-//Log.e("list",listAttach[position].toString())
+        Log.e("list",listMain[position].toString())
         if(listMain[position].size > 0) {
             initializeViews(listMain[position], holder, position)
         }
@@ -282,11 +303,11 @@ holder.itemView.setOnClickListener {
     }
 
     private fun initializeViews(dataModel: ArrayList<HashMap<String, String>>, holder: ViewHolder, position: Int) {
-        Log.e("list",listMain[position].toString())
+        Log.e("list123",dataModel.size.toString())
         holder.viewPager.visibility = View.VISIBLE
 
-        val adapter = PagerAdapterForum(dataModel)
-    holder.viewPager.setAdapter(adapter)
+        val adapter = PagerAdapterForum(ctx,dataModel)
+        holder.viewPager.setAdapter(adapter)
        //holder.viewPager.setClipToPadding(false)
    // holder.viewPager.setPadding(40, 0, 40, 0)
 

@@ -3,24 +3,38 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="wrap_content"
     >
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="5dp">
-        <ImageView
-            android:id="@+id/images"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:layout_centerInParent="true"
-         />
-        <Button
-            android:id="@+id/btn_play1"
-            android:layout_width="23dp"
-            android:layout_height="23dp"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
-            android:background="@drawable/play"/>
 
+        <RelativeLayout
+            android:id="@+id/imagesLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/images"
+                android:layout_width="wrap_content"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true" />
+
+            <Button
+                android:id="@+id/btn_play1"
+                android:layout_width="23dp"
+                android:layout_height="23dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/play"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <com.google.android.youtube.player.YouTubePlayerView
+            android:id="@+id/player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
     </RelativeLayout>
+
 
 </LinearLayout>

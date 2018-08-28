@@ -213,6 +213,7 @@ for (i in 0 until listImagesComment!!.size){
                 map["user_id"] = SharedPrefManager.getInstance(this@ForumDetails).userId
                 map["linkname"] = linkname
                 map["param"] = ""
+                map["pg"] = "9"
                 Log.e("map get details forum",map.toString())
                 return map
             }
@@ -391,21 +392,23 @@ for (i in 0 until listImagesComment!!.size){
         }
         else if( requestCode == SELECT_FILE){
             Log.e("file","file")
-             System.out.println("SELECT_DOCUMENT");
-				var selectedImageUri = data!!.data
-				selectedPath = getPath(selectedImageUri)
-				System.out.println("SELECT_VIDEO : " + selectedPath)
-				f =  File(selectedPath)
+             System.out.println("SELECT_DOCUMENT")
+            if(data != null) {
+                var selectedImageUri = data!!.data
+                selectedPath = getPath(selectedImageUri)
+                System.out.println("SELECT_VIDEO : " + selectedPath)
+                f = File(selectedPath)
 
                 // recycler_media.adapter = AttachmentAdapter(this@ForumDetails,listImages!!,"add")
 
-                 if(f != null){
-                     uploadImage(f!!.absolutePath)
-                 }
+                if (f != null) {
+                    uploadImage(f!!.absolutePath)
+                }
 
-                 // Get the file instance
-            // File file = new File(path);
-            // Initiate the upload
+                // Get the file instance
+                // File file = new File(path);
+                // Initiate the upload
+            }
 
         }
     }
@@ -746,7 +749,12 @@ val edit = AddForum(this@ForumDetails,filetype,filename)
                 map["forum_id"] = forumId
                 map["comment"] =  edt_forum_data.text.toString()
                 map["comment_id"] = commentId
-                map["attachment"] = sb!!.deleteCharAt(sb!!.length-1).toString()
+                if(sb != null && sb!!.length > 0) {
+                    map["attachment"] = sb!!.deleteCharAt(sb!!.length - 1).toString()
+                }
+                else{
+                    map["attachment"]=""
+                }
                 Log.e("map upload forum",map.toString())
                 return map
             }
