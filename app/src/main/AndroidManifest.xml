@@ -69,6 +69,10 @@
             android:screenOrientation="portrait"/>
         <activity android:name=".activities.MemoDetail"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activities.ChatListing"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".activities.Chat"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".activities.Home"
             android:label="@string/title_activity_home"

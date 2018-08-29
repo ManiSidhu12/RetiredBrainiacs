@@ -25,6 +25,7 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
@@ -47,7 +48,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class ForumDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener{
+class ForumDetails() : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener {
     var file_name :String = ""
     var filename :String = ""
     var filetype :String = ""
@@ -603,6 +604,23 @@ val edit = AddForum(this@ForumDetails,filetype,filename)
         }
     }
 
+    constructor(parcel: Parcel) : this() {
+        file_name = parcel.readString()
+        filename = parcel.readString()
+        filetype = parcel.readString()
+        bitmap = parcel.readParcelable(Bitmap::class.java.classLoader)
+        selectedPath = parcel.readString()
+        videoPath = parcel.readString()
+        fileUri = parcel.readParcelable(Uri::class.java.classLoader)
+        forumId = parcel.readString()
+        commentId = parcel.readString()
+        linkname = parcel.readString()
+        title = parcel.readString()
+        content = parcel.readString()
+        position = parcel.readInt()
+        type = parcel.readString()
+    }
+
     fun checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (ContextCompat.checkSelfPermission(this@ForumDetails, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(this@ForumDetails, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -765,6 +783,8 @@ val edit = AddForum(this@ForumDetails,filetype,filename)
         requestQueue.add(postRequest)
 
     }
+
+
 
 
 }

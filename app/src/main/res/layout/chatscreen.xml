@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <RelativeLayout
+        android:id="@+id/layout_friend"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:padding="2dp" >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/dummy_friendimage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="3dp"
+             />
+
+        <RelativeLayout
+            android:id="@+id/layout_leftmsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/dummy_friendimage"
+            android:minHeight="20dp" >
+            <TextView 
+                android:id="@+id/txt_time"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:padding="2dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="3dp"
+                android:text="2 Week ago"/>
+            <ImageView
+                android:id="@+id/arrow_friend"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="-10dp"
+                android:layout_marginTop="-2dp"
+                android:src="@drawable/nn"
+                android:layout_below="@+id/txt_time" />
+
+            <TextView
+                android:id="@+id/txt_friend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txt_time"
+                android:layout_toRightOf="@+id/arrow_friend"
+                android:background="@drawable/textview_bg"
+                android:gravity="left"
+                android:minHeight="20dp"
+                android:padding="3dp"
+                android:minWidth="30dp"
+                android:text="Hiiiiiiiii"
+                android:textColor="#FFFFFF" 
+                android:textIsSelectable="true"/>
+            
+            
+            <LinearLayout 
+                android:id="@+id/letf_image_layout"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/txt_friend"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:background="@android:color/darker_gray">
+
+            <ImageView
+                android:id="@+id/left_image_friend"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/txt_leftmsg"
+                android:scaleType="fitXY"
+                android:visibility="gone" >
+            </ImageView>
+            
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/friend_emojis"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/letf_image_layout"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone" >
+            </ImageView>
+            
+             <ImageView
+                android:id="@+id/friend_audio"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/friend_emojis"
+                android:src="@drawable/audio"
+                android:scaleType="fitXY"
+                android:visibility="gone" >
+            </ImageView>
+            <ImageView
+                android:id="@+id/friend_video"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/friend_audio"
+                android:src="@drawable/video_image"
+                android:scaleType="fitXY"
+                android:visibility="gone" >
+            </ImageView>
+            
+            <ImageView
+                android:id="@+id/friend_file"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/friend_video"
+                android:src="@drawable/pdf"
+                android:scaleType="fitXY"
+                android:visibility="gone" >
+            </ImageView>
+             
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_friend"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="15dp" >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/dummy_userimage"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="3dp"
+           />
+
+        <RelativeLayout
+            android:id="@+id/layout_rightmsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/dummy_userimage" >
+            
+            
+            <TextView 
+                android:id="@+id/txt_time2"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:padding="2dp"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="3dp"
+                android:text="2 Week ago"/>
+
+            <ImageView
+                android:id="@+id/arrow_user"
+                android:layout_width="wrap_content"
+                android:layout_height="15dp"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="right"
+                android:layout_marginLeft="-13dp"
+                android:layout_marginRight="3dp"
+                android:layout_marginTop="-2dp"
+                android:layout_weight="1"
+                android:layout_below="@+id/txt_time2"
+                android:src="@drawable/on" />
+
+            <TextView
+                android:id="@+id/txt_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="30dp"
+                android:layout_below="@+id/txt_time2"
+                android:layout_toLeftOf="@+id/arrow_user"
+                android:layout_weight="4"
+                android:background="@drawable/textview_bg_other"
+                android:minHeight="30sp"
+                android:padding="5dp"
+                android:text="Done?????"
+                android:textColor="#FFFFFF" 
+                android:textIsSelectable="true"/>
+            
+            <LinearLayout 
+                android:id="@+id/right_image_layout"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/txt_user"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                android:background="@android:color/darker_gray">
+
+            <ImageView
+                android:id="@+id/right_image_user"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:scaleType="fitXY"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/txt_rightmsg"
+                android:visibility="gone" >
+            </ImageView>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/user_emojis"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/right_image_layout"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="8dp"
+                android:visibility="gone" >
+            </ImageView>
+            
+            <ImageView
+                android:id="@+id/user_audio"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/user_emojis"
+                android:src="@drawable/audio"
+                android:scaleType="fitXY"
+                android:visibility="gone" >
+            </ImageView>
+            
+             <ImageView
+                android:id="@+id/user_video"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/user_audio"
+                android:src="@drawable/video_image"
+                android:scaleType="fitXY"
+                android:visibility="gone" >
+            </ImageView>
+            
+              <ImageView
+                android:id="@+id/user_file"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/user_video"
+                android:src="@drawable/pdf"
+                android:scaleType="fitXY"
+                android:visibility="gone" >
+            </ImageView>
+            
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

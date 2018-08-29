@@ -55,13 +55,21 @@ class ForumDetailsAdapter(var ctx: Context, var formMain: ArrayList<FormMessage>
 
         if(formMain[position].contentVideoSrc != null && !formMain[position].contentVideoSrc.isEmpty()){
             val u2 = formMain[position].contentVideoSrc .split("/")
-            Log.e("length", "" + u2.size)
+            Log.e("length", "" + u2)
             val u = u2[u2.size - 1]
-            val u1 = "http://img.youtube.com/vi/"+u+"/0.jpg"
+            var u3: String = ""
+if(u.contains("?")){
+     u3= u.split("?")[0]
+}
+            else{
+    u3 = u
+            }
+            val u1 = "http://img.youtube.com/vi/"+u3+"/0.jpg"
+            Log.e("length", "" + u1)
 
             val map = HashMap<String,String>()
             map.put("id",u1)
-            map.put("url", formMain[position].contentVideoSrc)
+            map.put("url", u3)
             map.put("type", "youtube")
             Log.e("map",map.toString())
             listAttach.add(map)

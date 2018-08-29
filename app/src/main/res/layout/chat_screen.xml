@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_chat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_above="@+id/msgbottomlayout"
+        ></android.support.v7.widget.RecyclerView>
+    <RelativeLayout
+        android:id="@+id/msgbottomlayout"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        >
+
+
+        <ImageView
+            android:id="@+id/smileys_img"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerInParent="true"
+            />
+
+        <RelativeLayout
+            android:id="@+id/layout_msg"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_toEndOf="@+id/smileys_img"
+            android:layout_toStartOf="@+id/sendbtn"
+            android:layout_centerInParent="true"
+            android:layout_margin="3dp"
+            android:background="@drawable/edit_bg" >
+
+            <EditText
+                android:id="@+id/txttype"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:gravity="center|left"
+                android:hint="Type here...."
+                android:singleLine="true"
+                android:padding="5dp"
+                android:layout_marginLeft="5dp"
+                android:textColor="#949499" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/sendbtn"
+            android:layout_width="25dp"
+            android:layout_height="35dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="3dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/send" >
+
+
+        </Button>
+    </RelativeLayout>
+</RelativeLayout>

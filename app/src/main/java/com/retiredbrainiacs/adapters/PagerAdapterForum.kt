@@ -86,12 +86,19 @@ class PagerAdapterForum(var ctx : Context, var list: ArrayList<HashMap<String, S
             img.setImageResource(R.drawable.doc)
         }
         else if(list[position].get("type").equals("youtube")){
-            Picasso.with(container.context).load(list[position].get("id")).into(img)
+            Log.e("imggg",list[position].get("id"))
+            Glide.with(container.getContext())
+                    .load(list.get(position).get("id"))
+                    .centerCrop()
+                    //.placeholder(R.drawable.ic)
+                    .crossFade()
+                    .into(img)
             videoId = list[position].get("url")!!
             imgPlay.visibility = View.VISIBLE
         }
-       /* val youTubePlayerView = findViewById(R.id.player) as YouTubePlayerView
+        val youTubePlayerView = itemView.findViewById(R.id.player) as YouTubePlayerView
 
+/*
         youTubePlayerView.initialize("YOUR API KEY",
                 object : YouTubePlayer.OnInitializedListener {
                     override fun onInitializationSuccess(provider: YouTubePlayer.Provider,
@@ -105,13 +112,14 @@ class PagerAdapterForum(var ctx : Context, var list: ArrayList<HashMap<String, S
                                                          youTubeInitializationResult: YouTubeInitializationResult) {
 
                     }
-                })*/
+                })
+*/
       //  textViewCampaign.setText(wall.getName())
             imgPlay.setOnClickListener {
             layImages.visibility = View.GONE
-          //  youTube_view.visibility  = View.VISIBLE
+                youTubePlayerView.visibility  = View.VISIBLE
             //youTube_view.initialize(GlobalConstants.YOUTUBE_KEY,this)
-          /*  youTube_view.initialize(GlobalConstants.YOUTUBE_KEY, object : YouTubePlayer.OnInitializedListener {
+                youTubePlayerView.initialize(GlobalConstants.YOUTUBE_KEY, object : YouTubePlayer.OnInitializedListener {
 
                 override fun onInitializationSuccess(provider: YouTubePlayer.Provider, player: YouTubePlayer,
                                                      wasRestored: Boolean) {
@@ -122,16 +130,17 @@ class PagerAdapterForum(var ctx : Context, var list: ArrayList<HashMap<String, S
                         player1!!.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT)
 
                         //cue the 1st video by default
-                        player1!!.cueVideo(videoId)
+                        Log.e("iddd",videoId)
+                        player1!!.loadVideo(videoId)
                     }
                 }
 
                 override fun onInitializationFailure(arg0: YouTubePlayer.Provider, arg1: YouTubeInitializationResult) {
 
                     //print or show error if initializ  ation failed
-                    Log.e("aaakk", "Youtube Player View initialization failed")
+                    Log.e("aaakk", arg0.toString())
                 }
-            })*/
+            })
         }
         container.addView(itemView)
         return itemView

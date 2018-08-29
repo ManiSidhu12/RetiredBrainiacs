@@ -29,11 +29,18 @@
                 android:background="@drawable/play"
                 android:visibility="gone" />
         </RelativeLayout>
-
+        <!-- <com.google.android.youtube.player.YouTubeThumbnailView
+            android:id="@+id/youtube_view"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_centerHorizontal="true"
+            />-->
         <com.google.android.youtube.player.YouTubePlayerView
             android:id="@+id/player"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="170dp"
+            android:visibility="gone"
+            android:layout_centerHorizontal="true" />
     </RelativeLayout>
 
 
