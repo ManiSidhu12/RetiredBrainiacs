@@ -22,7 +22,6 @@ import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.chat.ChatRoot
 import kotlinx.android.synthetic.main.chat_screen.*
 import java.io.StringReader
-import com.retiredbrainiacs.R.drawable.view
 import android.app.Activity
 import android.text.Editable
 import android.view.inputmethod.InputMethodManager
@@ -38,7 +37,7 @@ class Chat : AppCompatActivity(){
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.chat_screen)
-recycler_chat.layoutManager = LinearLayoutManager(this)
+        recycler_chat.layoutManager = LinearLayoutManager(this)
         if(intent.extras != null && intent.extras.getString("linkname") != null){
             linkname = intent.extras.getString("linkname")
             to_id = intent.extras.getString("toId")
@@ -60,7 +59,7 @@ recycler_chat.layoutManager = LinearLayoutManager(this)
                 if (CommonUtils.getConnectivityStatusString(this).equals("true")) {
                     val imm : InputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                     imm.hideSoftInputFromWindow(txttype.windowToken, 0)
-sendMessage()
+                    sendMessage()
                 } else {
                     CommonUtils.openInternetDialog(this)
                 }
@@ -83,7 +82,7 @@ sendMessage()
                 if(root.chatList != null && root.chatList.size > 0){
                     //   recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails, root.commentList, edt_cmnt)
                  adap = ChatAdapter(this,root.chatList)
-recycler_chat.adapter = adap
+                 recycler_chat.adapter = adap
                 }
 
             }

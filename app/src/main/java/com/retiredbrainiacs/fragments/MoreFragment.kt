@@ -54,7 +54,7 @@ startActivity(Intent(activity!!,StoreActivity::class.java))
 
     }
     v.lay_archives_pop.setOnClickListener {
-        startActivity(Intent(activity!!,Archives::class.java))
+        startActivity(Intent(activity!!,TimeLine::class.java))
 
     }
     v.lay_memorial_pop.setOnClickListener {

@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.fragments
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,6 +13,7 @@ import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.activities.ChatListing
 import com.retiredbrainiacs.common.Common
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.friends_screen.*
@@ -50,6 +52,11 @@ class FriendsFragment : Fragment(){
 
 
     fun work(){
+        v.img_msg_friends.setOnClickListener {
+
+            startActivity(Intent(activity!!, ChatListing::class.java))
+
+        }
         v.lay_all_friend.setOnClickListener {
             showSelection(v.txt_all_friend, v.img_all_friend, v.txt_request, v.txt_accept, v.img_request, v.img_accept, v.lay_all_friend, v.lay_request_friend, v.lay_accept_friend)
             fragmentManager!!.beginTransaction().replace(R.id.frame_friends,AllFriendsFragment()).commit()

@@ -14,6 +14,17 @@ private String status;
 @SerializedName("message")
 @Expose
 private String message;
+    @SerializedName("list_cat")
+    @Expose
+    private List<ListCat> listCat = null;
+    public List<ListCat> getListCat() {
+        return listCat;
+    }
+
+    public void setListCat(List<ListCat> listCat) {
+        this.listCat = listCat;
+    }
+
 
     public String getLikeCount() {
         return likeCount;

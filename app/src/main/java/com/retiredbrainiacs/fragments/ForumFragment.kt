@@ -2,6 +2,7 @@ package com.retiredbrainiacs.fragments
 
 import android.app.Dialog
 import android.app.ProgressDialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.activities.ChatListing
 import com.retiredbrainiacs.adapters.ForumAdapter
 import com.retiredbrainiacs.apis.ApiClient
 import com.retiredbrainiacs.apis.ApiInterface
@@ -80,6 +82,12 @@ class ForumFragment : Fragment(){
         v1.btn_logout.setOnClickListener {
 openDialog()
         }
+        v.img_msg_forum.setOnClickListener {
+
+                startActivity(Intent(activity!!, ChatListing::class.java))
+
+        }
+
         return v
     }
 

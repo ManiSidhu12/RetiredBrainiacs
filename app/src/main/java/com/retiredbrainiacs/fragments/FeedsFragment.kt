@@ -41,6 +41,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.activities.Chat
 import com.retiredbrainiacs.activities.ChatListing
 import com.retiredbrainiacs.adapters.FeedsAdapter
 import com.retiredbrainiacs.apis.AddPostAPI
@@ -185,6 +186,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
     fun work() {
         v.img_msg.setOnClickListener {
           if(toUserId != null && !toUserId.isEmpty())  {
+              startActivity(Intent(activity!!, Chat::class.java).putExtra("linkname",linkname).putExtra("toId",toUserId))
 
           }
             else{
