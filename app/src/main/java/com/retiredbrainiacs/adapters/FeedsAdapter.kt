@@ -234,7 +234,8 @@ holder.layLike.setOnClickListener {
     }
 }
     }
-fun showEditDiaolg(c: Context, postContent: String, postId: String, layoutFeed: LinearLayout, posts: MutableList<Post>, position: Int){
+ fun showEditDiaolg(c: Context, postContent: String, postId: String, layoutFeed: LinearLayout, posts: MutableList<Post>, position: Int)
+{
     val dialog = Dialog(c,R.style.Theme_Dialog)
 
     dialog.setContentView(R.layout.edit_pop_up1)

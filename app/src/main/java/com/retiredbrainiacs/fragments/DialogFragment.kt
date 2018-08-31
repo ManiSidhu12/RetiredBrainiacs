@@ -9,7 +9,7 @@ import android.view.View
 import com.retiredbrainiacs.R
 
 
-class DialogFragment : DialogFragment(){
+ class DialogFragment : DialogFragment(){
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         val rootView = inflater.inflate(R.layout.more_pop_up, container, false)
         dialog.setTitle("Simple Dialog")

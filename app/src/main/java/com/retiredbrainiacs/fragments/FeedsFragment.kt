@@ -513,9 +513,11 @@ if(resultCode == RESULT_OK){
 
             if (root.status.equals("true")) {
                 if (v != null && v.recycler_feed != null) {
-                    v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
-                    adap = FeedsAdapter(activity!!, root.posts, "post")
-                    v.recycler_feed.adapter = adap
+                    if(isVisible) {
+                        v.recycler_feed.layoutManager = LinearLayoutManager(activity!!)
+                        adap = FeedsAdapter(activity!!, root.posts, "post")
+                        v.recycler_feed.adapter = adap
+                    }
                 }
             } else {
                 Common.showToast(activity!!, root.message)

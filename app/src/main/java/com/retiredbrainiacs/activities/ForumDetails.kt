@@ -535,7 +535,7 @@ for (i in 0 until listImagesComment!!.size){
         try {
             val fis = FileInputStream(f)
 
-val edit = AddForum(this@ForumDetails,filetype,filename)
+val edit = AddForum(this@ForumDetails,filetype,filename,GlobalConstants.API_URL+"upload_forum_media")
             res = edit.doStart(fis)
 
         } catch (e: Exception) {
@@ -604,22 +604,6 @@ val edit = AddForum(this@ForumDetails,filetype,filename)
         }
     }
 
-    constructor(parcel: Parcel) : this() {
-        file_name = parcel.readString()
-        filename = parcel.readString()
-        filetype = parcel.readString()
-        bitmap = parcel.readParcelable(Bitmap::class.java.classLoader)
-        selectedPath = parcel.readString()
-        videoPath = parcel.readString()
-        fileUri = parcel.readParcelable(Uri::class.java.classLoader)
-        forumId = parcel.readString()
-        commentId = parcel.readString()
-        linkname = parcel.readString()
-        title = parcel.readString()
-        content = parcel.readString()
-        position = parcel.readInt()
-        type = parcel.readString()
-    }
 
     fun checkPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

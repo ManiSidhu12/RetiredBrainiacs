@@ -22,10 +22,12 @@ public class AddForum {
     Context ctx;
     String msg;
     String status,mediaName="",mediaUrl="";
-    public AddForum(Context c,String filetype, String filename1) {
+    String url;
+    public AddForum(Context c,String filetype, String filename1,String url) {
+        this.url = url;
         try
         {
-            connectURL = new URL(GlobalConstants.API_URL+"upload_forum_media");
+            connectURL = new URL(url);
         }
         catch (Exception ex)
         {
