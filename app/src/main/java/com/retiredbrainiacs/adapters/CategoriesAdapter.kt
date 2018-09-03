@@ -40,6 +40,7 @@ class CategoriesAdapter(var ctx: Context,var  listCat: MutableList<ListCat>) : R
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.txtCategory.text = listCat[position].name
+        holder.imgChk.visibility = View.GONE
         holder.imgDel.setOnClickListener {
 if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
     deleteCategory(ctx,listCat[position].id,listCat,position)
@@ -190,5 +191,6 @@ dialog.lay_settings_pop.visibility = View.GONE
         val txtCategory= itemView.txt_cat_nm
         val imgEdit = itemView.edit
         val imgDel = itemView.cross
+        val imgChk = itemView.img_chk
     }
 }

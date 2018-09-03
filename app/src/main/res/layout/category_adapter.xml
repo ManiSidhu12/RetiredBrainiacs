@@ -22,14 +22,14 @@
 
         <TextView
             android:id="@+id/txt_cat_nm"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
           android:layout_toEndOf="@+id/img_chk"
             android:layout_centerInParent="true"
             android:layout_marginStart="3dp"
             android:text="Home"
             android:textSize="16sp"
-            android:gravity="center"
+            android:gravity="start|center"
             android:padding="3dp"
             android:textColor="@android:color/black"/>
         <LinearLayout

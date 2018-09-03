@@ -143,6 +143,7 @@ int p = groupPosition;
 		text.setVisibility(View.GONE);
 			if(model.getOther() != null && !model.getOther().isEmpty()){
 				edt_add.setText(model.getOther());
+				edt_add.setTag(groupPosition);
 Log.e("model",model.getOther());
 			}
 edt_add.addTextChangedListener(new TextWatcher() {
@@ -158,8 +159,9 @@ edt_add.addTextChangedListener(new TextWatcher() {
 
 				@Override
 				public void afterTextChanged(Editable s) {
+					Log.e("chck",groupPosition+","+edt_add.getTag()+",,,,"+s+",..."+model.getOther());
 
-					if(!s.toString().equalsIgnoreCase(model.getOther())){
+					if(!s.toString().equalsIgnoreCase(model.getOther()) && edt_add.getTag().equals(groupPosition)){
 						Log.e("iiiiiii",groupPosition+","+childPosition);
 					model.setOther(s.toString());
 					//notifyDataSetChanged();
