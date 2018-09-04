@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
 import android.support.v4.content.ContextCompat
@@ -38,6 +39,7 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
     val actionsArray = arrayOf("Edit","Delete")
     var mediaPlayer : MediaPlayer ?= null
     lateinit var root : ResponseRoot
+    var type1 = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v = LayoutInflater.from(ctx).inflate(R.layout.home_feed_adapter,parent,false)
@@ -102,8 +104,21 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
 holder.audioImg.visibility = View.VISIBLE
             holder.audioImg.setImageResource(R.drawable.mp3)
             holder.imgPost.visibility = View.GONE
+            holder.audioImg
         }
-
+holder.audioImg.setOnClickListener {
+    if(posts[position].audio != null && !posts[position].audio.isEmpty()){
+try {
+        var uri = Uri.parse(posts[position].audio)
+        var player =  MediaPlayer()
+        player.setAudioStreamType(AudioManager.STREAM_MUSIC)
+        player.setDataSource(ctx, uri)
+        player.prepare()
+        player.start()
+    } catch( e: Exception) {
+        System.out.println(e.toString());
+    }    }
+}
         if(posts[position].likedByMe.equals("1")){
             holder.txtLike.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
             holder.txtLikeCount.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
@@ -154,7 +169,26 @@ holder.audioImg.visibility = View.VISIBLE
             adapterActions.setDropDownViewResource(R.layout.spinner_txt)
             holder.spinActions.adapter = adapterActions
             holder.spinActions.adapter = NothingSelectedSpinnerAdapter(adapterActions, R.layout.actions, ctx)
+holder.spinPrivacy.onItemSelectedListener = object  : AdapterView.OnItemSelectedListener{
+    override fun onNothingSelected(parent: AdapterView<*>?) {
 
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position1: Int, id: Long) {
+        if(holder.spinPrivacy.selectedItem != null){
+            if(holder.spinPrivacy.selectedItem.toString().equals("0")){
+                type1= "0"
+            }
+            else{
+                type1= "1"
+            }
+            var d : Dialog ?= null
+            editPost(ctx,posts[position].usersWallPostId,holder.layoutFeed,posts,position,holder.txtPost.text.toString(),d!!,type1)
+
+        }
+    }
+
+}
         }
      holder.spinActions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -252,6 +286,16 @@ holder.layLike.setOnClickListener {
     val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1,privacyArray)
     adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
     dialog.spin_privacy_pop.adapter = adapterPrivacy
+    if(posts[position].postType.equals("1")){
+        dialog.spin_privacy_pop.setSelection(adapterPrivacy.getPosition("Private"))
+        type1 = "1"
+    }
+    else {
+        dialog.spin_privacy_pop.setSelection(adapterPrivacy.getPosition("Public"))
+
+        type1 = "0"
+    }
+
     dialog.show()
 dialog.drop.setOnClickListener {
     dialog.spin_privacy_pop.performClick()
@@ -267,13 +311,22 @@ dialog.imageView1.setOnClickListener {
         {
             Common.showToast(c,"Please type something to edit...")
         }
-        else if(postContent.equals(dialog.edt_post.text.toString())){
+      /*  else if(postContent.equals(dialog.edt_post.text.toString())){
             Common.showToast(c,"Please update the content to edit...")
 
-        }
+        }*/
         else{
+            if(dialog.spin_privacy_pop.selectedItem != null){
+
+               if(dialog.spin_privacy_pop.selectedItem.toString().equals("Public")) {
+type1 = "0"
+               }
+                else{
+type1 = "1"
+               }
+            }
             if(CommonUtils.getConnectivityStatusString(c).equals("true")){
-              editPost(c,postId,layoutFeed,posts,position,dialog.edt_post.text.toString(),dialog)
+              editPost(c,postId,layoutFeed,posts,position,dialog.edt_post.text.toString(),dialog,type1)
             }
             else{
                 CommonUtils.openInternetDialog(c)
@@ -415,7 +468,7 @@ globalDialog.dismiss()
 
     }
 
-    private fun editPost(ctx: Context, id: String, layoutFeed: LinearLayout, post: MutableList<Post>, position: Int, content: String, dialog: Dialog){
+    private fun editPost(ctx: Context, id: String, layoutFeed: LinearLayout, post: MutableList<Post>, position: Int, content: String, dialog: Dialog,type : String){
         var url = GlobalConstants.API_URL1+"?action=wall_post_edit_content"
         val pd = ProgressDialog.show(ctx,"","Loading",false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -426,9 +479,12 @@ globalDialog.dismiss()
             var  root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if(root1.status.equals("true")){
-                dialog.dismiss()
+                if(dialog != null) {
+                    dialog.dismiss()
+                }
                 Common.showToast(ctx,root1.message)
                 //layoutFeed.visibility = View.GONE
+                post[position].postType = type
                 post[position].postContent = content
                 notifyDataSetChanged()
 
@@ -448,6 +504,7 @@ globalDialog.dismiss()
 
                 map["post_content"] = content
                 map["post_id"] = id
+                map["post_type"] = type
                 Log.e("map edit post",map.toString())
                 return map
             }

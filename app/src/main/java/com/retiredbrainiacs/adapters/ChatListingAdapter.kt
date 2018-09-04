@@ -25,6 +25,7 @@ class ChatListingAdapter (var ctx: Context, var chatFriends: MutableList<ChatFri
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.txtName.text = chatFriends[position].displayName
         holder.txtMsg.text = chatFriends[position].lastMessage
+        holder.time.text = chatFriends[position].insertedDate
 
         if(chatFriends[position].image != null && !chatFriends[position].image.isEmpty()){
             Picasso.with(ctx).load(chatFriends[position].image).into(holder.img)
@@ -38,5 +39,6 @@ class ChatListingAdapter (var ctx: Context, var chatFriends: MutableList<ChatFri
         val txtName = itemView.txtName_friend
         val txtMsg = itemView.txtMsg_friend
         val img = itemView.profile_image
+        val time = itemView.txtime
     }
     }

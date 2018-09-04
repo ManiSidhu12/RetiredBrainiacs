@@ -17,16 +17,12 @@
 
     <Button
         android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="5dp"
-        android:text="Add Forum"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:textAllCaps="false"
-        android:background="@android:color/transparent"
+        android:background="@drawable/addicon"
         android:visibility="gone"
          />
 

@@ -184,6 +184,8 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
     }
 
     fun work() {
+
+
         v.img_msg.setOnClickListener {
           if(toUserId != null && !toUserId.isEmpty())  {
               startActivity(Intent(activity!!, Chat::class.java).putExtra("linkname",linkname).putExtra("toId",toUserId))
@@ -404,6 +406,8 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
                 Log.e("SELECT_AUDIO Path : ",selectedPath)
                 f =  File(selectedPath)
                 Log.e("audio file",f.toString())
+                v.img_feed.setImageResource(R.drawable.mp3)
+
             }
 
         }
@@ -417,6 +421,8 @@ if(resultCode == RESULT_OK){
     Log.e("SELECT_AUDIO Path : ",selectedPath)
     f =  File(selectedPath)
     Log.e("audio file",f.toString())
+    v.img_feed.setImageResource(R.drawable.mp3)
+
 }
         }
 

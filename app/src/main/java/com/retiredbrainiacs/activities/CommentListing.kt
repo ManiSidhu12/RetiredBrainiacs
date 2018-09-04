@@ -255,7 +255,7 @@ post.likedByMe = "1"
             var   root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if(root.status.equals("true")){
-                Common.showToast(this@CommentListing,root.message)
+                Common.showToast(this@CommentListing,"Updated Successfully....")
            //     txtCmnt.text = edt_cmnt.text.toString()
 
                 commentList[GlobalConstants.pos].comment = edt_cmnt.text.toString()

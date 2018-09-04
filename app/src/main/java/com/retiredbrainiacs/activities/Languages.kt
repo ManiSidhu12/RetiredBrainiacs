@@ -57,7 +57,7 @@ class Languages : AppCompatActivity() {
         supportActionBar?.setCustomView(R.layout.custom_action_bar)
 
         var v = supportActionBar!!.customView
-        v.titletxt.text = "Language"
+        v.titletxt.text = "Languages"
 
         // ============ Retrofit ===========
         service = ApiClient.getClient().create(ApiInterface::class.java)
@@ -225,20 +225,24 @@ class Languages : AppCompatActivity() {
 
                         if (modelList[i].heading.equals("spoken_languages")) {
                             Log.e("values", "inside" + modelList[i].listChild.size)
+
                             if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
+                                sb = StringBuilder()
                                 map["spoken_other_lang"] = modelList[i].listChild[j].other
-                                // sb.append("10,")
+                               sb.append("10,")
                             }
                         } else if (modelList[i].heading.equals("known_languages")) {
                             if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
+                                sb = StringBuilder()
                                 map["known_other_lang"] = modelList[i].listChild[j].other
-                                //  sb.append("10,")
+                                 sb.append("10,")
 
                             }
                         } else if (modelList[i].heading.equals("preferred_languages")) {
                             if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
+                                sb = StringBuilder()
                                 map["pref_other_lang"] = modelList[i].listChild[j].other
-                                //  sb.append("10,")
+                              sb.append("10,")
 
                             }
                         }

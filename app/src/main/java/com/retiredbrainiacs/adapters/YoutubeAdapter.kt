@@ -2,6 +2,8 @@ package com.retiredbrainiacs.adapters
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -46,8 +48,37 @@ if(position == 0){
             }
 
         }
-        listYoutube.model[position].youtube_title = holder.edtUrl.text.toString()
-        listYoutube.model[position].youtube_desc = holder.edt_desc.text.toString()
+
+        holder.edtUrl.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                listYoutube.model[position].youtube_title = holder.edtUrl.text.toString()
+
+            }
+
+        })
+        holder.edt_desc.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                listYoutube.model[position].youtube_desc = holder.edt_desc.text.toString()
+
+            }
+
+        })
+
+        Log.e("titles",listYoutube.model[position].youtube_title)
     }
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {

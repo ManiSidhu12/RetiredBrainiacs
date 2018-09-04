@@ -189,7 +189,7 @@
                     android:layout_toEndOf="@+id/attach"
                     android:layout_centerHorizontal="true"
                     android:background="@android:color/transparent"
-                    android:hint="Write something on this page.."
+                    android:hint="Post Ideas Stories and Pictures"
                     android:textSize="14sp"
                     android:layout_marginEnd="7dp"
                     android:layout_marginTop="10dp"/>
