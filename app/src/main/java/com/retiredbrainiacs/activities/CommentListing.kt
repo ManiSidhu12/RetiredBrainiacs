@@ -19,7 +19,6 @@ import com.google.gson.Gson
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.CommentsAdapter
 import com.retiredbrainiacs.common.*
-import com.retiredbrainiacs.fragments.FeedsFragment
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.CommentList
 import com.retiredbrainiacs.model.feeds.Post
@@ -73,8 +72,8 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
         commentList = CommentListing.cmntList
             post = CommentListing.posts[positionPost]
             txt_like_count_detail.text = post.likeCount
-            txt_cmnt_count_detail.text = post.commentCount
-            Log.e("count",post.likeCount)
+            txt_cmnt_count_detail.text = post.commentList.size.toString()
+            Log.e("count",post.commentCount)
             if(post.likedByMe.equals("1")){
                 txt_like_count_detail.text = post.likeCount
 
@@ -94,7 +93,7 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
             var dividerItemDecoration = DividerItemDecoration(this@CommentListing, 1)
             recycler_cmnts.addItemDecoration(dividerItemDecoration)
 
-             adap = CommentsAdapter(this@CommentListing,commentList,edt_cmnt,btn_post,post_id)
+             adap = CommentsAdapter(this@CommentListing,commentList,edt_cmnt,btn_post,post_id,txt_cmnt_count_detail)
              recycler_cmnts.adapter = adap
         }
 
@@ -149,7 +148,7 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
                     recycler_cmnts.layoutManager = LinearLayoutManager(this@CommentListing)
                     var dividerItemDecoration = DividerItemDecoration(this@CommentListing, 1)
                     recycler_cmnts.addItemDecoration(dividerItemDecoration)
-                    adap = CommentsAdapter(this@CommentListing, commentList,edt_cmnt,btn_post,post_id)
+                    adap = CommentsAdapter(this@CommentListing, commentList, edt_cmnt, btn_post, post_id, txt_cmnt_count_detail)
                     recycler_cmnts.adapter = adap
 
                 // CommentListing.posts[CommentListing.positionPost].commentList = root1.commentList

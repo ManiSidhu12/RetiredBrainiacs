@@ -43,6 +43,7 @@ class Languages : AppCompatActivity() {
     //==============
 
     lateinit var sb: StringBuilder
+    lateinit var sbOther: StringBuilder
     lateinit var modelList: ArrayList<MainModel>
 
     lateinit var root: ResponseRoot
@@ -217,6 +218,7 @@ class Languages : AppCompatActivity() {
             map["user_id"] = SharedPrefManager.getInstance(this@Languages).userId
             for (i in 0 until modelList.size) {
                 sb = StringBuilder()
+                sbOther = StringBuilder()
                 if (modelList[i].listChild != null && modelList[i].listChild.size > 0) {
                     for (j in 0 until modelList[i].listChild.size) {
                         if (modelList[i].listChild[j].chkStatus.equals("1")) {
@@ -227,22 +229,22 @@ class Languages : AppCompatActivity() {
                             Log.e("values", "inside" + modelList[i].listChild.size)
 
                             if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
-                                sb = StringBuilder()
+                              sbOther = StringBuilder()
                                 map["spoken_other_lang"] = modelList[i].listChild[j].other
-                               sb.append("10,")
+                               sbOther.append("10,")
                             }
                         } else if (modelList[i].heading.equals("known_languages")) {
                             if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
-                                sb = StringBuilder()
+                               sbOther = StringBuilder()
                                 map["known_other_lang"] = modelList[i].listChild[j].other
-                                 sb.append("10,")
+                                 sbOther.append("10,")
 
                             }
                         } else if (modelList[i].heading.equals("preferred_languages")) {
                             if (modelList[i].listChild[j].other != null && !modelList[i].listChild[j].other.isEmpty()) {
-                                sb = StringBuilder()
+                               sbOther = StringBuilder()
                                 map["pref_other_lang"] = modelList[i].listChild[j].other
-                              sb.append("10,")
+                              sbOther.append("10,")
 
                             }
                         }
@@ -253,7 +255,17 @@ class Languages : AppCompatActivity() {
                 if (sb.length > 0) {
                     sb.deleteCharAt(sb.length - 1)
                 }
-                map[modelList[i].heading] = sb.toString()
+                if (sbOther != null && sbOther.length > 0) {
+                    sbOther.deleteCharAt(sbOther.length - 1)
+                }
+                if(sb.toString().contains("10")) {
+                    map[modelList[i].heading] = sb.toString()
+                }
+                else{
+                    map[modelList[i].heading] = sb.toString()+","+sbOther.toString()
+
+                }
+
             }
 
         }

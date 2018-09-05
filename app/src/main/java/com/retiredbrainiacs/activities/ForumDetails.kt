@@ -214,7 +214,7 @@ for (i in 0 until listImagesComment!!.size){
                 map["user_id"] = SharedPrefManager.getInstance(this@ForumDetails).userId
                 map["linkname"] = linkname
                 map["param"] = ""
-                map["pg"] = "9"
+                map["pg"] = "0"
                 Log.e("map get details forum",map.toString())
                 return map
             }
@@ -230,9 +230,9 @@ for (i in 0 until listImagesComment!!.size){
         builder = AlertDialog.Builder(this@ForumDetails)
         builder.setTitle("Add Photo!")
 
-        builder.setItems(items, DialogInterface.OnClickListener { dialog, item ->
+        builder.setItems(items,{ dialog, item ->
             if (items[item] == "Camera") {
-      openAlert(arrayOf<CharSequence>("Capture Image","Take Video", "Cancel"))
+      openAlert(arrayOf("Capture Image","Take Video", "Cancel"))
 
             }   else if (items[item] == "Files") {
 

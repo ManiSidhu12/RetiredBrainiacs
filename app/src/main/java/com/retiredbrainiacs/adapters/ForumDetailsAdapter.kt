@@ -5,7 +5,10 @@ import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.support.v4.view.ViewPager
 import android.support.v7.widget.RecyclerView
+import android.text.Html
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +16,8 @@ import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
+import android.widget.TextView
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -37,6 +42,7 @@ class ForumDetailsAdapter(var ctx: Context, var formMain: ArrayList<FormMessage>
    lateinit var listAttach : ArrayList<HashMap<String,String>>
     val actionsArray = arrayOf("Edit","Delete")
     var page = 0
+    lateinit var dots : ArrayList<TextView>
 
     var listMain : ArrayList<ArrayList<HashMap<String,String>>> = ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -182,7 +188,8 @@ listMain.add(listAttach)
         listMain.add(listAttach)
         Log.e("list",listMain[position].toString())
         if(listMain[position].size > 0) {
-            initializeViews(listMain[position], holder, position)
+
+            initializeViews(ctx,listMain[position], holder, position)
         }
         else{
             holder.viewPager.visibility = View.GONE
@@ -230,6 +237,24 @@ holder.itemView.setOnClickListener {
 
 
     }
+
+    private fun addBottomDots(currentPage: Int, ll_dots: LinearLayout, ctx: Context, dataModel: ArrayList<HashMap<String, String>>,pos : Int) {
+      dots = ArrayList()
+        ll_dots.removeAllViews()
+        Log.e("size",dataModel.size.toString())
+        for (i in 0 until dataModel.size) {
+            dots.add(TextView(ctx))
+           // dots[i] = TextView(ctx)
+            dots[i].setText(Html.fromHtml("&#8226;"))
+            dots[i].setTextSize(35f)
+            dots[i].setTextColor(Color.parseColor("#ababab"))
+            ll_dots.addView(dots[i])
+        }
+
+        if (dots.size > 0)
+            dots[currentPage].setTextColor(Color.parseColor("#232f3e"))
+    }
+
     fun showDialogMsg(c: Context, id: String, position: Int, formMain: ArrayList<FormMessage>) {
         val globalDialog = Dialog(c, R.style.Theme_Dialog)
         globalDialog.setContentView(R.layout.dialog_global)
@@ -310,7 +335,7 @@ holder.itemView.setOnClickListener {
 
     }
 
-    private fun initializeViews(dataModel: ArrayList<HashMap<String, String>>, holder: ViewHolder, position: Int) {
+    private fun initializeViews(ctx : Context,dataModel: ArrayList<HashMap<String, String>>, holder: ViewHolder, position1: Int) {
         Log.e("list123",dataModel.size.toString())
         holder.viewPager.visibility = View.VISIBLE
 
@@ -318,6 +343,21 @@ holder.itemView.setOnClickListener {
         holder.viewPager.setAdapter(adapter)
        //holder.viewPager.setClipToPadding(false)
    // holder.viewPager.setPadding(40, 0, 40, 0)
+        addBottomDots(0,holder.ll_dots,ctx,dataModel,position1)
+        holder.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
+            override fun onPageScrollStateChanged(state: Int) {
+
+            }
+
+            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+            }
+
+            override fun onPageSelected(position: Int) {
+
+                addBottomDots(position,holder.ll_dots,ctx,dataModel,position1)
+            }
+
+        })
 
     }
 
@@ -330,5 +370,7 @@ holder.itemView.setOnClickListener {
         val viewPager = itemView.vp_slider
         val layActions = itemView.rightLay_forum
         val spinnerAction = itemView.spin_actions
+        val ll_dots = itemView.ll_dots
+
     }
 }

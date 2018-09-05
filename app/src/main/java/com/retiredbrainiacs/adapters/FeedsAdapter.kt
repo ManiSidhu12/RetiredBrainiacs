@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.*
 import android.widget.*
@@ -33,6 +34,8 @@ import kotlinx.android.synthetic.main.dialog_global.*
 import kotlinx.android.synthetic.main.edit_pop_up1.*
 import kotlinx.android.synthetic.main.home_feed_adapter.view.*
 import java.io.StringReader
+import java.text.SimpleDateFormat
+import java.util.*
 
 class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : String): RecyclerView.Adapter<FeedsAdapter.ViewHolder>(){
     val privacyArray = arrayOf("Public","Private")
@@ -40,7 +43,7 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
     var mediaPlayer : MediaPlayer ?= null
     lateinit var root : ResponseRoot
     var type1 = ""
-
+var dialog : Dialog ? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v = LayoutInflater.from(ctx).inflate(R.layout.home_feed_adapter,parent,false)
         return ViewHolder(v)
@@ -60,12 +63,25 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
         Common.setFontBtnRegular(ctx,holder.btnPost)
         Common.setFontRegular(ctx,holder.edtCmnt)
         holder.txtPost.text = posts[position].postContent
+        var  sdf =  SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
+var time = sdf!!.parse(posts[position].postingDate).getTime();
+var now = System.currentTimeMillis();
+
+var ago = DateUtils.getRelativeTimeSpanString(time, now, DateUtils.DAY_IN_MILLIS)
 
         holder.txtUserName.text = posts[position].wallPostUserName
         holder.txtLikeCount.text = posts[position].likeCount
         holder.txtCmntCount.text = posts[position].commentList.size.toString()
         val date = posts[position].postingDate.replace(" ",",")
-        holder.txtTime.text = date.split(",")[0]
+        holder.txtTime.text = ago
+
+        if(posts[position].audio.isEmpty() && posts[position].video.isEmpty() && posts[position].image.isEmpty()){
+            holder.imgLayout.visibility = View.GONE
+        }
+        else{
+            holder.imgLayout.visibility = View.VISIBLE
+        }
         if(SharedPrefManager.getInstance(ctx).userId.equals(posts[position].fromUserId)){
             holder.laySettings.visibility = View.VISIBLE
             holder.layActions.visibility = View.VISIBLE
@@ -169,26 +185,55 @@ try {
             adapterActions.setDropDownViewResource(R.layout.spinner_txt)
             holder.spinActions.adapter = adapterActions
             holder.spinActions.adapter = NothingSelectedSpinnerAdapter(adapterActions, R.layout.actions, ctx)
-holder.spinPrivacy.onItemSelectedListener = object  : AdapterView.OnItemSelectedListener{
+            //=====
+            holder.spinPrivacy.setOnTouchListener({ v:View, event:MotionEvent->
+
+                holder.spinPrivacy.setOnItemSelectedListener(object:AdapterView.OnItemSelectedListener {
+                  override  fun onItemSelected(parent:AdapterView<*>, view:View, position1:Int, id:Long) {
+                      if(holder.spinPrivacy.selectedItem != null){
+                          if(holder.spinPrivacy.selectedItem.toString().equals(type1))
+                              if(holder.spinPrivacy.selectedItem.toString().equals("0")){
+                                  type1= "0"
+                              }
+                              else{
+                                  type1= "1"
+                              }
+
+                          editPost(ctx,posts[position].usersWallPostId,posts,position,holder.txtPost.text.toString(),type1)
+
+                      }
+
+                  }
+                  override  fun onNothingSelected(parent:AdapterView<*>) {
+                    }
+                })
+                false
+            })
+            //=====
+/*
+  holder.spinPrivacy.onItemSelectedListener = object  : AdapterView.OnItemSelectedListener{
     override fun onNothingSelected(parent: AdapterView<*>?) {
 
     }
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position1: Int, id: Long) {
         if(holder.spinPrivacy.selectedItem != null){
+            if(holder.spinPrivacy.selectedItem.toString().equals(type1))
             if(holder.spinPrivacy.selectedItem.toString().equals("0")){
                 type1= "0"
             }
             else{
                 type1= "1"
             }
-            var d : Dialog ?= null
-            editPost(ctx,posts[position].usersWallPostId,holder.layoutFeed,posts,position,holder.txtPost.text.toString(),d!!,type1)
+
+         editPost(ctx,posts[position].usersWallPostId,posts,position,holder.txtPost.text.toString(),type1)
 
         }
     }
 
+
 }
+*/
         }
      holder.spinActions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -197,10 +242,10 @@ holder.spinPrivacy.onItemSelectedListener = object  : AdapterView.OnItemSelected
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
         if(holder.spinActions.selectedItem != null) {
             if (holder.spinActions.selectedItem.equals("Delete")) {
-                showDialogMsg(ctx, posts[position].usersWallPostId, holder.layoutFeed, posts, position)
+                showDialogMsg(ctx, posts[position].usersWallPostId, holder.layoutFeed, posts, position,holder.spinActions)
             }
             else{
-                showEditDiaolg(ctx,posts[position].postContent, posts[position].usersWallPostId,holder.layoutFeed, posts, position)
+                showEditDiaolg(ctx,posts[position].postContent, posts[position].usersWallPostId, posts, position)
                 val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1,actionsArray)
                 adapterActions.setDropDownViewResource(R.layout.spinner_txt)
                 holder.spinActions.adapter = adapterActions
@@ -268,46 +313,46 @@ holder.layLike.setOnClickListener {
     }
 }
     }
- fun showEditDiaolg(c: Context, postContent: String, postId: String, layoutFeed: LinearLayout, posts: MutableList<Post>, position: Int)
+ fun showEditDiaolg(c: Context, postContent: String, postId: String, posts: MutableList<Post>, position: Int)
 {
-    val dialog = Dialog(c,R.style.Theme_Dialog)
+     dialog = Dialog(c,R.style.Theme_Dialog)
 
-    dialog.setContentView(R.layout.edit_pop_up1)
-    dialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+    dialog!!.setContentView(R.layout.edit_pop_up1)
+    dialog!!.window!!.setBackgroundDrawableResource(android.R.color.transparent)
 
     if(SharedPrefManager.getInstance(c).userImg != null && !SharedPrefManager.getInstance(c).userImg.isEmpty()){
-        Picasso.with(c).load(SharedPrefManager.getInstance(c).userImg).into(dialog.img_user_pop)
+        Picasso.with(c).load(SharedPrefManager.getInstance(c).userImg).into(dialog!!.img_user_pop)
     }
     else{
-        dialog.img_user_pop.setImageResource(R.drawable.dummyuser)
+        dialog!!.img_user_pop.setImageResource(R.drawable.dummyuser)
     }
-    dialog.edt_post.text = Editable.Factory.getInstance().newEditable(postContent)
-    dialog.edt_post.setSelection(dialog.edt_post.text.length)
+    dialog!!.edt_post.text = Editable.Factory.getInstance().newEditable(postContent)
+    dialog!!.edt_post.setSelection(dialog!!.edt_post.text.length)
     val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1,privacyArray)
     adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
-    dialog.spin_privacy_pop.adapter = adapterPrivacy
+    dialog!!.spin_privacy_pop.adapter = adapterPrivacy
     if(posts[position].postType.equals("1")){
-        dialog.spin_privacy_pop.setSelection(adapterPrivacy.getPosition("Private"))
+        dialog!!.spin_privacy_pop.setSelection(adapterPrivacy.getPosition("Private"))
         type1 = "1"
     }
     else {
-        dialog.spin_privacy_pop.setSelection(adapterPrivacy.getPosition("Public"))
+        dialog!!.spin_privacy_pop.setSelection(adapterPrivacy.getPosition("Public"))
 
         type1 = "0"
     }
 
-    dialog.show()
-dialog.drop.setOnClickListener {
-    dialog.spin_privacy_pop.performClick()
+    dialog!!.show()
+dialog!!.drop.setOnClickListener {
+    dialog!!.spin_privacy_pop.performClick()
 }
-dialog.imageView1.setOnClickListener {
-    dialog.dismiss()
+dialog!!.imageView1.setOnClickListener {
+    dialog!!.dismiss()
 }
-    dialog.dialoglay.setOnClickListener {
-        dialog.dismiss()
+    dialog!!.dialoglay.setOnClickListener {
+        dialog!!.dismiss()
     }
-    dialog.btn_post_pop.setOnClickListener {
-        if(dialog.edt_post.text.toString().isEmpty())
+    dialog!!.btn_post_pop.setOnClickListener {
+        if(dialog!!.edt_post.text.toString().isEmpty())
         {
             Common.showToast(c,"Please type something to edit...")
         }
@@ -316,9 +361,9 @@ dialog.imageView1.setOnClickListener {
 
         }*/
         else{
-            if(dialog.spin_privacy_pop.selectedItem != null){
+            if(dialog!!.spin_privacy_pop.selectedItem != null){
 
-               if(dialog.spin_privacy_pop.selectedItem.toString().equals("Public")) {
+               if(dialog!!.spin_privacy_pop.selectedItem.toString().equals("Public")) {
 type1 = "0"
                }
                 else{
@@ -326,7 +371,7 @@ type1 = "1"
                }
             }
             if(CommonUtils.getConnectivityStatusString(c).equals("true")){
-              editPost(c,postId,layoutFeed,posts,position,dialog.edt_post.text.toString(),dialog,type1)
+              editPost(c,postId,posts,position,dialog!!.edt_post.text.toString(),type1)
             }
             else{
                 CommonUtils.openInternetDialog(c)
@@ -334,7 +379,7 @@ type1 = "1"
         }
     }
 }
-    fun showDialogMsg(c: Context, id: String, layoutFeed: LinearLayout, post: MutableList<Post>, position: Int) {
+    fun showDialogMsg(c: Context, id: String, layoutFeed: LinearLayout, post: MutableList<Post>, position: Int,spin : Spinner) {
         val globalDialog = Dialog(c, R.style.Theme_Dialog)
         globalDialog.setContentView(R.layout.dialog_global)
         globalDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
@@ -358,7 +403,10 @@ type1 = "1"
         globalDialog.cancel.setOnClickListener{
 
             globalDialog.dismiss()
-
+            val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1,actionsArray)
+            adapterActions.setDropDownViewResource(R.layout.spinner_txt)
+            spin.adapter = adapterActions
+            spin.adapter = NothingSelectedSpinnerAdapter(adapterActions, R.layout.actions, ctx)
 
         }
 
@@ -468,7 +516,7 @@ globalDialog.dismiss()
 
     }
 
-    private fun editPost(ctx: Context, id: String, layoutFeed: LinearLayout, post: MutableList<Post>, position: Int, content: String, dialog: Dialog,type : String){
+    private fun editPost(ctx: Context, id: String,  post: MutableList<Post>, position: Int, content: String,type : String){
         var url = GlobalConstants.API_URL1+"?action=wall_post_edit_content"
         val pd = ProgressDialog.show(ctx,"","Loading",false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -480,7 +528,7 @@ globalDialog.dismiss()
 
             if(root1.status.equals("true")){
                 if(dialog != null) {
-                    dialog.dismiss()
+                    dialog!!.dismiss()
                 }
                 Common.showToast(ctx,root1.message)
                 //layoutFeed.visibility = View.GONE

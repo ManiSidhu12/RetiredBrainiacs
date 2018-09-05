@@ -46,9 +46,9 @@ class PagerAdapterForum(var ctx : Context, var list: ArrayList<HashMap<String, S
             if (list.get(position).get("url") != null && !list.get(position).get("url")!!.isEmpty()) {
                 Glide.with(container.getContext())
                         .load(list.get(position).get("url"))
-                        .centerCrop()
+                     //   .centerCrop()
                         //.placeholder(R.drawable.ic)
-                        .crossFade()
+                        //.crossFade()
                         .into(img)
 
             }

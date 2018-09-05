@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.adapters
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.support.v7.widget.RecyclerView
@@ -8,9 +9,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.RelativeLayout
+import android.widget.TextView
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -24,9 +27,10 @@ import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.CommentList
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.comments_adapter.view.*
+import kotlinx.android.synthetic.main.dialog_global.*
 import java.io.StringReader
 
-class CommentsAdapter(var ctx: Context, var commentList: MutableList<CommentList>, var edt_cmnt: EditText,var btn_post: Button,var post_id : String) : RecyclerView.Adapter<CommentsAdapter.ViewHolder>(){
+class CommentsAdapter(var ctx: Context, var commentList: MutableList<CommentList>, var edt_cmnt: EditText, var btn_post: Button, var post_id: String,var txt_cmnt_count_detail: TextView) : RecyclerView.Adapter<CommentsAdapter.ViewHolder>(){
     var listener: EventListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v = LayoutInflater.from(ctx).inflate(R.layout.comments_adapter,parent,false)
@@ -62,17 +66,12 @@ edt_cmnt.setSelection(edt_cmnt.text.toString().length)
 
         holder.btnDelete.setOnClickListener {
             GlobalConstants.editStatus = false
-            if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
-                deleteComment(ctx,post_id,commentList[position].commentId,holder.mainLayout,commentList,position)
-            }
-            else{
-                CommonUtils.openInternetDialog(ctx)
-            }
+          showDialogMsg(ctx,post_id,commentList[position].commentId,holder.mainLayout,commentList,position,txt_cmnt_count_detail)
         }
 
 
     }
-    private fun deleteComment(ctx: Context, post_id: String, cmnt_id: String, mainLayout: RelativeLayout, commentList: MutableList<CommentList>, position: Int){
+    private fun deleteComment(ctx: Context, post_id: String, cmnt_id: String, commentList: MutableList<CommentList>, position: Int,txt_count : TextView){
         var url = GlobalConstants.API_URL1+"?action=delete_comment"
         val pd = ProgressDialog.show(ctx,"","Loading",false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -85,6 +84,9 @@ edt_cmnt.setSelection(edt_cmnt.text.toString().length)
             if(root.status.equals("true")){
                 Common.showToast(ctx,root.message)
                 commentList.removeAt(position)
+
+                    txt_count.text = commentList.size.toString()
+
                 notifyDataSetChanged()
               //  mainLayout.visibility = View.GONE
             }
@@ -111,6 +113,47 @@ edt_cmnt.setSelection(edt_cmnt.text.toString().length)
         postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
         val requestQueue = Volley.newRequestQueue(ctx)
         requestQueue.add(postRequest)
+
+    }
+    fun showDialogMsg(c: Context, post_id: String, commentId: String, mainLayout: RelativeLayout, commentList: MutableList<CommentList>, position: Int,txt_count :TextView) {
+        val globalDialog = Dialog(c, R.style.Theme_Dialog)
+        globalDialog.setContentView(R.layout.dialog_global)
+        globalDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+
+
+
+        globalDialog.text.text = "Are you sure you want to delete?"
+
+
+
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(globalDialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        globalDialog.show()
+        globalDialog.window!!.attributes = lp
+        globalDialog.ok.text = "Yes"
+        globalDialog.cancel.text = "No"
+
+        globalDialog.cancel.setOnClickListener{
+
+            globalDialog.dismiss()
+
+
+        }
+
+
+        globalDialog.ok.setOnClickListener {
+            globalDialog.dismiss()
+            if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
+                deleteComment(ctx, post_id,commentList[position].commentId,commentList,position,txt_count)
+            }
+            else{
+                CommonUtils.openInternetDialog(ctx)
+            }
+        }
+
 
     }
 

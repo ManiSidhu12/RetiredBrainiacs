@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.adapters
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.graphics.Color
@@ -11,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.RelativeLayout
 import com.google.gson.Gson
 import com.retiredbrainiacs.R
@@ -26,6 +28,7 @@ import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.dialog_global.*
 import kotlinx.android.synthetic.main.friends_adapter.view.*
 import retrofit2.Retrofit
 
@@ -62,7 +65,8 @@ holder.lay_request.setBackgroundResource(R.drawable.memo_btn_bg)
 
         holder.lay_request.setOnClickListener {
             if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
-                removeFriend(listFriends[position].userId,"remove",holder.layMain)
+              //  removeFriend(listFriends[position].userId,"remove",holder.layMain)
+                showDialogMsg(ctx,position,holder.layMain,listFriends)
             }
             else{
                 CommonUtils.openInternetDialog(ctx)
@@ -89,7 +93,49 @@ holder.lay_request.setBackgroundResource(R.drawable.memo_btn_bg)
         }
 
     }
-    fun removeFriend(id: String,type : String,lay :  RelativeLayout) {
+    fun showDialogMsg(c: Context, position: Int, lay: RelativeLayout, listFriends: MutableList<ListFriend>) {
+        val globalDialog = Dialog(c, R.style.Theme_Dialog)
+        globalDialog.setContentView(R.layout.dialog_global)
+        globalDialog.window!!.setBackgroundDrawableResource(android.R.color.transparent)
+
+
+
+        globalDialog.text.text = "Are you sure you want to Remove?"
+
+
+
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(globalDialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+
+        globalDialog.show()
+        globalDialog.window!!.attributes = lp
+        globalDialog.ok.text = "Yes"
+        globalDialog.cancel.text = "No"
+
+        globalDialog.cancel.setOnClickListener{
+
+            globalDialog.dismiss()
+
+
+        }
+
+
+        globalDialog.ok.setOnClickListener {
+            globalDialog.dismiss()
+            if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
+                removeFriend(listFriends[position].userId,"remove",lay,listFriends,position)
+            }
+            else{
+                CommonUtils.openInternetDialog(ctx)
+            }
+        }
+
+
+    }
+
+    fun removeFriend(id: String, type: String, lay: RelativeLayout, listFriends: MutableList<ListFriend>, position: Int) {
         val pd = ProgressDialog.show(ctx, "", "Loading", false)
         Log.e("parms",id+","+ SharedPrefManager.getInstance(ctx).userId)
         service.acceptRequest(SharedPrefManager.getInstance(ctx).userId,id,type)
@@ -108,7 +154,8 @@ holder.lay_request.setBackgroundResource(R.drawable.memo_btn_bg)
                         if(t != null ){
                             if(t.status.equals("true")) {
                                 Common.showToast(ctx,t.msg)
-                                lay.visibility = View.GONE
+                        listFriends.removeAt(position)
+                                notifyDataSetChanged()
 
                             }
                             else{
