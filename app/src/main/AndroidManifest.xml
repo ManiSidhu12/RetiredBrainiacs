@@ -31,6 +31,8 @@
         <activity android:name=".activities.Languages"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>
+        <activity android:name=".activities.ArchiveDetails"
+            android:screenOrientation="portrait"/>
         <activity android:name=".activities.StoreActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="portrait"/>

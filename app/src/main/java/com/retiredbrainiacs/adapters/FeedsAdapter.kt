@@ -5,9 +5,9 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
-import android.media.AudioManager
 import android.media.MediaPlayer
 import android.net.Uri
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.RecyclerView
@@ -44,6 +44,8 @@ class FeedsAdapter(var ctx: Context, var posts : MutableList<Post>,var type : St
     lateinit var root : ResponseRoot
     var type1 = ""
 var dialog : Dialog ? = null
+    var handler =  Handler()
+    var mediaFileLengthInMilliseconds : Int = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v = LayoutInflater.from(ctx).inflate(R.layout.home_feed_adapter,parent,false)
         return ViewHolder(v)
@@ -63,12 +65,12 @@ var dialog : Dialog ? = null
         Common.setFontBtnRegular(ctx,holder.btnPost)
         Common.setFontRegular(ctx,holder.edtCmnt)
         holder.txtPost.text = posts[position].postContent
-        var  sdf =  SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-sdf.setTimeZone(TimeZone.getTimeZone("GMT"));
-var time = sdf!!.parse(posts[position].postingDate).getTime();
-var now = System.currentTimeMillis();
+        var  sdf =  SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT"))
+        var time = sdf!!.parse(posts[position].postingDate).getTime()
+        var now = System.currentTimeMillis()
 
-var ago = DateUtils.getRelativeTimeSpanString(time, now, DateUtils.DAY_IN_MILLIS)
+        var ago = DateUtils.getRelativeTimeSpanString(time, now, DateUtils.DAY_IN_MILLIS)
 
         holder.txtUserName.text = posts[position].wallPostUserName
         holder.txtLikeCount.text = posts[position].likeCount
@@ -93,11 +95,11 @@ var ago = DateUtils.getRelativeTimeSpanString(time, now, DateUtils.DAY_IN_MILLIS
         if(posts[position].usersWallPostRating != null){
             holder.rateBar.rating = posts[position].usersWallPostRating.toFloat()
         }
-   if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserImage.isEmpty()){
-    Picasso.with(ctx).load(posts[position].wallPostUserImage).into(holder.imgUser)
-   }
-  else{
-    holder.imgUser.setImageResource(R.drawable.dummyuser)
+        if(posts[position].wallPostUserImage != null && !posts[position].wallPostUserImage.isEmpty()){
+         Picasso.with(ctx).load(posts[position].wallPostUserImage).into(holder.imgUser)
+     }
+  else {
+      holder.imgUser.setImageResource(R.drawable.dummyuser)
         }
         if(posts[position].image != null && !posts[position].image.isEmpty()){
             holder.imgPost.visibility = View.VISIBLE
@@ -115,26 +117,57 @@ var ago = DateUtils.getRelativeTimeSpanString(time, now, DateUtils.DAY_IN_MILLIS
             Picasso.with(ctx).load(posts[position].videoImg).into(holder.imgPost)
         }
         else if(posts[position].audio != null && !posts[position].audio.isEmpty()){
-            holder.btnPlay.visibility = View.GONE
-         //   holder.btnPlay.setBackgroundResource(R.drawable.mp3)
-holder.audioImg.visibility = View.VISIBLE
-            holder.audioImg.setImageResource(R.drawable.mp3)
-            holder.imgPost.visibility = View.GONE
-            holder.audioImg
+            holder.imgLayout.visibility = View.GONE
+            holder.audioLay.visibility = View.VISIBLE
+            //   holder.btnPlay.setBackgroundResource(R.drawable.mp3)
+           //holder.audioImg.visibility = View.VISIBLE
+            //holder.audioImg.setImageResource(R.drawable.mp3)
+           // holder.imgPost.visibility = View.GONE
+
+
+            mediaPlayer = MediaPlayer()
+            mediaPlayer!!.setOnBufferingUpdateListener(object : MediaPlayer.OnBufferingUpdateListener{
+                override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
+                    holder.seekBar.secondaryProgress = percent
+                }
+
+            })
+            mediaPlayer!!.setOnCompletionListener(object  : MediaPlayer.OnCompletionListener{
+                override fun onCompletion(mp: MediaPlayer?) {
+                    holder.btnPause.setImageResource(R.drawable.pause)
+                }
+
+            })
+/*holder.seekBar.setOnTouchListener(object : View.OnTouchListener{
+    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
+			*//** Seekbar onTouch event handler. Method which seeks MediaPlayer to seekBar primary progress position*//*
+			if(mediaPlayer!!.isPlaying()){
+				var playPositionInMillisecconds = (mediaFileLengthInMilliseconds / 100) * holder.seekBar.getProgress()
+				mediaPlayer!!.seekTo(playPositionInMillisecconds);
+			}
+
+        return false
+    }*/
+
+//})
+            holder.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+
+               override fun onStopTrackingTouch(seekBar: SeekBar) {
+
+                }
+
+                override fun onStartTrackingTouch(seekBar: SeekBar) {
+
+                }
+
+               override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    if (mediaPlayer != null && fromUser) {
+                        mediaPlayer!!.seekTo(progress * 1000)
+                    }
+                }
+            })
         }
-holder.audioImg.setOnClickListener {
-    if(posts[position].audio != null && !posts[position].audio.isEmpty()){
-try {
-        var uri = Uri.parse(posts[position].audio)
-        var player =  MediaPlayer()
-        player.setAudioStreamType(AudioManager.STREAM_MUSIC)
-        player.setDataSource(ctx, uri)
-        player.prepare()
-        player.start()
-    } catch( e: Exception) {
-        System.out.println(e.toString());
-    }    }
-}
+
         if(posts[position].likedByMe.equals("1")){
             holder.txtLike.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
             holder.txtLikeCount.setTextColor(ContextCompat.getColor(ctx, R.color.theme_color_orange))
@@ -188,25 +221,25 @@ try {
             //=====
             holder.spinPrivacy.setOnTouchListener({ v:View, event:MotionEvent->
 
-                holder.spinPrivacy.setOnItemSelectedListener(object:AdapterView.OnItemSelectedListener {
-                  override  fun onItemSelected(parent:AdapterView<*>, view:View, position1:Int, id:Long) {
-                      if(holder.spinPrivacy.selectedItem != null){
-                          if(holder.spinPrivacy.selectedItem.toString().equals(type1))
-                              if(holder.spinPrivacy.selectedItem.toString().equals("0")){
-                                  type1= "0"
-                              }
-                              else{
-                                  type1= "1"
-                              }
+                holder.spinPrivacy.onItemSelectedListener = object:AdapterView.OnItemSelectedListener {
+                    override  fun onItemSelected(parent:AdapterView<*>, view:View, position1:Int, id:Long) {
+                        if(holder.spinPrivacy.selectedItem != null){
+                            if(holder.spinPrivacy.selectedItem.toString().equals(type1))
+                                if(holder.spinPrivacy.selectedItem.toString().equals("0")){
+                                    type1= "0"
+                                } else{
+                                    type1= "1"
+                                }
 
-                          editPost(ctx,posts[position].usersWallPostId,posts,position,holder.txtPost.text.toString(),type1)
+                            editPost(ctx,posts[position].usersWallPostId,posts,position,holder.txtPost.text.toString(),type1)
 
-                      }
+                        }
 
-                  }
-                  override  fun onNothingSelected(parent:AdapterView<*>) {
                     }
-                })
+
+                    override  fun onNothingSelected(parent:AdapterView<*>) {
+                    }
+                }
                 false
             })
             //=====
@@ -284,6 +317,8 @@ try {
                 holder.videoView.start()
             }
             else if(posts[position].audio != null && !posts[position].audio.isEmpty()){
+                holder.imgLayout.visibility = View.GONE
+                holder.audioLay.visibility = View.VISIBLE
                 if(mediaPlayer != null){
                     try {
                         mediaPlayer!!.release()
@@ -296,6 +331,8 @@ try {
                 mediaPlayer!!.setDataSource(posts[position].audio)
                 mediaPlayer!!.prepare()
                 mediaPlayer!!.start()
+                holder.txtDuration.text = "/"+mediaPlayer!!.duration.toString()
+                holder.txtCurrent.text ="0:0"
             }
         }
 
@@ -303,6 +340,34 @@ try {
             if(posts[position].image != null && !posts[position].image.isEmpty()) {
                 ctx.startActivity(Intent(ctx, FullImage::class.java).putExtra("post", posts[position]))
             }
+        }
+        holder.btnPause.setOnClickListener {
+
+			 /** ImageButton onClick event handler. Method which start/pause mediaplayer playing */
+			try {
+				mediaPlayer!!.setDataSource(posts[position].audio) // setup song from https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3 URL to mediaplayer data source
+				mediaPlayer!!.prepare(); // you must call this method after setup the datasource in setDataSource method. After calling prepare() the instance of MediaPlayer starts load data from URL to internal buffer.
+                holder.txtDuration.text = "/"+mediaPlayer!!.duration.toString()
+                var duration = mediaPlayer!!.duration
+                holder.seekBar.max = duration
+
+                holder.txtCurrent.text = mediaPlayer!!.currentPosition.toString()
+            } catch ( e: Exception) {
+				e.printStackTrace();
+			}
+
+			mediaFileLengthInMilliseconds = mediaPlayer!!.getDuration(); // gets the song length in milliseconds from URL
+
+			if(!mediaPlayer!!.isPlaying()){
+				mediaPlayer!!.start()
+				holder.btnPause.setImageResource(R.drawable.pause);
+			}else {
+				mediaPlayer!!.pause()
+				holder.btnPause.setImageResource(R.drawable.play1);
+			}
+
+			primarySeekBarProgressUpdater(holder.seekBar)
+
         }
 holder.layLike.setOnClickListener {
     if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
@@ -313,7 +378,16 @@ holder.layLike.setOnClickListener {
     }
 }
     }
- fun showEditDiaolg(c: Context, postContent: String, postId: String, posts: MutableList<Post>, position: Int)
+
+    private fun primarySeekBarProgressUpdater(seekBar: SeekBar) {
+        seekBar.progress = (mediaPlayer!!.currentPosition / 1000) // This math construction give a percentage of "was playing"/"song length"
+        if (mediaPlayer!!.isPlaying()) {
+            val notification = Runnable { primarySeekBarProgressUpdater(seekBar) }
+            handler.postDelayed(notification, 1000)
+        }
+    }
+
+    fun showEditDiaolg(c: Context, postContent: String, postId: String, posts: MutableList<Post>, position: Int)
 {
      dialog = Dialog(c,R.style.Theme_Dialog)
 
@@ -593,5 +667,10 @@ globalDialog.dismiss()
         val videoView = itemView.video_view
         val layActions = itemView.lay_actions
         val audioImg = itemView.audio_img
+        val btnPause = itemView.btnPlay
+        val seekBar = itemView.seekBar
+        val txtDuration = itemView.totalduration
+        val txtCurrent = itemView.currentpos
+        val audioLay = itemView.audioLayout
     }
 }

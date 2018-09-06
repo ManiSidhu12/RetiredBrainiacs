@@ -11,6 +11,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.media.ThumbnailUtils
 import android.net.Uri
