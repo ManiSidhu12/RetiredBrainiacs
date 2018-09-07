@@ -23,28 +23,28 @@ private String categoryName;
 private List<Youtube> youtube = null;
 @SerializedName("archiveimages")
 @Expose
-private List<Object> archiveimages = null;
+private List<ArchiveImages> archiveimages = null;
 @SerializedName("bmp_tif")
 @Expose
-private List<Object> bmpTif = null;
+private List<BmpTif> bmpTif = null;
 @SerializedName("xml")
 @Expose
-private List<Object> xml = null;
+private List<Xml> xml = null;
 @SerializedName("pdf")
 @Expose
 private List<Pdf> pdf = null;
 @SerializedName("xls")
 @Expose
-private List<Object> xls = null;
+private List<Xls> xls = null;
 @SerializedName("xlsx")
 @Expose
-private List<Object> xlsx = null;
+private List<Xlsx> xlsx = null;
 @SerializedName("doc")
 @Expose
-private List<Object> doc = null;
+private List<Doc> doc = null;
 @SerializedName("docx")
 @Expose
-private List<Object> docx = null;
+private List<Docx> docx = null;
 @SerializedName("mp4_mov_wmv")
 @Expose
 private List<Mp4MovWmv> mp4MovWmv = null;
@@ -92,27 +92,27 @@ public void setYoutube(List<Youtube> youtube) {
 this.youtube = youtube;
 }
 
-public List<Object> getArchiveimages() {
+public List<ArchiveImages> getArchiveimages() {
 return archiveimages;
 }
 
-public void setArchiveimages(List<Object> archiveimages) {
+public void setArchiveimages(List<ArchiveImages> archiveimages) {
 this.archiveimages = archiveimages;
 }
 
-public List<Object> getBmpTif() {
+public List<BmpTif> getBmpTif() {
 return bmpTif;
 }
 
-public void setBmpTif(List<Object> bmpTif) {
+public void setBmpTif(List<BmpTif> bmpTif) {
 this.bmpTif = bmpTif;
 }
 
-public List<Object> getXml() {
+public List<Xml> getXml() {
 return xml;
 }
 
-public void setXml(List<Object> xml) {
+public void setXml(List<Xml> xml) {
 this.xml = xml;
 }
 
@@ -124,35 +124,35 @@ public void setPdf(List<Pdf> pdf) {
 this.pdf = pdf;
 }
 
-public List<Object> getXls() {
+public List<Xls> getXls() {
 return xls;
 }
 
-public void setXls(List<Object> xls) {
+public void setXls(List<Xls> xls) {
 this.xls = xls;
 }
 
-public List<Object> getXlsx() {
+public List<Xlsx> getXlsx() {
 return xlsx;
 }
 
-public void setXlsx(List<Object> xlsx) {
+public void setXlsx(List<Xlsx> xlsx) {
 this.xlsx = xlsx;
 }
 
-public List<Object> getDoc() {
+public List<Doc> getDoc() {
 return doc;
 }
 
-public void setDoc(List<Object> doc) {
+public void setDoc(List<Doc> doc) {
 this.doc = doc;
 }
 
-public List<Object> getDocx() {
+public List<Docx> getDocx() {
 return docx;
 }
 
-public void setDocx(List<Object> docx) {
+public void setDocx(List<Docx> docx) {
 this.docx = docx;
 }
 

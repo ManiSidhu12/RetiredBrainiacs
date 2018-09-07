@@ -14,16 +14,32 @@
         android:id="@+id/titletxt"
         android:gravity="center"
         android:textSize="16sp" />
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentEnd="true"
+    android:layout_centerInParent="true"
+    android:layout_marginRight="5dp"
+    >
+    <Button
+        android:id="@+id/btn_edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="Edit"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:background="@android:color/transparent"
+        android:visibility="gone"
+        />
 
     <Button
         android:id="@+id/btn_logout"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="5dp"
+        android:layout_centerInParent="true"
         android:background="@drawable/addicon"
         android:visibility="gone"
          />
-
+</RelativeLayout>
 </RelativeLayout>

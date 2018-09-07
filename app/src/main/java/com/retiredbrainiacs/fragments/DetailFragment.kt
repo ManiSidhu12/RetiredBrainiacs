@@ -27,39 +27,37 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.classified_detail_fragment.view.*
 import java.io.StringReader
 
-class DetailFragment : Fragment(){
-    lateinit var v : View
-    lateinit var root : DetailsRoot
-    lateinit var root1 : ResponseRoot
-    var linkName : String =""
+class DetailFragment : Fragment() {
+    lateinit var v: View
+    lateinit var root: DetailsRoot
+    lateinit var root1: ResponseRoot
+    var linkName: String = ""
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-     v = inflater.inflate(R.layout.classified_detail_fragment,container,false)
+        v = inflater.inflate(R.layout.classified_detail_fragment, container, false)
 
 
-        if(arguments!!.getString("linkname") != null) {
-        linkName = arguments!!.getString("linkname")
+        if (arguments!!.getString("linkname") != null) {
+            linkName = arguments!!.getString("linkname")
 
         }
-        if(CommonUtils.getConnectivityStatusString(activity).equals("true")){
+        if (CommonUtils.getConnectivityStatusString(activity!!).equals("true")) {
             getClassifiedDetails()
-        }
-        else{
+        } else {
             CommonUtils.openInternetDialog(activity)
         }
 
         v.lay_saved_detail.setOnClickListener {
-            if(CommonUtils.getConnectivityStatusString(activity).equals("true")){
-saveClassified()
-            }
-            else{
+            if (CommonUtils.getConnectivityStatusString(activity).equals("true")) {
+                saveClassified()
+            } else {
                 CommonUtils.openInternetDialog(activity)
             }
         }
         return v
     }
 
-    private fun getClassifiedDetails(){
-        var url = GlobalConstants.API_URL+"classified_detail"
+    private fun getClassifiedDetails() {
+        var url = GlobalConstants.API_URL + "classified_detail"
         val pd = ProgressDialog.show(activity, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -70,31 +68,29 @@ saveClassified()
             reader.isLenient = true
             root = gson.fromJson<DetailsRoot>(reader, DetailsRoot::class.java)
 
-            if(root.status.equals("true")){
+            if (root.status.equals("true")) {
 
-                v.ad_id_details.text = "Ad Id :-"+root.clssified[0].adId
+                v.ad_id_details.text = "Ad Id :-" + root.clssified[0].adId
                 v.postad_time.text = root.clssified[0].postedOn
                 v.description_details.text = root.clssified[0].description
 
-                if(arguments!!.getString("img") != null && !arguments!!.getString("img").isEmpty()){
+                if (arguments!!.getString("img") != null && !arguments!!.getString("img").isEmpty()) {
                     Picasso.with(activity).load(arguments!!.getString("img")).into(v.img_classified)
                 }
                 v.postad.text = arguments!!.getString("title")
-            }
-            else{
-                Common.showToast(activity!!,root.message)
+            } else {
+                Common.showToast(activity!!, root.message)
             }
         },
-              Response.ErrorListener {
-                  pd.dismiss()
-                }){
+                Response.ErrorListener {
+                    pd.dismiss()
+                }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
-
                 map["user_id"] = SharedPrefManager.getInstance(activity).userId
                 map["linkname"] = linkName
-                Log.e("map details",map.toString())
+                Log.e("map details", map.toString())
                 return map
             }
         }
@@ -104,8 +100,9 @@ saveClassified()
         requestQueue.add(postRequest)
 
     }
-    private fun saveClassified(){
-        var url = GlobalConstants.API_URL+"save_classified"
+
+    private fun saveClassified() {
+        var url = GlobalConstants.API_URL + "save_classified"
         val pd = ProgressDialog.show(activity, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -115,26 +112,25 @@ saveClassified()
             reader.isLenient = true
             root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
-            if(root1.status.equals("true")){
-         v.txt_saved_details.text = "Saved"
-         v.txt_saved_details.setTextColor(ContextCompat.getColor(activity!!, R.color.theme_color_orange))
-           v.img_saved_details.setColorFilter(ContextCompat.getColor(activity!!, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
+            if (root1.status.equals("true")) {
+                v.txt_saved_details.text = "Saved"
+                v.txt_saved_details.setTextColor(ContextCompat.getColor(activity!!, R.color.theme_color_orange))
+                v.img_saved_details.setColorFilter(ContextCompat.getColor(activity!!, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
 
-            }
-            else{
-                Common.showToast(activity!!,root1.message)
+            } else {
+                Common.showToast(activity!!, root1.message)
             }
         },
                 Response.ErrorListener {
                     pd.dismiss()
-                }){
+                }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
 
                 map["user_id"] = SharedPrefManager.getInstance(activity).userId
                 map["classifiedid"] = root.clssified[0].classifiedId
-                Log.e("map save",map.toString())
+                Log.e("map save", map.toString())
                 return map
             }
         }

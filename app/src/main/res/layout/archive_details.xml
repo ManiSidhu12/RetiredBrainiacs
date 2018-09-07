@@ -1,62 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_color">
+    android:background="@color/background_color"
+    android:orientation="vertical">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_margin="15dp">
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="45dp"
-    android:layout_gravity="center_horizontal"
-    android:layout_marginTop="20dp"
-    android:background="@drawable/search_whitebg">
-    <EditText
-        android:id="@+id/edt_archive_title_detail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:singleLine="true"
-        android:gravity="start|center"
-        android:padding="4dp"
-        android:hint="title"
-        android:background="@android:color/transparent"
-        android:textSize="14sp"/>
-</RelativeLayout>
+        android:layout_margin="15dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:orientation="vertical">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:background="@drawable/search_whitebg">
-            <TextView
-                android:id="@+id/txt_archive_date_detail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:singleLine="true"
-                android:gravity="start|center"
-                android:padding="4dp"
-                android:hint="Date"
-                android:textSize="14sp"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/search_whitebg">
+
             <EditText
-                android:id="@+id/edt_archive_cat_detail"
+                android:id="@+id/edt_archive_title_detail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:singleLine="true"
-                android:gravity="start|center"
-                android:padding="4dp"
-                android:hint="Category"
                 android:background="@android:color/transparent"
-                android:textSize="14sp"/>
+                android:enabled="false"
+                android:gravity="start|center"
+                android:hint="title"
+                android:padding="4dp"
+                android:singleLine="true"
+                android:textSize="14sp" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -65,23 +39,64 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="15dp"
             android:background="@drawable/search_whitebg">
+
+            <TextView
+                android:id="@+id/txt_archive_date_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="start|center"
+                android:hint="Date"
+                android:padding="4dp"
+                android:singleLine="true"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/search_whitebg">
+
+            <EditText
+                android:id="@+id/edt_archive_cat_detail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/transparent"
+                android:enabled="false"
+                android:gravity="start|center"
+                android:hint="Category"
+                android:padding="4dp"
+                android:singleLine="true"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/search_whitebg">
+
             <EditText
                 android:id="@+id/edt_archive_desc_detail"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:singleLine="true"
-                android:gravity="start|center"
-                android:padding="4dp"
-                android:hint="Description"
                 android:background="@android:color/transparent"
-                android:textSize="14sp"/>
+                android:enabled="false"
+                android:gravity="start|center"
+                android:hint="Description"
+                android:padding="4dp"
+                android:singleLine="true"
+                android:textSize="14sp" />
         </RelativeLayout>
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/recycler_archive_details"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
-    ></android.support.v7.widget.RecyclerView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_archive_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="20dp"></android.support.v7.widget.RecyclerView>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
