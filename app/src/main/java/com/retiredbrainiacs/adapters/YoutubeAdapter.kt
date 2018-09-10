@@ -28,11 +28,11 @@ class YoutubeAdapter(var ctx: Context, var listYoutube: ModelYoutube) : Recycler
         var m = YoutubeModel()
 if(position == 0){
     plus = "add"
-    holder.add.setImageResource(R.drawable.addicon)
+    holder.add.setImageResource(R.drawable.plus1)
 }
         else{
     plus = "minus"
-    holder.add.setImageResource(R.drawable.minus)
+    holder.add.setImageResource(R.drawable.minus1)
         }
         holder.add.setOnClickListener {
             if(position == 0) {

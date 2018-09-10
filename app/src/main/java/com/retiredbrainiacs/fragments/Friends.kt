@@ -84,7 +84,8 @@ getAllFriendsAPI()
         },
 
                 Response.ErrorListener { pd.dismiss()
-                    v.recycler_stores.visibility = View.VISIBLE}) {
+                    v.recycler_stores.visibility = View.VISIBLE
+                }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
