@@ -55,6 +55,17 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
         return posts.size
     }
 
+    fun setSelection(spin: Spinner, p: String) {
+        spin.post {
+            if (p.equals("1")) {
+            spin.setSelection(1)
+        } else {
+            spin.setSelection(0)
+
+        }
+
+        }
+    }
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Common.setFontRegular(ctx, holder.txtUserName)
         Common.setFontRegular(ctx, holder.txtTime)
@@ -196,32 +207,38 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
             val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1, privacyArray)
             adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
             holder.spinPrivacy.adapter = adapterPrivacy
+           setSelection(holder.spinPrivacy,posts[position].postType)
 
-            if (posts[position].postType.equals("1")) {
+            /*if (posts[position].postType.equals("1")) {
                 holder.spinPrivacy.setSelection(adapterPrivacy.getPosition("Private"))
             } else {
                 holder.spinPrivacy.setSelection(adapterPrivacy.getPosition("Public"))
 
-            }
+            }*/
 
             val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1, actionsArray)
             adapterActions.setDropDownViewResource(R.layout.spinner_txt)
             holder.spinActions.adapter = adapterActions
             holder.spinActions.adapter = NothingSelectedSpinnerAdapter(adapterActions, R.layout.actions, ctx)
             //=====
-            holder.spinPrivacy.setOnTouchListener({ v: View, event: MotionEvent ->
+            holder.spinPrivacy.setOnTouchListener { v: View, event: MotionEvent ->
 
                 holder.spinPrivacy.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                     override fun onItemSelected(parent: AdapterView<*>, view: View, position1: Int, id: Long) {
                         if (holder.spinPrivacy.selectedItem != null) {
-                            if (holder.spinPrivacy.selectedItem.toString().equals(type1))
-                                if (holder.spinPrivacy.selectedItem.toString().equals("0")) {
+
+                                if (holder.spinPrivacy.selectedItem.toString().equals("Public")) {
+                                    Log.e("type",type1)
                                     type1 = "0"
+
                                 } else {
+                                    Log.e("typeelse",type1)
                                     type1 = "1"
+                                   // editPost(ctx, posts[position].usersWallPostId, posts, position, holder.txtPost.text.toString(), type1)
+
                                 }
 
-                            editPost(ctx, posts[position].usersWallPostId, posts, position, holder.txtPost.text.toString(), type1)
+                            editPost(ctx, posts[position].usersWallPostId, posts, position, holder.txtPost.text.toString(), type1, holder.spinPrivacy, holder.txtPost)
 
                         }
 
@@ -231,7 +248,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                     }
                 }
                 false
-            })
+            }
             //=====
 /*
   holder.spinPrivacy.onItemSelectedListener = object  : AdapterView.OnItemSelectedListener{
@@ -267,7 +284,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                     if (holder.spinActions.selectedItem.equals("Delete")) {
                         showDialogMsg(ctx, posts[position].usersWallPostId, holder.layoutFeed, posts, position, holder.spinActions)
                     } else {
-                        showEditDiaolg(ctx, posts[position].postContent, posts[position].usersWallPostId, posts, position)
+                        showEditDiaolg(ctx, posts[position].postContent, posts[position].usersWallPostId, posts, position,holder.spinPrivacy,holder.txtPost)
                         val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1, actionsArray)
                         adapterActions.setDropDownViewResource(R.layout.spinner_txt)
                         holder.spinActions.adapter = adapterActions
@@ -376,7 +393,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
 
     }
 
-    fun showEditDiaolg(c: Context, postContent: String, postId: String, posts: MutableList<Post>, position: Int) {
+    fun showEditDiaolg(c: Context, postContent: String, postId: String, posts: MutableList<Post>, position: Int, spinPrivacy: Spinner, txtPost: TextView) {
         dialog = Dialog(c, R.style.Theme_Dialog)
 
         dialog!!.setContentView(R.layout.edit_pop_up1)
@@ -392,6 +409,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
         val adapterPrivacy = ArrayAdapter(ctx, R.layout.spin_setting1, privacyArray)
         adapterPrivacy.setDropDownViewResource(R.layout.spinner_txt)
         dialog!!.spin_privacy_pop.adapter = adapterPrivacy
+        dialog!!.setCanceledOnTouchOutside(true)
         if (posts[position].postType.equals("1")) {
             dialog!!.spin_privacy_pop.setSelection(adapterPrivacy.getPosition("Private"))
             type1 = "1"
@@ -409,7 +427,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
             dialog!!.dismiss()
         }
         dialog!!.dialoglay.setOnClickListener {
-            dialog!!.dismiss()
+           dialog!!.dismiss()
         }
         dialog!!.btn_post_pop.setOnClickListener {
             if (dialog!!.edt_post.text.toString().isEmpty()) {
@@ -429,7 +447,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                     }
                 }
                 if (CommonUtils.getConnectivityStatusString(c).equals("true")) {
-                    editPost(c, postId, posts, position, dialog!!.edt_post.text.toString(), type1)
+                    editPost(c, postId, posts, position, dialog!!.edt_post.text.toString(), type1,spinPrivacy,txtPost)
                 } else {
                     CommonUtils.openInternetDialog(c)
                 }
@@ -572,7 +590,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
 
     }
 
-    private fun editPost(ctx: Context, id: String, post: MutableList<Post>, position: Int, content: String, type: String) {
+    private fun editPost(ctx: Context, id: String, post: MutableList<Post>, position: Int, content: String, type: String, spinPrivacy: Spinner, txtPost: TextView) {
         var url = GlobalConstants.API_URL1 + "?action=wall_post_edit_content"
         val pd = ProgressDialog.show(ctx, "", "Loading", false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -585,12 +603,21 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
             if (root1.status.equals("true")) {
                 if (dialog != null) {
                     dialog!!.dismiss()
+
+                    //notifyDataSetChanged()
                 }
                 Common.showToast(ctx, root1.message)
                 //layoutFeed.visibility = View.GONE
-                post[position].postType = type
+               post[position].postType = type
                 post[position].postContent = content
-                notifyDataSetChanged()
+                txtPost.text = post[position].postContent
+                if(type.equals("0")){
+                    spinPrivacy.setSelection(0)
+                }
+                else{
+                    spinPrivacy.setSelection(1)
+                }
+                 // notifyDataSetChanged()
 
             } else {
                 Common.showToast(ctx, root1.message)

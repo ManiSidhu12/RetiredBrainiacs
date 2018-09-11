@@ -20,12 +20,14 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.youtube.player.YouTubeBaseActivity
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
@@ -49,7 +51,7 @@ import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ArchiveDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener {
+class ArchiveDetails : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener {
     var file_name :String = ""
     var filename :String = ""
     var filetype :String = ""
@@ -78,6 +80,7 @@ class ArchiveDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener {
     var map = HashMap<String, String>()
     lateinit var sbYoutube : StringBuilder
     lateinit var sbYoutubeDesc : StringBuilder
+    var linkname : String = ""
     override fun image_attachment(from: Int, filename: String?, file: Bitmap?, uri: Uri?) {
         bitmap = file!!
         file_name = filename!!
@@ -96,23 +99,26 @@ class ArchiveDetails : AppCompatActivity(),Imageutils.ImageAttachmentListener {
     lateinit var model: ModelDetail
     lateinit var listModel: ArrayList<ModelDetail>
     lateinit var modelMain: MainModel
-    lateinit var v: View
     var size = 0
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.archive_details)
-        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar?.setCustomView(R.layout.custom_action_bar)
 
-        v = supportActionBar!!.customView
-        v.titletxt.text = "Archive Details"
-        v.btn_logout.visibility = View.GONE
-        v.btn_edit.visibility = View.VISIBLE
+        window.setSoftInputMode(
+                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
+      //  this.supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+      //  supportActionBar?.setCustomView(R.layout.custom_action_bar)
+
+      //  v = supportActionBar!!.customView
+      //  v.titletxt.text = "Archive Details"
+     //   v.btn_logout.visibility = View.GONE
+      //  v.btn_edit.visibility = View.VISIBLE
 modelYou = ModelYoutube()
         imageUtils = Imageutils(this@ArchiveDetails)
         sb = StringBuilder()
         if (intent != null && intent.extras != null && intent.extras.getString("id") != null) {
             id = intent.extras.getString("id")
+            linkname = intent.extras.getString("linkname")
         }
 
         recycler_archive_details.layoutManager = LinearLayoutManager(this@ArchiveDetails)
@@ -123,12 +129,12 @@ modelYou = ModelYoutube()
             CommonUtils.openInternetDialog(this)
         }
 
-        v.btn_edit.setOnClickListener {
-            if(v.btn_edit.text.toString().equals("Edit")) {
+        btn_edit.setOnClickListener {
+            if(btn_edit.text.toString().equals("Edit")) {
                 edt_archive_title_detail.isEnabled = true
                 edt_archive_cat_detail.isEnabled = true
                 edt_archive_desc_detail.isEnabled = true
-                v.btn_edit.text = "Save"
+             btn_edit.text = "Save"
                 recycler_archive_details.adapter = ArchiveDetailAdapter(this, modelMain.model, "edit", size,listYoutube)
             }
             else {
@@ -143,9 +149,12 @@ modelYou = ModelYoutube()
             }
         }
         lay_browse.setOnClickListener {
-            openAlert(arrayOf("Camera","Photos","Videos","Files", "Cancel"))
+            if(btn_edit.text.toString().equals("Save")) {
+                openAlert(arrayOf("Camera", "Photos", "Videos", "Files", "Cancel"))
+            }
 
         }
+
     }
 
     private fun getArchiveDetails() {
@@ -165,10 +174,15 @@ modelYou = ModelYoutube()
                 if (root.listArch != null && root.listArch.size > 0) {
                     edt_archive_title_detail.text = Editable.Factory.getInstance().newEditable(root.listArch[0].archiveTitle)
                     edt_archive_desc_detail.text = Editable.Factory.getInstance().newEditable(root.listArch[0].description)
-                    edt_archive_cat_detail.text = Editable.Factory.getInstance().newEditable(root.listArch[0].categoryName)
+                    if(root.listArch[0].categoryName != null && !root.listArch[0].categoryName.isEmpty()) {
+                        edt_archive_cat_detail.text = Editable.Factory.getInstance().newEditable(root.listArch[0].categoryName)
+                    }
+                    else{
+                      lay_cat.visibility = View.GONE
+                    }
                     txt_archive_date_detail.text = root.listArch[0].archiveDate
                     for (i in 0 until root.listArch.size) {
-modelYou = ModelYoutube()
+                        modelYou = ModelYoutube()
                         if (root.listArch[i].youtube != null && root.listArch[i].youtube.size > 0) {
                             for (j in 0 until root.listArch[i].youtube.size) {
                                 model = ModelDetail()
@@ -178,7 +192,7 @@ modelYou = ModelYoutube()
                                 model.file_note = root.listArch[i].youtube[j].fileNote
                                 model.file_type = "youtube"
                                 listModel.add(model)
-                             var m  = YoutubeModel()
+                                var m  = YoutubeModel()
                                 m.youtube_desc = root.listArch[i].youtube[j].fileNote
                                 m.youtube_title = root.listArch[i].youtube[j].file
                                 listYoutube.add(m)
@@ -564,16 +578,14 @@ modelYou = ModelYoutube()
             filetype = "mp4"
 
             filename = "Video" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.video)
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.video)
 
         }
         else if (absolutePath.endsWith(".m4a")) {
             filetype = "mp3"
 
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.mp3)
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.mp3)
 
         }
         else if(absolutePath.endsWith(".mp3")){
@@ -581,15 +593,13 @@ modelYou = ModelYoutube()
             filetype = "mp3"
 
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.mp3)
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.mp3)
         }
         else if(absolutePath.endsWith(".3gp")){
             filetype = "3gp"
 
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.mp3)
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.mp3)
         }
         else if (absolutePath.endsWith(".avi")) {
             filetype = "avi"
@@ -599,8 +609,7 @@ modelYou = ModelYoutube()
         else if (absolutePath.endsWith(".ogg")) {
             filetype = "ogg"
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.mp3)
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.mp3)
         }
         else if (absolutePath.endsWith(".doc")) {
             filetype = "doc"
@@ -611,14 +620,12 @@ modelYou = ModelYoutube()
         else if (absolutePath.endsWith(".docx")) {
             filetype = "docx"
             filename = "File" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.doc)
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.doc)
         }
         else if (absolutePath.endsWith(".pdf")) {
             filetype = "pdf"
             filename = "File" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.pdf)
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.pdf)
 
         }
         else if (absolutePath.endsWith(".xml")) {
@@ -629,21 +636,18 @@ modelYou = ModelYoutube()
         else if (absolutePath.endsWith(".xls")) {
             filetype = "xls"
             filename = "File" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.xls)
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.xls)
 
         }
         else if (absolutePath.endsWith(".xlsx")) {
             filetype = "xlsx"
             filename = "File" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.xls)
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.xls)
         }
         else if (absolutePath.endsWith(".txt")) {
             filetype = "txt"
             filename = "File" + System.currentTimeMillis() + "." + filetype
-            bitmap = BitmapFactory.decodeResource(getResources(),
-                    R.drawable.doc)
+            bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.doc)
 
         }
         pd = ProgressDialog.show(this, "", "Uploading")
@@ -873,7 +877,7 @@ Log.e("true","in")
                 }
             }
             if(sbYoutube != null && sbYoutube.length > 0){
-                sbYoutube.delete(sbYoutube.length-3,sbYoutube.length-1)
+                sbYoutube.delete(sbYoutube.length-3,sbYoutube.length)
             }
 
             if(sbYoutube != null && sbYoutube.length > 0) {
@@ -882,7 +886,7 @@ Log.e("true","in")
                 map["video_url[]"] = " "
             }
             if(sbYoutubeDesc != null && sbYoutubeDesc.length > 0){
-                sbYoutubeDesc.delete(sbYoutubeDesc.length-3,sbYoutubeDesc.length-1)
+                sbYoutubeDesc.delete(sbYoutubeDesc.length-3,sbYoutubeDesc.length)
             }
             if(sbYoutubeDesc != null && sbYoutubeDesc.length > 0) {
                 map["video_desc[]"] = sbYoutubeDesc.toString()
@@ -915,7 +919,7 @@ Log.e("true","in")
 
 
                 map["user_id"] =  SharedPrefManager.getInstance(this@ArchiveDetails).userId
-                map["linkname"] = ""
+                map["linkname"] = linkname
                 map["title"] = edt_archive_title_detail.text.toString()
                 map["archive_date"] = txt_archive_date_detail.text.toString()
                 map["description"] = edt_archive_desc_detail.text.toString()

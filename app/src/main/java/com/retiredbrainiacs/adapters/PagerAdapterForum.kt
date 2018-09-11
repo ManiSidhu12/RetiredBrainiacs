@@ -3,7 +3,6 @@ package com.retiredbrainiacs.adapters
 import android.content.Context
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -11,10 +10,8 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.google.android.youtube.player.YouTubeInitializationResult
 import com.google.android.youtube.player.YouTubePlayer
-import com.google.android.youtube.player.YouTubePlayerSupportFragment
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.GlobalConstants
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.pager.view.*
 import kotlin.collections.HashMap
 import com.google.android.youtube.player.YouTubePlayerView

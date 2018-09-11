@@ -1,16 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@color/background_color"
-    android:orientation="vertical">
 
+    android:orientation="vertical">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+    <RelativeLayout
+        android:id="@+id/layoutTop"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/theme_color_orange"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Archive Details"
+            android:textColor="@android:color/white"
+            android:id="@+id/titletxt"
+            android:gravity="center"
+            android:textSize="16sp" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="5dp"
+            >
+            <Button
+                android:id="@+id/btn_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Edit"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:background="@android:color/transparent"
+                />
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerInParent="true"
+                android:background="@drawable/addicon"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="15dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
+      android:layout_centerHorizontal="true"
+        android:layout_above="@+id/btn_delete"
+        android:layout_below="@+id/layoutTop"
         android:orientation="vertical">
 
         <RelativeLayout
@@ -54,6 +108,7 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/lay_cat"
             android:layout_width="match_parent"
             android:layout_height="45dp"
             android:layout_gravity="center_horizontal"
@@ -150,6 +205,20 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="20dp"></android.support.v7.widget.RecyclerView>
-    </LinearLayout>
 
+    </LinearLayout>
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:text="Delete Archive"
+        android:textAllCaps="false"
+        android:textSize="14sp"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:background="@color/create_color"/>
+</RelativeLayout>
 </android.support.v4.widget.NestedScrollView>

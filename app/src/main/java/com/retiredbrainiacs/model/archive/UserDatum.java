@@ -11,9 +11,6 @@ private String timelinearchiveUser;
 @SerializedName("arch_btn")
 @Expose
 private String archBtn;
-@SerializedName("help_desc")
-@Expose
-private String helpDesc;
 
 public String getTimelinearchiveUser() {
 return timelinearchiveUser;
@@ -29,14 +26,6 @@ return archBtn;
 
 public void setArchBtn(String archBtn) {
 this.archBtn = archBtn;
-}
-
-public String getHelpDesc() {
-return helpDesc;
-}
-
-public void setHelpDesc(String helpDesc) {
-this.helpDesc = helpDesc;
 }
 
 }

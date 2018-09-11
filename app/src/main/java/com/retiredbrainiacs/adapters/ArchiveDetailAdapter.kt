@@ -17,6 +17,8 @@ import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.youtube.player.YouTubeInitializationResult
+import com.google.android.youtube.player.YouTubePlayer
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
@@ -35,6 +37,8 @@ import java.util.ArrayList
 class ArchiveDetailAdapter(var ctx: Context, var model: MutableList<ModelDetail>, var type: String, var size: Int,var listYoutube: ArrayList<YoutubeModel>) : RecyclerView.Adapter<ArchiveDetailAdapter.ViewHolder>(){
    var plus : String = ""
     var m =  ModelDetail()
+    var player1 : YouTubePlayer ? = null
+    var videoId : String = ""
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v = LayoutInflater.from(ctx).inflate(R.layout.archive_detail_adap,parent,false)
@@ -83,7 +87,9 @@ class ArchiveDetailAdapter(var ctx: Context, var model: MutableList<ModelDetail>
                 }
                 val u1 = "http://img.youtube.com/vi/"+u3+"/0.jpg"
                 Log.e("url",u1)
+                holder.bntPlay.visibility = View.VISIBLE
                 Picasso.with(ctx).load(u1).into(holder.img)
+                videoId = u3
             }
 
         }
@@ -171,6 +177,34 @@ class ArchiveDetailAdapter(var ctx: Context, var model: MutableList<ModelDetail>
 holder.delete.setOnClickListener {
     showDialogMsg(ctx,position,model)
 }
+        holder.bntPlay.setOnClickListener {
+            holder.imgLayout.visibility = View.GONE
+            holder.youtubePlayer.visibility  = View.VISIBLE
+            //youTube_view.initialize(GlobalConstants.YOUTUBE_KEY,this)
+            holder.youtubePlayer.initialize(GlobalConstants.YOUTUBE_KEY, object : YouTubePlayer.OnInitializedListener {
+
+                override fun onInitializationSuccess(provider: YouTubePlayer.Provider, player: YouTubePlayer,
+                                                     wasRestored: Boolean) {
+                    if (!wasRestored) {
+                        player1 = player
+
+                        //set the player style default
+                        player1!!.setPlayerStyle(YouTubePlayer.PlayerStyle.DEFAULT)
+
+                        //cue the 1st video by default
+                        Log.e("iddd",videoId)
+                        player1!!.loadVideo(videoId)
+                    }
+                }
+
+                override fun onInitializationFailure(arg0: YouTubePlayer.Provider, arg1: YouTubeInitializationResult) {
+
+                    //print or show error if initializ  ation failed
+                    Log.e("aaakk", arg0.toString())
+                }
+            })
+        }
+
     }
     fun showDialogMsg(c: Context, position: Int, model: MutableList<ModelDetail> ) {
         val globalDialog = Dialog(c, R.style.Theme_Dialog)
@@ -266,5 +300,8 @@ holder.delete.setOnClickListener {
         val add = itemView.add
         val txtUrl = itemView.edt_youtube_url
         val txtDesc = itemView.edt_archive_desc1
+        val bntPlay = itemView.btn_play
+        var youtubePlayer  =  itemView.player
+        var imgLayout = itemView.imgLayout
     }
 }

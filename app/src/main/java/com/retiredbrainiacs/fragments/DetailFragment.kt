@@ -47,10 +47,15 @@ class DetailFragment : Fragment() {
         }
 
         v.lay_saved_detail.setOnClickListener {
-            if (CommonUtils.getConnectivityStatusString(activity).equals("true")) {
-                saveClassified()
-            } else {
-                CommonUtils.openInternetDialog(activity)
+            if(v.txt_saved_details.text.toString().equals("Save")) {
+                if (CommonUtils.getConnectivityStatusString(activity).equals("true")) {
+                    saveClassified()
+                } else {
+                    CommonUtils.openInternetDialog(activity)
+                }
+            }
+            else{
+                Common.showToast(activity!!,"Already Saved...")
             }
         }
         return v

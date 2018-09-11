@@ -725,9 +725,9 @@ val edit = AddForum(this@ForumDetails,filetype,filename,GlobalConstants.API_URL+
             val gson = Gson()
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
-           var root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+            var root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
-            if(root1.status.equals("true")) {
+             if(root1.status.equals("true")) {
                 Common.showToast(this@ForumDetails,root1.message)
                 model = ModelImages()
                 sb = StringBuilder()
