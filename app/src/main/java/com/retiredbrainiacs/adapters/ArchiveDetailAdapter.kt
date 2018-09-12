@@ -35,10 +35,12 @@ import java.io.StringReader
 import java.util.ArrayList
 
 class ArchiveDetailAdapter(var ctx: Context, var model: MutableList<ModelDetail>, var type: String, var size: Int,var listYoutube: ArrayList<YoutubeModel>) : RecyclerView.Adapter<ArchiveDetailAdapter.ViewHolder>(){
-   var plus : String = ""
+    var plus : String = ""
     var m =  ModelDetail()
     var player1 : YouTubePlayer ? = null
     var videoId : String = ""
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var v = LayoutInflater.from(ctx).inflate(R.layout.archive_detail_adap,parent,false)

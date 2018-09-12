@@ -14,8 +14,6 @@ import android.provider.MediaStore
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
-import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.util.Log
@@ -42,6 +40,7 @@ import com.retiredbrainiacs.model.YoutubeModel
 import com.retiredbrainiacs.model.archive.ArchiveDetailsRoot
 import com.retiredbrainiacs.model.archive.MainModel
 import com.retiredbrainiacs.model.archive.ModelDetail
+import com.retiredbrainiacs.model.archive.TimelinearchiveRoot
 import kotlinx.android.synthetic.main.archive_details.*
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import java.io.File
@@ -121,6 +120,7 @@ modelYou = ModelYoutube()
             linkname = intent.extras.getString("linkname")
         }
 
+        recycler_archive_details.isNestedScrollingEnabled = false
         recycler_archive_details.layoutManager = LinearLayoutManager(this@ArchiveDetails)
 
         if (CommonUtils.getConnectivityStatusString(this).equals("true")) {
@@ -153,6 +153,15 @@ modelYou = ModelYoutube()
                 openAlert(arrayOf("Camera", "Photos", "Videos", "Files", "Cancel"))
             }
 
+        }
+
+        btn_delete.setOnClickListener {
+            if(CommonUtils.getConnectivityStatusString(this@ArchiveDetails).equals("true")){
+                deleteArchives()
+            }
+            else{
+                CommonUtils.openInternetDialog(this@ArchiveDetails)
+            }
         }
 
     }
@@ -946,5 +955,62 @@ Log.e("true","in")
         requestQueue.add(postRequest)
 
     }
+
+    //======= Delete Archive =========
+    private fun deleteArchives() {
+        var url = GlobalConstants.API_URL1+"?action=delete_archive"
+        val pd = ProgressDialog.show(this,"","Loading",false)
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            Log.e("response",response)
+
+            val gson = Gson()
+            val reader = com.google.gson.stream.JsonReader(StringReader(response))
+            reader.isLenient = true
+            var   root = gson.fromJson<TimelinearchiveRoot>(reader, TimelinearchiveRoot::class.java)
+            if(root.status.equals("true")){
+                finish()
+               /* if(root.timelinedata != null && root.timelinedata.size >0){
+
+
+
+                }
+                else{
+
+                }*/
+
+            }
+            else{
+                Common.showToast(this,root.message)
+
+
+            }
+        },
+
+                Response.ErrorListener {
+                    Log.e("error","err")
+                    pd.dismiss()
+                }){
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["user_id"] = SharedPrefManager.getInstance(this@ArchiveDetails).userId
+                map["id"] = id
+
+                Log.e("map delete archive",map.toString())
+                return map
+            }
+        }
+
+
+
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
+    }
+
 
 }
