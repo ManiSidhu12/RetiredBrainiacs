@@ -115,6 +115,12 @@
 <activity android:name=".activities.FullImage"
     android:screenOrientation="portrait"
     />
+        <activity android:name=".activities.Contact"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activities.About"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"/>
     </application>
 
 </manifest>

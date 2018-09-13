@@ -33,13 +33,43 @@ private String sampleContent3;
 @Expose
 private String image;
 
-public String getTitle() {
-return title;
-}
+    @SerializedName("email")
+    @Expose
+    private String email;
 
-public void setTitle(String title) {
-this.title = title;
-}
+    @SerializedName("Phone")
+    @Expose
+    private String phone;
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+
 
 public String getDateOfBirth() {
 return dateOfBirth;

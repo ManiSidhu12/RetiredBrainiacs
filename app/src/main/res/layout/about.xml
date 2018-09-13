@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/theme_color_orange">
+        <ImageView
+            android:id="@+id/img_memo_home"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            />
+        <RelativeLayout
+            android:id="@+id/lay_addimage"
+            android:layout_width="wrap_content"
+            android:layout_height="45dp"
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="15dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerHorizontal="true"
+            android:background="@drawable/green_bg">
+            <ImageView
+                android:id="@+id/imgadd"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignParentStart="true"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/addicon"/>
+            <TextView
+                android:id="@+id/addtxt"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/imgadd"
+                android:layout_centerInParent="true"
+                android:text="Add image"
+                android:gravity="center"
+                android:textSize="14sp"
+                android:layout_marginEnd="10dp"
+                android:textColor="@android:color/white"
+                android:layout_marginStart="7dp"/>
+        </RelativeLayout>
+    </RelativeLayout>
+<TextView
+    android:id="@+id/txtName"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:textColor="@color/theme_color_orange"
+    android:textSize="16sp"
+    android:gravity="center"
+    android:layout_margin="15dp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="20dp"
+        android:background="@drawable/search_whitebg">
+        <EditText
+            android:id="@+id/abouttxt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:padding="4dp"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:enabled="false"
+            android:gravity="top|start"
+            android:hint="Content"/>
+    </RelativeLayout>
+
+</LinearLayout>

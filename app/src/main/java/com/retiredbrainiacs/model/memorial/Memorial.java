@@ -32,7 +32,7 @@ public void setUserData(List<UserDatum> userData) {
 this.userData = userData;
 }
 
-public List<GalleryItemsQuery> getGalleryItemsQuery() {
+public List<GalleryItemsQuery>  getGalleryItemsQuery() {
 return galleryItemsQuery;
 }
 
