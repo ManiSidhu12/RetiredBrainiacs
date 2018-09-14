@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginStart="20dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginTop="40dp"
+    android:text="Write a wish(max 25 characters)"
+    android:textSize="16sp"
+    android:padding="3dp"
+    android:gravity="center"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/search_whitebg">
+        <EditText
+            android:id="@+id/edt_wish"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:hint="Wish here..."
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/transparent"
+            android:gravity="start|center"
+            android:enabled="false"
+            android:padding="4dp"
+            />
+    </RelativeLayout>
+    <Button
+        android:id="@+id/btn_save_wish"
+        android:layout_width="200dp"
+        android:layout_height="45dp"
+        android:background="@color/theme_color_orange"
+        android:text="Save"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:textSize="16sp"
+        android:textAllCaps="false"
+        android:layout_marginTop="40dp"
+        android:textColor="@android:color/white"/>
+
+
+</LinearLayout>

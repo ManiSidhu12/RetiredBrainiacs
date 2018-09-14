@@ -17,12 +17,27 @@
             android:layout_height="match_parent"
             android:src="@drawable/imagedummy"
             android:scaleType="fitXY"/>
+        <Button
+            android:id="@+id/btn_del"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="15dp"
+            android:text="Delete"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:background="@color/create_color"
+            android:textColor="@color/white"
+            android:visibility="gone"
+            android:textAllCaps="false"
+            />
         <RelativeLayout
             android:id="@+id/lay_addimage"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_marginTop="15dp"
             android:layout_marginStart="15dp"
+            android:visibility="gone"
             android:background="@drawable/green_bg">
             <ImageView
                 android:id="@+id/imgadd"
@@ -266,6 +281,8 @@
         android:orientation="horizontal"
         android:background="@android:color/white"
         android:weightSum="2"
+        android:layout_marginBottom="30dp"
+        android:visibility="gone"
         android:layout_gravity="center_horizontal"
       >
         <Button

@@ -33,6 +33,52 @@ private String sampleContent3;
 @Expose
 private String image;
 
+    public String getImageName() {
+        return imageName;
+    }
+
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
+    }
+
+    @SerializedName("image_name")
+    @Expose
+    private String imageName;
+    @SerializedName("charities")
+    @Expose
+    private String charities;
+
+    public String getCharities() {
+        return charities;
+    }
+
+    public void setCharities(String charities) {
+        this.charities = charities;
+    }
+
+    public String getCheques() {
+        return cheques;
+    }
+
+    public void setCheques(String cheques) {
+        this.cheques = cheques;
+    }
+
+    @SerializedName("cheques")
+    @Expose
+    private String cheques;
+
+    public String getPaypal() {
+        return paypal;
+    }
+
+    public void setPaypal(String paypal) {
+        this.paypal = paypal;
+    }
+
+    @SerializedName("paypal")
+    @Expose
+    private String paypal;
     @SerializedName("email")
     @Expose
     private String email;
