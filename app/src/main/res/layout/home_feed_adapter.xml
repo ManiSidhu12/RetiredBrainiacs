@@ -186,10 +186,11 @@
 
         <Button
             android:id="@+id/btn_play"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_centerInParent="true"
-            android:background="@drawable/play"
+            android:background="@drawable/play1"
+            android:backgroundTint="@color/white"
 
             android:visibility="gone" />
 
@@ -239,6 +240,7 @@ android:layout_toEndOf="@+id/currentpos"
         android:layout_marginStart="2dp"
         android:textSize="16sp"
         android:gravity="start|center"
+        android:text="/0:0"
         android:textColor="@android:color/black"/>
     <SeekBar
         android:layout_width="160dp"
@@ -248,7 +250,7 @@ android:layout_toEndOf="@+id/currentpos"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="2dp"
         android:id="@+id/seekBar"
-      android:layout_weight="2" />
+       android:layout_weight="2" />
 
 </RelativeLayout>
 

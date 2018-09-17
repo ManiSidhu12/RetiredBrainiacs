@@ -58,6 +58,17 @@ private String description;
 @Expose
 private String adId;
 
+    public Integer getSAVED() {
+        return sAVED;
+    }
+
+    public void setSAVED(Integer sAVED) {
+        this.sAVED = sAVED;
+    }
+
+    @SerializedName("SAVED")
+    @Expose
+    private Integer sAVED;
 public String getClssifiedTitle() {
 return clssifiedTitle;
 }

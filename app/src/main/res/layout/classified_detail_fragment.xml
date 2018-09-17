@@ -174,7 +174,7 @@
                 android:layout_marginStart="7dp"
                 android:padding="3dp"
                 android:textSize="16sp"
-                android:text="Saved"
+                android:text="Save"
                 android:gravity="center"
                 android:ellipsize="end"
                 android:textColor="@color/classified_selector"

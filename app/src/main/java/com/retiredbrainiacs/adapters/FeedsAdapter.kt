@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.adapters
 
+import android.app.Activity
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
@@ -133,15 +134,23 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
             mediaPlayer = MediaPlayer()
             mediaPlayer!!.setOnBufferingUpdateListener(object : MediaPlayer.OnBufferingUpdateListener {
                 override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
-                    holder.seekBar.secondaryProgress = percent
+                   // holder.seekBar.secondaryProgress = percent
                 }
 
             })
             mediaPlayer!!.setOnCompletionListener(object : MediaPlayer.OnCompletionListener {
                 override fun onCompletion(mp: MediaPlayer?) {
-                    holder.btnPause.setImageResource(R.drawable.pause)
+                    holder.btnPause.setImageResource(R.drawable.play1)
+                    holder.txtCurrent.text = "0:0"
+
                 }
 
+            })
+            mediaPlayer!!.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
+
+                override fun onPrepared(mp: MediaPlayer?) {
+//holder.seekBar.progress = mp!!.currentPosition
+                }
             })
 /*holder.seekBar.setOnTouchListener(object : View.OnTouchListener{
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
@@ -156,19 +165,23 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
     }*/
 
 //})
-            holder.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+           holder.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
 
                 }
 
-                override fun onStartTrackingTouch(seekBar: SeekBar) {
+              override fun onStartTrackingTouch(seekBar: SeekBar) {
 
-                }
+               }
 
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                    if(fromUser){
+                        mediaPlayer!!.seekTo(progress)
+                        holder.seekBar.progress = progress
+                    }
 
-                }
+               }
             })
         }
 
@@ -336,7 +349,8 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                 mediaPlayer!!.setDataSource(posts[position].audio)
                 mediaPlayer!!.prepare()
                 mediaPlayer!!.start()
-                holder.txtDuration.text = "/" + mediaPlayer!!.duration.toString()
+                var dur = mediaPlayer!!.duration/1000
+                //holder.txtDuration.text = "/" + dur.toString()
                 holder.txtCurrent.text = "0:0"
             }
         }
@@ -352,11 +366,24 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
             try {
                 mediaPlayer!!.setDataSource(posts[position].audio) // setup song from https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3 URL to mediaplayer data source
                 mediaPlayer!!.prepare(); // you must call this method after setup the datasource in setDataSource method. After calling prepare() the instance of MediaPlayer starts load data from URL to internal buffer.
-                holder.txtDuration.text = "/" + mediaPlayer!!.duration.toString()
+              //  holder.txtDuration.text = "/" + mediaPlayer!!.duration.toString()
                 var duration = mediaPlayer!!.duration
                 holder.seekBar.max = duration
-
-                holder.txtCurrent.text = mediaPlayer!!.currentPosition.toString()
+                holder.txtDuration.text = "/" + formateMilliSeccond(mediaPlayer!!.duration.toLong())
+                holder.txtCurrent.text = formateMilliSeccond(mediaPlayer!!.currentPosition.toLong())
+                val mHandler = Handler()
+                (ctx as Activity).runOnUiThread(object:Runnable {
+                     override fun run() {
+                        if (mediaPlayer != null)
+                        {
+                            val mCurrentPosition = mediaPlayer!!.getCurrentPosition() / 1000
+                            holder.seekBar.progress = mediaPlayer!!.getCurrentPosition()
+                            holder.txtCurrent.text = formateMilliSeccond(mediaPlayer!!.getCurrentPosition().toLong())
+                            Log.e("current",mCurrentPosition.toString())
+                        }
+                        mHandler.postDelayed(this, 1000)
+                    }
+                })
             } catch (e: Exception) {
                 e.printStackTrace();
             }
@@ -371,7 +398,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                 holder.btnPause.setImageResource(R.drawable.play1);
             }
 
-            primarySeekBarProgressUpdater(holder.seekBar)
+            //primarySeekBarProgressUpdater(holder.seekBar)
 
         }
         holder.layLike.setOnClickListener {
@@ -383,6 +410,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
         }
     }
 
+/*
     private fun primarySeekBarProgressUpdater(seekBar: SeekBar) {
         seekBar.progress = (mediaPlayer!!.currentPosition / 1000) // This math construction give a percentage of "was playing"/"song length"
         if (mediaPlayer!!.isPlaying()) {
@@ -391,6 +419,39 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
         }
 
 
+    }
+*/
+
+    fun formateMilliSeccond(milliseconds: Long): String {
+        var finalTimerString = ""
+        var secondsString = ""
+
+        // Convert total duration into time
+        val hours = (milliseconds / (1000 * 60 * 60)).toInt()
+        val minutes = (milliseconds % (1000 * 60 * 60)).toInt() / (1000 * 60)
+        val seconds = (milliseconds % (1000 * 60 * 60) % (1000 * 60) / 1000).toInt()
+
+        // Add hours if there
+        if (hours > 0) {
+            finalTimerString = hours.toString() + ":"
+        }
+
+        // Prepending 0 to seconds if it is one digit
+        if (seconds < 10) {
+            secondsString = "0$seconds"
+        } else {
+            secondsString = "" + seconds
+        }
+
+        finalTimerString = "$finalTimerString$minutes:$secondsString"
+
+        //      return  String.format("%02d Min, %02d Sec",
+        //                TimeUnit.MILLISECONDS.toMinutes(milliseconds),
+        //                TimeUnit.MILLISECONDS.toSeconds(milliseconds) -
+        //                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(milliseconds)));
+
+        // return timer string
+        return finalTimerString
     }
 
     fun showEditDiaolg(c: Context, postContent: String, postId: String, posts: MutableList<Post>, position: Int, spinPrivacy: Spinner, txtPost: TextView) {

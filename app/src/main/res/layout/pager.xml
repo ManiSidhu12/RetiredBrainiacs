@@ -23,10 +23,10 @@
 
             <Button
                 android:id="@+id/btn_play1"
-                android:layout_width="23dp"
-                android:layout_height="23dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_centerInParent="true"
-                android:background="@drawable/play"
+                android:background="@drawable/youtube"
                 android:visibility="gone" />
         </RelativeLayout>
         <!-- <com.google.android.youtube.player.YouTubeThumbnailView
@@ -41,6 +41,72 @@
             android:layout_height="170dp"
             android:visibility="gone"
             android:layout_centerHorizontal="true" />
+        <VideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_centerHorizontal="true"
+            android:visibility="gone" />
+        <RelativeLayout
+            android:id="@+id/audioLayout"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            >
+
+            <RelativeLayout
+                android:id="@+id/linear"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+            android:layout_centerInParent="true"
+
+                >
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="7dp"
+                    android:id="@+id/btnPlay"
+                    android:src="@drawable/play1"
+                    />
+                <TextView
+                    android:id="@+id/currentpos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toEndOf="@+id/btnPlay"
+                    android:layout_marginStart="12dp"
+                    android:layout_centerInParent="true"
+                    android:textSize="16sp"
+                    android:gravity="start|center"
+                    android:text="0:0"
+                    android:textColor="@android:color/black"/>
+                <TextView
+                    android:id="@+id/totalduration"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_toEndOf="@+id/currentpos"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="2dp"
+                    android:textSize="16sp"
+                    android:gravity="start|center"
+                    android:text="/0:0"
+                    android:textColor="@android:color/black"/>
+                <SeekBar
+                    android:layout_width="160dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@+id/totalduration"
+                    android:layout_centerInParent="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="2dp"
+                    android:id="@+id/seekBar"
+                    android:layout_weight="2" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
     </RelativeLayout>
 
 

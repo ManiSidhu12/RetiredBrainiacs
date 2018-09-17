@@ -5,16 +5,16 @@ import com.google.gson.annotations.SerializedName;
 
 public class Favourite {
 
-@SerializedName("favourite")
-@Expose
-private Integer favourite;
+    @SerializedName("fav")
+    @Expose
+    private Integer fav;
 
-public Integer getFavourite() {
-return favourite;
-}
+    public Integer getFav() {
+        return fav;
+    }
 
-public void setFavourite(Integer favourite) {
-this.favourite = favourite;
-}
+    public void setFav(Integer fav) {
+        this.fav = fav;
+    }
 
 }

@@ -49,13 +49,18 @@ class DetailFragment : Fragment() {
         v.lay_saved_detail.setOnClickListener {
             if(v.txt_saved_details.text.toString().equals("Save")) {
                 if (CommonUtils.getConnectivityStatusString(activity).equals("true")) {
-                    saveClassified()
+                    saveClassified("save")
                 } else {
                     CommonUtils.openInternetDialog(activity)
                 }
             }
             else{
-                Common.showToast(activity!!,"Already Saved...")
+             //   Common.showToast(activity!!,"Already Saved...")
+                if (CommonUtils.getConnectivityStatusString(activity).equals("true")) {
+                    saveClassified("unsave")
+                } else {
+                    CommonUtils.openInternetDialog(activity)
+                }
             }
         }
         return v
@@ -78,6 +83,18 @@ class DetailFragment : Fragment() {
                 v.ad_id_details.text = "Ad Id :-" + root.clssified[0].adId
                 v.postad_time.text = root.clssified[0].postedOn
                 v.description_details.text = root.clssified[0].description
+                if(root.clssified[0].saved == 0){
+                    v.txt_saved_details.text = "Save"
+                    v.txt_saved_details.setTextColor(ContextCompat.getColor(activity!!, R.color.black))
+                    v.img_saved_details.setColorFilter(ContextCompat.getColor(activity!!, R.color.black), android.graphics.PorterDuff.Mode.SRC_IN)
+
+                }
+                else{
+                    v.txt_saved_details.text = "Saved"
+                    v.txt_saved_details.setTextColor(ContextCompat.getColor(activity!!, R.color.theme_color_orange))
+                    v.img_saved_details.setColorFilter(ContextCompat.getColor(activity!!, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
+
+                }
 
                 if (arguments!!.getString("img") != null && !arguments!!.getString("img").isEmpty()) {
                     Picasso.with(activity).load(arguments!!.getString("img")).into(v.img_classified)
@@ -106,7 +123,7 @@ class DetailFragment : Fragment() {
 
     }
 
-    private fun saveClassified() {
+    private fun saveClassified(value : String) {
         var url = GlobalConstants.API_URL + "save_classified"
         val pd = ProgressDialog.show(activity, "", "Loading", false)
 
@@ -118,10 +135,16 @@ class DetailFragment : Fragment() {
             root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if (root1.status.equals("true")) {
-                v.txt_saved_details.text = "Saved"
-                v.txt_saved_details.setTextColor(ContextCompat.getColor(activity!!, R.color.theme_color_orange))
-                v.img_saved_details.setColorFilter(ContextCompat.getColor(activity!!, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
-
+                if(value.equals("save")) {
+                    v.txt_saved_details.text = "Saved"
+                    v.txt_saved_details.setTextColor(ContextCompat.getColor(activity!!, R.color.theme_color_orange))
+                    v.img_saved_details.setColorFilter(ContextCompat.getColor(activity!!, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
+                }
+                else{
+                    v.txt_saved_details.text = "Saved"
+                    v.txt_saved_details.setTextColor(ContextCompat.getColor(activity!!, R.color.theme_color_orange))
+                    v.img_saved_details.setColorFilter(ContextCompat.getColor(activity!!, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
+                }
             } else {
                 Common.showToast(activity!!, root1.message)
             }

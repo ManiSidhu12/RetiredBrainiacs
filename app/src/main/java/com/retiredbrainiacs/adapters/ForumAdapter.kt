@@ -37,7 +37,13 @@ class ForumAdapter(var ctx: Context, var listForm: MutableList<ListForm>) : Recy
         holder.postData.text = listForm.get(position).content
         holder.txtTime.text = listForm.get(position).addedDate
         holder.txtRating.text = listForm.get(position).rating.toString() + "/5"
-
+        if(listForm.get(position).commentCount.isEmpty()){
+            holder.txtRply.text = "0 Reply"
+        }
+        else {
+            holder.txtRply.text = listForm.get(position).commentCount + " Replies"
+        }
+holder.txtView.text = listForm.get(position).viewCount+" View"
         if(listForm[position].image != null && !listForm[position].image.isEmpty()){
           Picasso.with(ctx).load(listForm[position].image).into(holder.imgUser)
         }

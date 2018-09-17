@@ -343,7 +343,9 @@ holder.itemView.setOnClickListener {
         holder.viewPager.setAdapter(adapter)
        //holder.viewPager.setClipToPadding(false)
    // holder.viewPager.setPadding(40, 0, 40, 0)
-        addBottomDots(0,holder.ll_dots,ctx,dataModel,position1)
+        if(dataModel.size > 1) {
+            addBottomDots(0, holder.ll_dots, ctx, dataModel, position1)
+        }
         holder.viewPager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener{
             override fun onPageScrollStateChanged(state: Int) {
 
@@ -353,8 +355,10 @@ holder.itemView.setOnClickListener {
             }
 
             override fun onPageSelected(position: Int) {
+                if(dataModel.size > 1) {
 
-                addBottomDots(position,holder.ll_dots,ctx,dataModel,position1)
+                    addBottomDots(position, holder.ll_dots, ctx, dataModel, position1)
+                }
             }
 
         })

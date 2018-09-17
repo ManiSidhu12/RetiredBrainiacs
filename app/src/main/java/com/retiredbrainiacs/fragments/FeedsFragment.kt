@@ -316,27 +316,28 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
 
         if (requestCode == VIDEO_CAPTURE_CODE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+if(data != null) {
+    val imageUri = Uri.parse(videoPath)
+    f = File(imageUri.path)
+    val fileSizeInBytes = f!!.length()
 
-                val imageUri = Uri.parse(videoPath)
-                f = File(imageUri.path)
-                val fileSizeInBytes = f!!.length()
+    val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
+    Log.e("file", f.toString() + fileSizeInKB)
+    thumbnail = ThumbnailUtils.createVideoThumbnail(f!!.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
+    Log.e("thumb", "aman" + thumbnail.toString())
 
-                val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
-                Log.e("file", f.toString() + fileSizeInKB)
 
-                thumbnail = ThumbnailUtils.createVideoThumbnail(f!!.getAbsolutePath(), MediaStore.Video.Thumbnails.MINI_KIND)
-                Log.e("thumb", "aman" + thumbnail.toString())
-                f1 = saveImage.storeImage(thumbnail)
-                if (global.videoList != null) {
-                    global.videoList.clear()
-                } else {
-                    global.videoList = ArrayList()
-                }
-                addVideo(f!!.absolutePath, uploadImage1(f!!.absolutePath).split(",")[0])
-                addVideo(f1!!.absolutePath, uploadImage1(f1!!.absolutePath).split(",")[0])
-                v.img_feed.setImageBitmap(thumbnail)
+    f1 = saveImage.storeImage(thumbnail)
+    if (global.videoList != null) {
+        global.videoList.clear()
+    } else {
+        global.videoList = ArrayList()
+    }
+    addVideo(f!!.absolutePath, uploadImage1(f!!.absolutePath).split(",")[0])
+    addVideo(f1!!.absolutePath, uploadImage1(f1!!.absolutePath).split(",")[0])
+    v.img_feed.setImageBitmap(thumbnail)
 
-            } else {
+}  } else {
                 val selectedImageUri = data!!.getData()
                 f = File(selectedImageUri!!.path)
                 val fileSizeInBytes = f!!.length()
@@ -433,7 +434,7 @@ if(resultCode == RESULT_OK){
         var cursor: Cursor? = null
         try {
             val projection = arrayOf(MediaStore.Audio.Media.DATA)
-            cursor = activity!!.managedQuery(uri, projection, null, null, null)
+            cursor = activity!!.contentResolver.query(uri, projection, null, null, null)
             val column_index = cursor!!.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
             cursor!!.moveToFirst()
             return cursor!!.getString(column_index)
@@ -445,7 +446,7 @@ if(resultCode == RESULT_OK){
     }
     fun getPath(uri: Uri, activity: Activity?): String {
         val projection = arrayOf(MediaStore.MediaColumns.DATA)
-        val cursor = activity!!.managedQuery(uri, projection, null, null, null)
+        val cursor = activity!!.contentResolver.query(uri, projection, null, null, null)
         val column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
         cursor.moveToFirst()
         return cursor.getString(column_index)

@@ -39,7 +39,6 @@ class About : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         /* lay_upload.visibility = View.GONE
          userImage.visibility = View.VISIBLE
          userImage.setImageBitmap(file)*/
-
         f = File(file_path)
 
         val path = Environment.getExternalStorageDirectory().toString() + File.separator + "RetiredBrainiacs" + File.separator
@@ -343,7 +342,6 @@ abouttxt.isEnabled = false
                 map["user_id"] = SharedPrefManager.getInstance(this@About).userId
                 map["page_id"] = page_id
                 map["file_name"] = imagename
-
                 Log.e("map delete image", map.toString())
                 return map
             }

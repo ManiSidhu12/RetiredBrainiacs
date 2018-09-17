@@ -4,6 +4,7 @@ import android.app.ProgressDialog
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import com.android.volley.AuthFailureError
@@ -69,6 +70,7 @@ if(CommonUtils.getConnectivityStatusString(this).equals("true")){
             var root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
             if (root.status.equals("true")) {
                 Common.showToast(this, root.message)
+                edt_wish.text = Editable.Factory.getInstance().newEditable("")
 
             } else {
                 Common.showToast(this, root.message)
