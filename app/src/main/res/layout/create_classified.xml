@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="20dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Ad Title"
+        android:textColor="@color/theme_color_orange"
+        android:textSize="16sp"/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/orange_bg">
+        <EditText
+            android:id="@+id/edt_ad_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:hint="Ad Title"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/transparent"
+            android:gravity="start|center"
+            android:padding="4dp"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Location"
+        android:textColor="@color/theme_color_orange"
+        android:textSize="16sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/orange_bg">
+        <EditText
+            android:id="@+id/edt_location"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:hint="Location"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/transparent"
+            android:gravity="start|center"
+            android:padding="4dp"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Select Category"
+        android:textColor="@color/theme_color_orange"
+        android:textSize="16sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/orange_bg">
+        <Spinner
+            android:id="@+id/spin_ad_category"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:gravity="start|center"
+            android:padding="4dp"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Youtube Video Link"
+        android:textColor="@color/theme_color_orange"
+        android:textSize="16sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/orange_bg">
+        <EditText
+            android:id="@+id/edt_youtube_link"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:hint="Your Youtube Video Link"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/transparent"
+            android:gravity="start|center"
+            android:padding="4dp"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:text="Description"
+        android:textColor="@color/theme_color_orange"
+        android:textSize="16sp"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:background="@drawable/orange_bg">
+        <EditText
+            android:id="@+id/edt_desc"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:hint="Your message"
+            android:textSize="14sp"
+            android:textColor="@android:color/black"
+            android:background="@android:color/transparent"
+            android:gravity="start|top"
+            android:padding="4dp"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal">
+
+        <RelativeLayout
+            android:id="@+id/lay_browse_class"
+            android:layout_width="120dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true"
+            android:background="@drawable/cmnt_bg"
+            android:layout_centerInParent="true">
+            <ImageView
+                android:id="@+id/attach"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="7dp"
+                android:src="@drawable/clip"
+                android:layout_centerInParent="true"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_toEndOf="@+id/attach"
+                android:layout_centerInParent="true"
+                android:text="Upload"
+                android:gravity="center"
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:layout_marginStart="5dp"/>
+        </RelativeLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toEndOf="@+id/lay_browse"
+            android:layout_centerInParent="true"
+            android:text="Upload pictures(upto 9),schematics or pdf etc."
+            android:gravity="center"
+            android:visibility="gone"
+            android:layout_marginStart="7dp"/>
+
+
+    </RelativeLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_media_classified"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:nestedScrollingEnabled="false"
+        android:orientation="horizontal" />
+<Button
+    android:id="@+id/btn_post_ad"
+    android:layout_width="250dp"
+    android:layout_height="45dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/login_bg"
+    android:text="Post Now"
+    android:textAllCaps="false"
+    android:textSize="16sp"
+    android:gravity="center"
+    android:textColor="@android:color/white"
+    android:layout_margin="25dp"/>
+</LinearLayout>
+</ScrollView>

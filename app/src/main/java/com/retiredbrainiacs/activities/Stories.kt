@@ -83,7 +83,7 @@ addMemorialPage()                }
         }
         txtend.setOnClickListener {
             if(v.btn_edit.text.equals("Save")){
-                showDatePicker(txtdob, "dor")
+                showDatePicker(txtend, "dor")
 
             }
         }
@@ -104,7 +104,7 @@ addMemorialPage()                }
             if(root.status.equals("true")){
 
                 page_id = root.memorial[0].userData[0].pageId
-
+intro.text = "About "+SharedPrefManager.getInstance(this@Stories).name
                 txtdob.text = root.memorial[0].userData[0].dateOfBirth
                 txtend.text = root.memorial[0].userData[0].endDate
                 edt_left.text = Editable.Factory.getInstance().newEditable(root.memorial[0].userData[0].sampleContent1)

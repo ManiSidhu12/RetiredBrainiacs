@@ -56,4 +56,14 @@ public class Global extends Application {
 
     ArrayList<HashMap<String,String>> videoList = new ArrayList<>();
 
+    public ArrayList<HashMap<String, String>> getImageUpload() {
+        return imageUpload;
+    }
+
+    public void setImageUpload(ArrayList<HashMap<String, String>> imageUpload) {
+        this.imageUpload = imageUpload;
+    }
+
+    ArrayList<HashMap<String, String>> imageUpload=new ArrayList<>();
+
 }

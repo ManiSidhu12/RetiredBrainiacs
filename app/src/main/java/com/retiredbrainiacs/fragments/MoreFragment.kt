@@ -27,6 +27,7 @@ v = inflater.inflate(R.layout.more_pop_up,container,false)
         if(v1.btn_logout.visibility == View.VISIBLE) {
             v1.btn_logout.visibility = View.GONE
         }
+        v1.btn_edit.visibility = View.GONE
 work()
       // openDialog()
 

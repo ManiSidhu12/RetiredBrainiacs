@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.fragments
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import com.retiredbrainiacs.activities.CreateClassified
 import com.retiredbrainiacs.common.Common
 import kotlinx.android.synthetic.main.classified_screen.view.*
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
@@ -29,6 +31,8 @@ class ClassifiedFragment : Fragment(){
         if(v1.btn_logout.visibility == View.VISIBLE) {
             v1.btn_logout.visibility = View.GONE
         }
+        v1.btn_edit.visibility = View.VISIBLE
+        v1.btn_edit.text = " Post Ad"
         v1.titletxt.text = "Classified"
 
         //======= Font  ================
@@ -49,6 +53,9 @@ class ClassifiedFragment : Fragment(){
     }
 
 fun work(){
+    v1.btn_edit.setOnClickListener {
+        startActivity(Intent(activity!!,CreateClassified::class.java))
+    }
     v.lay_all_classi.setOnClickListener {
         showSelection(v.txt_all, v.img_all, v.txt_save, v.txt_my, v.img_save, v.img_my, v.lay_all_classi, v.lay_save_classi, v.lay_my_classi)
         fragmentManager!!.beginTransaction().replace(R.id.frame_classified,AllClassifiedFragment()).commit()

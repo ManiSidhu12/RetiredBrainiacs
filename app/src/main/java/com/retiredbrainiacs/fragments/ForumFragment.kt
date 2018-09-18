@@ -59,6 +59,7 @@ class ForumFragment : Fragment(){
         if(v1.btn_logout.visibility == View.GONE) {
             v1.btn_logout.visibility = View.VISIBLE
         }
+        v1.btn_edit.visibility = View.GONE
         v1.titletxt.text = "Forum"
 
 

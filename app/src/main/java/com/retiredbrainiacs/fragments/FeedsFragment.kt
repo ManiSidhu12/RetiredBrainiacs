@@ -128,6 +128,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
         v1 = (activity as AppCompatActivity).supportActionBar!!.customView
 
         v1.btn_logout.visibility = View.GONE
+        v1.btn_edit.visibility = View.GONE
         v1.titletxt.text = "Home"
 
         Common.setFontRegular(activity!!, v1.titletxt)
