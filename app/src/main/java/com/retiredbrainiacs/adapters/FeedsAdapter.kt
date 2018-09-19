@@ -48,7 +48,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
     var handler = Handler()
     var mediaFileLengthInMilliseconds: Int = 0
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var v = LayoutInflater.from(ctx).inflate(R.layout.home_feed_adapter, parent, false)
+        val v = LayoutInflater.from(ctx).inflate(R.layout.home_feed_adapter, parent, false)
         return ViewHolder(v)
     }
 
@@ -376,9 +376,9 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                      override fun run() {
                         if (mediaPlayer != null)
                         {
-                            val mCurrentPosition = mediaPlayer!!.getCurrentPosition() / 1000
-                            holder.seekBar.progress = mediaPlayer!!.getCurrentPosition()
-                            holder.txtCurrent.text = formateMilliSeccond(mediaPlayer!!.getCurrentPosition().toLong())
+                            val mCurrentPosition = mediaPlayer!!.currentPosition / 1000
+                            holder.seekBar.progress = mediaPlayer!!.currentPosition
+                            holder.txtCurrent.text = formateMilliSeccond(mediaPlayer!!.currentPosition.toLong())
                             Log.e("current",mCurrentPosition.toString())
                         }
                         mHandler.postDelayed(this, 1000)
@@ -388,14 +388,14 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                 e.printStackTrace();
             }
 
-            mediaFileLengthInMilliseconds = mediaPlayer!!.getDuration(); // gets the song length in milliseconds from URL
+            mediaFileLengthInMilliseconds = mediaPlayer!!.duration // gets the song length in milliseconds from URL
 
-            if (!mediaPlayer!!.isPlaying()) {
+            if (!mediaPlayer!!.isPlaying) {
                 mediaPlayer!!.start()
-                holder.btnPause.setImageResource(R.drawable.pause);
+                holder.btnPause.setImageResource(R.drawable.pause)
             } else {
                 mediaPlayer!!.pause()
-                holder.btnPause.setImageResource(R.drawable.play1);
+                holder.btnPause.setImageResource(R.drawable.play1)
             }
 
             //primarySeekBarProgressUpdater(holder.seekBar)
@@ -481,6 +481,10 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
         }
 
         dialog!!.show()
+
+        dialog!!.clicklay.setOnClickListener {
+
+        }
         dialog!!.drop.setOnClickListener {
             dialog!!.spin_privacy_pop.performClick()
         }

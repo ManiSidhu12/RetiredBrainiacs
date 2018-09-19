@@ -3,7 +3,6 @@ package com.retiredbrainiacs.activities
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.net.Uri
 import android.os.Bundle
@@ -13,20 +12,28 @@ import android.os.Message
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
+import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
 import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException
+import com.google.android.gms.common.GooglePlayServicesRepairableException
+import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.gson.Gson
+import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.BitmapAdapter
 import com.retiredbrainiacs.apis.AddClassified
 import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.classified.CategoryRoot
+import com.retiredbrainiacs.model.classified.DetailsRoot
+import com.retiredbrainiacs.model.classified.Image
 import kotlinx.android.synthetic.main.create_classified.*
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import java.io.File
@@ -46,16 +53,18 @@ class CreateClassified : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         imageutils.createImage(file, filename, path, false)
 
         listImages!!.add(bitmap)
-        recycler_media_classified.adapter = BitmapAdapter(this@CreateClassified,listImages!!,width)
+        recycler_media_classified.adapter = BitmapAdapter(this@CreateClassified, listImages!!, width, "bitmap", img)
 
-if( f!= null){
-    addimages(f!!.getAbsolutePath(),uploadImage(f!!.absolutePath))
+if(f!= null){
+    addimages(f!!.absolutePath,uploadImage(f!!.absolutePath))
 
 }
     }
+    var img =  ArrayList<Image>()
     lateinit var pd : ProgressDialog
     var width = 0
     var catId = " "
+    var type =""
     lateinit var imageutils: Imageutils
     var filename :String = ""
     var file_name :String = ""
@@ -66,8 +75,11 @@ if( f!= null){
     lateinit var root : CategoryRoot
     var list : ArrayList<String> ?= null
     var listID : ArrayList<String> ?= null
+    internal var PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
+
     var listImages : java.util.ArrayList<Bitmap>?= null
-lateinit var v : View
+    lateinit var v : View
+    var linkname= ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -86,6 +98,15 @@ lateinit var v : View
         width = size.x
         recycler_media_classified.layoutManager = LinearLayoutManager(this@CreateClassified,LinearLayoutManager.HORIZONTAL,false)
 global = Global()
+
+        if(intent.extras != null && intent.extras.getString("type").equals("edit")){
+            linkname = intent.extras.getString("linkname")
+            if (CommonUtils.getConnectivityStatusString(this@CreateClassified).equals("true")) {
+                getClassifiedDetails()
+            } else {
+                CommonUtils.openInternetDialog(this@CreateClassified)
+            }
+        }
         if(CommonUtils.getConnectivityStatusString(this).equals("true")){
             getCategories()
         }
@@ -98,7 +119,6 @@ if(validate()){
    if(CommonUtils.getConnectivityStatusString(this).equals("true")){
        pd = ProgressDialog.show(this@CreateClassified, "", "Uploading")
 
-     //  Thread(null, uploadimage, "").start()
        Thread(uploadimage).start()
    }
     else{
@@ -106,28 +126,46 @@ if(validate()){
    }
 }
         }
+edt_location.setOnClickListener {
+    try {
+        val intent = PlaceAutocomplete.IntentBuilder(PlaceAutocomplete.MODE_FULLSCREEN).build(this@CreateClassified)
+        startActivityForResult(intent, PLACE_AUTOCOMPLETE_REQUEST_CODE)
+    } catch (e: GooglePlayServicesRepairableException) {
+    } catch (e: GooglePlayServicesNotAvailableException) {
+    }
 
+
+}
         lay_browse_class.setOnClickListener {
             imageutils.imagepicker(1)
-
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         imageutils.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) run {
+            if (resultCode == RESULT_OK) {
+                val place = PlaceAutocomplete.getPlace(this, data)
+                edt_location.text = place.name.toString()
+                var latLng = place.latLng.toString()
+
+
+
+            }
+        }
 
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         imageutils.request_permission_result(requestCode, permissions, grantResults)
     }
+
     private fun getCategories() {
-        var url = GlobalConstants.API_URL1 + "?action=view_memorial_cat"
+        val url = GlobalConstants.API_URL1 + "?action=view_memorial_cat"
         val pd = ProgressDialog.show(this, "", "Loading", false)
         val postRequest = object : StringRequest(Request.Method.GET, url, Response.Listener<String> { response ->
             pd.dismiss()
             Log.e("response", response)
-
             val gson = Gson()
             val reader = com.google.gson.stream.JsonReader(StringReader(response))
             reader.isLenient = true
@@ -235,6 +273,10 @@ return filename
             Common.showToast(this,"Please select atleast one image...")
             return false
         }
+        else if(global.imageUpload != null && global.imageUpload.size > 9){
+            Common.showToast(this,"Maximum number of images is 9...")
+            return false
+        }
         else{
             return true
         }
@@ -258,7 +300,6 @@ if(spin_ad_category.selectedItem != null){
         msg.obj = res
         imageHandler.sendMessage(msg)
     }
-
     //********** Implementing handler for upload image thread*****
     var imageHandler: Handler = object : Handler()
     {
@@ -288,5 +329,49 @@ if(spin_ad_category.selectedItem != null){
 
 
         }
+    }
+
+    private fun getClassifiedDetails() {
+        var url = GlobalConstants.API_URL + "classified_detail"
+        val pd = ProgressDialog.show(this, "", "Loading", false)
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+
+            pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+        var    root = gson.fromJson<DetailsRoot>(reader, DetailsRoot::class.java)
+
+            if (root.status.equals("true")) {
+edt_ad_title.text = Editable.Factory.getInstance().newEditable(root.clssified[0].clssifiedTitle)
+edt_location.text = root.clssified[0].map
+edt_youtube_link.text = Editable.Factory.getInstance().newEditable(root.clssified[0].urlvideo)
+edt_desc.text = Editable.Factory.getInstance().newEditable(root.clssified[0].description)
+if(root.clssified[0].images != null && root.clssified[0].images.size > 0){
+    recycler_media_classified.adapter = BitmapAdapter(this@CreateClassified,listImages!!,width,"images",root.clssified[0].images)
+
+}
+            } else {
+                Common.showToast(this@CreateClassified, root.message)
+            }
+        },
+                Response.ErrorListener {
+                    pd.dismiss()
+                }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+                map["user_id"] = SharedPrefManager.getInstance(this@CreateClassified).userId
+                map["linkname"] = linkname
+                Log.e("map details", map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
     }
 }

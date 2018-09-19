@@ -124,7 +124,11 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/filepaths"/>
         </provider>
-<activity android:name=".activities.FullImage"
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_places_key" />
+
+        <activity android:name=".activities.FullImage"
     android:screenOrientation="portrait"
     />
         <activity android:name=".activities.Contact"

@@ -2,6 +2,7 @@ package com.retiredbrainiacs.adapters
 
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -16,6 +17,7 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.activities.CreateClassified
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
@@ -39,7 +41,7 @@ class MyClassifiedAdapter(var ctx: Context,var myClassified: MutableList<MyClass
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         Common.setFontRegular(ctx,holder.txtEdit)
         Common.setFontRegular(ctx,holder.txtDelete)
-
+        holder.txtTitlle.text = myClassified[position].classifiedTitle
         if(myClassified[position].image != null && !myClassified[position].image.isEmpty()){
             Picasso.with(ctx).load(myClassified[position].image).into(holder.img)
         }
@@ -54,6 +56,10 @@ class MyClassifiedAdapter(var ctx: Context,var myClassified: MutableList<MyClass
                 CommonUtils.openInternetDialog(ctx)
             }
         }
+
+        holder.layEdit.setOnClickListener {
+ctx.startActivity(Intent(ctx,CreateClassified::class.java).putExtra("type","edit").putExtra("linkname",myClassified[position].linkname))
+        }
     }
 
     class ViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
@@ -61,6 +67,8 @@ val txtEdit = itemView.txt_edit
 val txtDelete = itemView.txt_delete
         val img = itemView.img_my_classified
         val layDel = itemView.lay_delete
+        val layEdit = itemView.lay_edit
+        val txtTitlle = itemView.txt_title_classi
 
     }
     private fun deleteClassified(value: String, ctx: Context, position: Int, myClassified: MutableList<MyClassified>) {

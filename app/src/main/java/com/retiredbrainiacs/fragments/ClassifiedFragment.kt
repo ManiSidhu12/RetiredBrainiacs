@@ -54,7 +54,7 @@ class ClassifiedFragment : Fragment(){
 
 fun work(){
     v1.btn_edit.setOnClickListener {
-        startActivity(Intent(activity!!,CreateClassified::class.java))
+        startActivity(Intent(activity!!,CreateClassified::class.java).putExtra("type","new"))
     }
     v.lay_all_classi.setOnClickListener {
         showSelection(v.txt_all, v.img_all, v.txt_save, v.txt_my, v.img_save, v.img_my, v.lay_all_classi, v.lay_save_classi, v.lay_my_classi)

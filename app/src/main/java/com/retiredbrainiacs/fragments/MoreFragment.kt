@@ -28,8 +28,9 @@ v = inflater.inflate(R.layout.more_pop_up,container,false)
             v1.btn_logout.visibility = View.GONE
         }
         v1.btn_edit.visibility = View.GONE
-work()
-      // openDialog()
+        work()
+
+      //openDialog()
 
         Common.setFontRegular(activity!!,v1.titletxt)
 
