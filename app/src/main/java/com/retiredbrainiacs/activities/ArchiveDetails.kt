@@ -680,7 +680,7 @@ modelYou = ModelYoutube()
         try {
             val fis = FileInputStream(f)
 
-            val edit = AddForum(this@ArchiveDetails,filetype,filename,GlobalConstants.API_URL+"upload_archive_media")
+            val edit = AddForum(this@ArchiveDetails,filetype,filename,GlobalConstants.API_URL+"upload_archive_media","archive")
             res = edit.doStart(fis)
         } catch (e: Exception) {
             e.printStackTrace()

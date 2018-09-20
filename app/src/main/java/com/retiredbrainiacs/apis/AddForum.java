@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.retiredbrainiacs.common.GlobalConstants;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,7 +24,8 @@ public class AddForum {
     String msg;
     String status,mediaName="",mediaUrl="";
     String url;
-    public AddForum(Context c,String filetype, String filename1,String url) {
+    String type= "";
+    public AddForum(Context c,String filetype, String filename1,String url,String tyype) {
         this.url = url;
         try
         {
@@ -39,6 +41,7 @@ public class AddForum {
 
         imagetype=filetype;
         this.filename=filename1;
+        type = tyype;
         Log.e("img", imagetype+filename);
     }
 
@@ -77,8 +80,13 @@ public class AddForum {
 
 
             //---------image
-            dos.writeBytes("Content-Disposition: form-data; name=\"uploadfile\";filename=\""+ filename + "\"" + lineEnd);
+            if(type.equalsIgnoreCase("classified")){
+                dos.writeBytes("Content-Disposition: form-data; name=\"uploadimage[]\";filename=\""+ filename + "\"" + lineEnd);
 
+            }
+            else {
+                dos.writeBytes("Content-Disposition: form-data; name=\"uploadfile\";filename=\"" + filename + "\"" + lineEnd);
+            }
             if (imagetype.equalsIgnoreCase("jpg"))
             {
                 Log.i("imagetype", "1");
@@ -187,8 +195,17 @@ public class AddForum {
 mediaName = "";
             if(status.equalsIgnoreCase("true"))
             {
-      mediaName = job.getString("media_name");
-      mediaUrl = job.getString("uploaded_media_url");
+                if(type.equalsIgnoreCase("classified")){
+                    JSONArray arr = job.getJSONArray("images");
+                    for(int j = 0; j< arr.length();j++){
+                        JSONObject obj = arr.getJSONObject(j);
+                        mediaName = obj.getString("image");
+                    }
+                }
+                else {
+                    mediaName = job.getString("media_name");
+                    mediaUrl = job.getString("uploaded_media_url");
+                }
             }
             else{
 

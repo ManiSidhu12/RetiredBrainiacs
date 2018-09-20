@@ -115,12 +115,11 @@ openDialog()
                     override fun onNext(t: ForumRoot) {
                         v.progress_forum.visibility = View.GONE
                         v.recycler_forum.visibility = View.VISIBLE
-Log.e("resp form",t.status)
+                        Log.e("resp form",t.status)
                         if(t != null && t.status.equals("true")){
                             if(t.listForm != null && t.listForm.size > 0){
                                 v.recycler_forum.layoutManager = LinearLayoutManager(activity)
                                 v.recycler_forum.adapter = ForumAdapter(activity!!,t.listForm)
-
                             }
                         }
                     }
@@ -164,7 +163,7 @@ addForumAPI(dialog.edt_post_forum.text.toString(),dialog.edt_post_content.text.t
         dialog.imageView1.setOnClickListener{ dialog.dismiss() }
     }
     private fun addForumAPI(subject : String, content : String,dialog: Dialog){
-        var url = GlobalConstants.API_URL+"post_a_forum"
+        val url = GlobalConstants.API_URL+"post_a_forum"
         val pd = ProgressDialog.show(activity!!, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->

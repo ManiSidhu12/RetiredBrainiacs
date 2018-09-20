@@ -56,7 +56,9 @@ class  Account : AppCompatActivity(){
         btn_edit.setOnClickListener {
 startActivity(Intent(this@Account,ContactInfo::class.java).putExtra("type","edit"))
         }
-
+        lay_chng_pswd.setOnClickListener {
+            startActivity(Intent(this@Account,ChangePassword::class.java))
+        }
         lay_about.setOnClickListener {
             startActivity(Intent(this@Account,AboutUs::class.java))
         }

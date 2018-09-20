@@ -262,7 +262,6 @@ txt_forgot.setOnClickListener {
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
                 map["email"] = email.trim()
-                //Log.e("map", map.toString());
                 return map
             }
         }
@@ -275,7 +274,7 @@ txt_forgot.setOnClickListener {
 
     //============= Login Web Service =====
     private fun loginWebService(email : String,pswd : String){
-        var url = GlobalConstants.API_URL+"login"
+        val url = GlobalConstants.API_URL+"login"
         val pd = ProgressDialog.show(this@Login, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -352,7 +351,7 @@ if(rootLogin.message.equals("YOUR ACCOUNT IS NOT VERIFIED")){
         dialog.btn_cancel.setOnClickListener{ dialog.dismiss() }
     }
     private fun forgotPassword(email : String,dialog: Dialog){
-        var url = GlobalConstants.API_URL+"forget_password"
+        val url = GlobalConstants.API_URL+"forget_password"
         val pd = ProgressDialog.show(this@Login, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
@@ -364,7 +363,7 @@ if(rootLogin.message.equals("YOUR ACCOUNT IS NOT VERIFIED")){
 
             if(rootLogin.status.equals("true")) {
                 val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(dialog.edt_email_forgot.getWindowToken(), 0)
+                imm.hideSoftInputFromWindow(dialog.edt_email_forgot.windowToken, 0)
                 dialog.dismiss()
             } else{
                 Common.showToast(this@Login,rootLogin.message)
@@ -376,7 +375,6 @@ if(rootLogin.message.equals("YOUR ACCOUNT IS NOT VERIFIED")){
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
-
                 map["user_email"] = email
                 return map
             }

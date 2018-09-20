@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.app.Activity.RESULT_OK
 import android.app.AlertDialog
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -61,6 +62,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.home_feed_screen.*
 import kotlinx.android.synthetic.main.home_feed_screen.view.*
+import kotlinx.android.synthetic.main.instructions_popup.*
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -77,8 +79,6 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
         }
 
     }
-
-    // Requesting permission to RECORD_AUDIOcc
     private val REQUEST_RECORD_AUDIO_PERMISSION = 200
     var RQS_RECORDING = 12
 
@@ -187,6 +187,9 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
 
     fun work() {
 
+v.img_ques.setOnClickListener {
+   openDialog()
+}
 
         v.img_msg.setOnClickListener {
           if(toUserId != null && !toUserId.isEmpty())  {
@@ -570,25 +573,7 @@ if(resultCode == RESULT_OK){
             filetype = "jpeg"
             filename = "Image" + System.currentTimeMillis() + "." + filetype
 
-        } /*else if (absolutePath.endsWith(".mp4")) {
-            filetype = "mp4"
-
-            filename = "Video" + System.currentTimeMillis() + "." + filetype
-            if (absolutePath1.endsWith(".jpg")) {
-
-                fileType1 = "jpg"
-                fileName1 = "Image" + System.currentTimeMillis() + "." + fileType1
-
-            } else if (absolutePath1.endsWith(".png")) {
-                fileType1 = "png"
-                fileName1 = "Image" + System.currentTimeMillis() + "." + fileType1
-
-            } else if (absolutePath1.endsWith(".jpeg")) {
-                fileType1 = "jpeg"
-                fileName1 = "Image" + System.currentTimeMillis() + "." + fileType1
-
-            }
-        }*/
+        }
         else if(absolutePath.endsWith(".mp3")){
             Log.e("in","mp3")
             filetype = "mp3"
@@ -962,5 +947,12 @@ if(resultCode == RESULT_OK){
         startActivityForResult(intent, RQS_RECORDING)
 
     }
-
+fun openDialog(){
+    val dialog = Dialog(activity!!, android.R.style.Theme_Translucent_NoTitleBar)
+    dialog.setContentView(R.layout.instructions_popup)
+    dialog.show()
+    dialog.closebtn.setOnClickListener {
+        dialog.dismiss()
+    }
+}
 }

@@ -3,6 +3,7 @@ package com.retiredbrainiacs.activities
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Point
 import android.net.Uri
 import android.os.Bundle
@@ -28,9 +29,14 @@ import com.google.android.gms.location.places.ui.PlaceAutocomplete
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.adapters.AttachmentAdapter
 import com.retiredbrainiacs.adapters.BitmapAdapter
 import com.retiredbrainiacs.apis.AddClassified
+import com.retiredbrainiacs.apis.AddForum
 import com.retiredbrainiacs.common.*
+import com.retiredbrainiacs.model.ImagesModel
+import com.retiredbrainiacs.model.ModelImages
+import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.classified.CategoryRoot
 import com.retiredbrainiacs.model.classified.DetailsRoot
 import com.retiredbrainiacs.model.classified.Image
@@ -52,18 +58,18 @@ class CreateClassified : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         Log.e("path",path)
         imageutils.createImage(file, filename, path, false)
 
-        listImages!!.add(bitmap)
-        recycler_media_classified.adapter = BitmapAdapter(this@CreateClassified, listImages!!, width, "bitmap", img)
-
-if(f!= null){
-    addimages(f!!.absolutePath,uploadImage(f!!.absolutePath))
-
-}
+        if(f != null){
+            uploadImage(f!!.absolutePath)
+        }
     }
+    var sb : StringBuilder ? = null
+var linkName = ""
     var img =  ArrayList<Image>()
     lateinit var pd : ProgressDialog
     var width = 0
     var catId = " "
+    lateinit var  model : ModelImages
+
     var type =""
     lateinit var imageutils: Imageutils
     var filename :String = ""
@@ -73,13 +79,13 @@ if(f!= null){
     var f :File ?= null
     lateinit var global : Global
     lateinit var root : CategoryRoot
-    var list : ArrayList<String> ?= null
+    var listCat : ArrayList<String> ?= null
     var listID : ArrayList<String> ?= null
     internal var PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
+    var list = ArrayList<ImagesModel>()
 
     var listImages : java.util.ArrayList<Bitmap>?= null
     lateinit var v : View
-    var linkname= ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -92,6 +98,9 @@ if(f!= null){
         v.btn_edit.visibility = View.GONE
         imageutils = Imageutils(this@CreateClassified)
         listImages = ArrayList()
+        model = ModelImages()
+        sb = StringBuilder()
+
         val display = windowManager.defaultDisplay
         val size = Point()
         display.getSize(size)
@@ -100,7 +109,7 @@ if(f!= null){
 global = Global()
 
         if(intent.extras != null && intent.extras.getString("type").equals("edit")){
-            linkname = intent.extras.getString("linkname")
+            linkName = intent.extras.getString("linkname")
             if (CommonUtils.getConnectivityStatusString(this@CreateClassified).equals("true")) {
                 getClassifiedDetails()
             } else {
@@ -117,9 +126,7 @@ global = Global()
         btn_post_ad.setOnClickListener {
 if(validate()){
    if(CommonUtils.getConnectivityStatusString(this).equals("true")){
-       pd = ProgressDialog.show(this@CreateClassified, "", "Uploading")
-
-       Thread(uploadimage).start()
+      createClassified()
    }
     else{
        CommonUtils.openInternetDialog(this)
@@ -175,7 +182,7 @@ edt_location.setOnClickListener {
                 listID = ArrayList()
                 if(root.catList != null && root.catList.size > 0){
                 for ( i in 0 until root.catList.size){
-                    list!!.add(root.catList[i].title)
+                    listCat!!.add(root.catList[i].title)
                     listID!!.add(root.catList[i].categoryId)
                 }
                     val adapterActions = ArrayAdapter(this, R.layout.spin_setting1, list)
@@ -204,7 +211,7 @@ edt_location.setOnClickListener {
     }
 
     //***** Implementing upload Image ****
-    private fun uploadImage(absolutePath: String) : String {
+    private fun uploadImage(absolutePath: String) {
         Log.e("absolute",absolutePath)
         if (absolutePath.endsWith(".jpg")) {
             filetype = "jpg"
@@ -217,9 +224,12 @@ edt_location.setOnClickListener {
         } else if (absolutePath.endsWith(".jpeg")) {
             filetype = "jpeg"
             filename = "Image" + System.currentTimeMillis() + "." + filetype
-
         }
-return filename
+
+        pd = ProgressDialog.show(this, "", "Uploading")
+        Thread(null, uploadimage, "").start()
+        //signUp();
+
     }
 
     fun addimages(path: String, name: String) {
@@ -281,16 +291,15 @@ return filename
             return true
         }
     }
+    // ****** Implementing thread to upload image****
     private val uploadimage = Runnable {
+        Log.e("type1222", "amannn"+f.toString())
 
         var res = ""
         try {
             val fis = FileInputStream(f)
-if(spin_ad_category.selectedItem != null){
-    catId = listID!![spin_ad_category.selectedItemPosition-1]
-}
-            Log.e("iid",catId)
-            val edit = AddClassified(this@CreateClassified,global.imageUpload,SharedPrefManager.getInstance(this@CreateClassified).userId,edt_ad_title.text.toString(),edt_location.text.toString(),catId,edt_youtube_link.text.toString(),edt_desc.text.toString())
+
+            val edit = AddForum(this@CreateClassified,filetype,filename,GlobalConstants.API_URL+"upload_classified_media","classified")
             res = edit.doStart(fis)
 
         } catch (e: Exception) {
@@ -300,6 +309,7 @@ if(spin_ad_category.selectedItem != null){
         msg.obj = res
         imageHandler.sendMessage(msg)
     }
+
     //********** Implementing handler for upload image thread*****
     var imageHandler: Handler = object : Handler()
     {
@@ -316,7 +326,33 @@ if(spin_ad_category.selectedItem != null){
                     // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
                     Common.showToast(this@CreateClassified, res.split(",")[1])
                     listImages = ArrayList()
-                    global.imageUpload.clear()
+                    listImages!!.add(bitmap)
+                    Log.e("list",listImages.toString()+","+bitmap)
+
+                    if(listImages != null && listImages!!.size > 0) {
+
+                        for (i in 0 until listImages!!.size) {
+
+                            var m = ImagesModel()
+
+                            m.imageBitmap =  listImages!![i]
+                            m.id = ""
+                            m.type = ""
+                            m.url = ""
+                            m.value = "new"
+                            list!!.add(m)
+                        }
+                        model.model = list
+                    }
+                    //model.model.
+                    if(!media.equals("")){
+                        sb!!.append(media +",")
+                    }
+                    // listImagesComment = ArrayList()
+                    recycler_media_classified.adapter = AttachmentAdapter(this@CreateClassified,model,"new")
+
+                 //   recycler_media_classified.adapter = BitmapAdapter(this@CreateClassified, listImages!!, width, "bitmap", img)
+
 
                 } else {
                     Common.showToast(this@CreateClassified, res.split(",")[1])
@@ -331,17 +367,76 @@ if(spin_ad_category.selectedItem != null){
         }
     }
 
+    private fun createClassified(){
+        var url = GlobalConstants.API_URL+"add_classified"
+        val pd = ProgressDialog.show(this@CreateClassified, "", "Loading", false)
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            pd.dismiss()
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            val root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+
+            if(root1.status.equals("true")) {
+                Common.showToast(this@CreateClassified,root1.message)
+                model = ModelImages()
+                sb = StringBuilder()
+
+
+            } else{
+                Common.showToast(this@CreateClassified,root1.message)
+
+            }
+        },
+
+                Response.ErrorListener { pd.dismiss() }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["user_id"] =  SharedPrefManager.getInstance(this@CreateClassified).userId
+                map["title"] = edt_ad_title.text.toString()
+                map["location"] =  edt_location.text.toString()
+                if(spin_ad_category.selectedItem != null){
+                    catId = listID!![spin_ad_category.selectedItemPosition-1]
+                }
+                else{
+                    catId = ""
+                }
+                map["category"] = catId
+                map["video_url"] = edt_youtube_link.text.toString()
+                map["description"] = edt_desc.text.toString()
+                map["linkname"] = linkName
+                if(sb != null && sb!!.length > 0) {
+                    map["uploadimage"] = sb!!.deleteCharAt(sb!!.length - 1).toString()
+                }
+                else{
+                    map["uploadimage"]=""
+                }
+                Log.e("map upload classified",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this@CreateClassified)
+        requestQueue.add(postRequest)
+
+    }
+
     private fun getClassifiedDetails() {
         var url = GlobalConstants.API_URL + "classified_detail"
         val pd = ProgressDialog.show(this, "", "Loading", false)
 
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            sb = StringBuilder()
 
             pd.dismiss()
             val gson = Gson()
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
-        var    root = gson.fromJson<DetailsRoot>(reader, DetailsRoot::class.java)
+        var root = gson.fromJson<DetailsRoot>(reader, DetailsRoot::class.java)
 
             if (root.status.equals("true")) {
 edt_ad_title.text = Editable.Factory.getInstance().newEditable(root.clssified[0].clssifiedTitle)
@@ -363,7 +458,7 @@ if(root.clssified[0].images != null && root.clssified[0].images.size > 0){
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
                 map["user_id"] = SharedPrefManager.getInstance(this@CreateClassified).userId
-                map["linkname"] = linkname
+                map["linkname"] = linkName
                 Log.e("map details", map.toString())
                 return map
             }

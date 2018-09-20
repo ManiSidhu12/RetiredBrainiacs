@@ -55,6 +55,7 @@ startActivity(Intent(activity!!,StoreActivity::class.java))
         // fragmentManager!!.beginTransaction().replace(R.id.frame_layout, Account()).addToBackStack("more").commit()
 
     }
+
     v.lay_archives_pop.setOnClickListener {
         startActivity(Intent(activity!!,TimeLine::class.java))
 

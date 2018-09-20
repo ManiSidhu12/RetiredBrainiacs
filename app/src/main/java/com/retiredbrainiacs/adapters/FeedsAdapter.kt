@@ -78,7 +78,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
         Common.setFontRegular(ctx, holder.edtCmnt)
         holder.txtPost.text = posts[position].postContent
         var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT"))
+        sdf.timeZone = TimeZone.getTimeZone("GMT")
         var time = sdf!!.parse(posts[position].postingDate).getTime()
         var now = System.currentTimeMillis()
 
@@ -125,16 +125,10 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
         } else if (posts[position].audio != null && !posts[position].audio.isEmpty()) {
             holder.imgLayout.visibility = View.GONE
             holder.audioLay.visibility = View.VISIBLE
-            //   holder.btnPlay.setBackgroundResource(R.drawable.mp3)
-            //holder.audioImg.visibility = View.VISIBLE
-            //holder.audioImg.setImageResource(R.drawable.mp3)
-            // holder.imgPost.visibility = View.GONE
-
 
             mediaPlayer = MediaPlayer()
             mediaPlayer!!.setOnBufferingUpdateListener(object : MediaPlayer.OnBufferingUpdateListener {
                 override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
-                   // holder.seekBar.secondaryProgress = percent
                 }
 
             })
@@ -146,25 +140,13 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                 }
 
             })
-            mediaPlayer!!.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
+            mediaPlayer!!.setOnPreparedListener(object  : MediaPlayer.OnPreparedListener {
 
                 override fun onPrepared(mp: MediaPlayer?) {
 //holder.seekBar.progress = mp!!.currentPosition
                 }
             })
-/*holder.seekBar.setOnTouchListener(object : View.OnTouchListener{
-    override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-			*/
-            /** Seekbar onTouch event handler. Method which seeks MediaPlayer to seekBar primary progress position*//*
-			if(mediaPlayer!!.isPlaying()){
-				var playPositionInMillisecconds = (mediaFileLengthInMilliseconds / 100) * holder.seekBar.getProgress()
-				mediaPlayer!!.seekTo(playPositionInMillisecconds);
-			}
 
-        return false
-    }*/
-
-//})
            holder.seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
 
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
@@ -222,12 +204,6 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
             holder.spinPrivacy.adapter = adapterPrivacy
            setSelection(holder.spinPrivacy,posts[position].postType)
 
-            /*if (posts[position].postType.equals("1")) {
-                holder.spinPrivacy.setSelection(adapterPrivacy.getPosition("Private"))
-            } else {
-                holder.spinPrivacy.setSelection(adapterPrivacy.getPosition("Public"))
-
-            }*/
 
             val adapterActions = ArrayAdapter(ctx, R.layout.spin_setting1, actionsArray)
             adapterActions.setDropDownViewResource(R.layout.spinner_txt)
@@ -263,30 +239,6 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                 false
             }
             //=====
-/*
-  holder.spinPrivacy.onItemSelectedListener = object  : AdapterView.OnItemSelectedListener{
-    override fun onNothingSelected(parent: AdapterView<*>?) {
-
-    }
-
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position1: Int, id: Long) {
-        if(holder.spinPrivacy.selectedItem != null){
-            if(holder.spinPrivacy.selectedItem.toString().equals(type1))
-            if(holder.spinPrivacy.selectedItem.toString().equals("0")){
-                type1= "0"
-            }
-            else{
-                type1= "1"
-            }
-
-         editPost(ctx,posts[position].usersWallPostId,posts,position,holder.txtPost.text.toString(),type1)
-
-        }
-    }
-
-
-}
-*/
         }
         holder.spinActions.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {

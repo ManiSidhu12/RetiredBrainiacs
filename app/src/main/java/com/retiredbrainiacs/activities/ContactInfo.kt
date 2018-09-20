@@ -223,7 +223,7 @@ imageutils.imagepicker(1)
 
     }
 
-    private fun getProfile(){
+      private fun getProfile(){
         var url = GlobalConstants.API_URL+"getprofile"
         val pd = ProgressDialog.show(this@ContactInfo, "", "Loading", false)
 

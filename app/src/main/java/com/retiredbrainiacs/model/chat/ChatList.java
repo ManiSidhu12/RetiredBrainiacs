@@ -32,7 +32,18 @@ private String message;
 @SerializedName("user_role")
 @Expose
 private String userRole;
-
+    @SerializedName("msg_audio")
+    @Expose
+    private String msgAudio;
+    @SerializedName("msg_image")
+    @Expose
+    private String msgImage;
+    @SerializedName("msg_video")
+    @Expose
+    private String msgVideo;
+    @SerializedName("msg_download")
+    @Expose
+    private String msgDownload;
 public String getUserId() {
 return userId;
 }
@@ -104,5 +115,35 @@ return userRole;
 public void setUserRole(String userRole) {
 this.userRole = userRole;
 }
+    public String getMsgAudio() {
+        return msgAudio;
+    }
 
+    public void setMsgAudio(String msgAudio) {
+        this.msgAudio = msgAudio;
+    }
+
+    public String getMsgImage() {
+        return msgImage;
+    }
+
+    public void setMsgImage(String msgImage) {
+        this.msgImage = msgImage;
+    }
+
+    public String getMsgVideo() {
+        return msgVideo;
+    }
+
+    public void setMsgVideo(String msgVideo) {
+        this.msgVideo = msgVideo;
+    }
+
+    public String getMsgDownload() {
+        return msgDownload;
+    }
+
+    public void setMsgDownload(String msgDownload) {
+        this.msgDownload = msgDownload;
+    }
 }

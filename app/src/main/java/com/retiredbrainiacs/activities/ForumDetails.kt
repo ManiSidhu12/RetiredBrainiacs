@@ -534,7 +534,7 @@ for (i in 0 until listImagesComment!!.size){
         try {
             val fis = FileInputStream(f)
 
-val edit = AddForum(this@ForumDetails,filetype,filename,GlobalConstants.API_URL+"upload_forum_media")
+val edit = AddForum(this@ForumDetails,filetype,filename,GlobalConstants.API_URL+"upload_forum_media","forum")
             res = edit.doStart(fis)
 
         } catch (e: Exception) {

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+    <TextView
+        android:id="@+id/chng_pswd1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:padding="4dp"
+        android:textSize="14sp"
+        android:textColor="@color/black"
+        android:text="Use the form below to change the password for Your Retired Brainiacs account."/>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="25dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/cmnt_bg">
+        <EditText
+            android:id="@+id/edt_cur_pswd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textPassword"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:layout_marginLeft="7dp"
+            android:padding="4dp"
+            android:hint="Current Password"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/cmnt_bg">
+        <EditText
+            android:id="@+id/edt_new_pswd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textPassword"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:layout_marginLeft="7dp"
+            android:padding="4dp"
+            android:hint="New password"/>
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:background="@drawable/cmnt_bg">
+        <EditText
+            android:id="@+id/edt_cnfrm_pswd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:inputType="textPassword"
+            android:textSize="14sp"
+            android:singleLine="true"
+            android:background="@android:color/transparent"
+            android:textColor="@color/black"
+            android:layout_marginLeft="7dp"
+            android:padding="4dp"
+            android:hint="Confirm New password"/>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_save_pswd"
+        android:layout_width="250dp"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:background="@color/theme_color_orange"
+        android:text="Save Changes"/>
+</LinearLayout>

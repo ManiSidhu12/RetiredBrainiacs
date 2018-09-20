@@ -14,20 +14,22 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.adapters.ChatAdapter
-import com.retiredbrainiacs.common.Common
-import com.retiredbrainiacs.common.CommonUtils
-import com.retiredbrainiacs.common.GlobalConstants
-import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.chat.ChatRoot
 import kotlinx.android.synthetic.main.chat_screen.*
 import java.io.StringReader
 import android.app.Activity
+import android.graphics.Bitmap
+import android.net.Uri
 import android.text.Editable
 import android.view.inputmethod.InputMethodManager
+import com.retiredbrainiacs.common.*
 
 
-class Chat : AppCompatActivity(){
+class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
+    override fun image_attachment(from: Int, filename: String?, file: Bitmap?, uri: Uri?) {
+    }
+
     lateinit var root : ChatRoot
     var linkname = ""
     var to_id = ""
