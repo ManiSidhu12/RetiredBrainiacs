@@ -42,7 +42,6 @@ import com.retiredbrainiacs.model.archive.MainModel
 import com.retiredbrainiacs.model.archive.ModelDetail
 import com.retiredbrainiacs.model.archive.TimelinearchiveRoot
 import kotlinx.android.synthetic.main.archive_details.*
-import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -50,7 +49,7 @@ import java.io.StringReader
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ArchiveDetails : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener {
+ class ArchiveDetails : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener {
     var file_name :String = ""
     var filename :String = ""
     var filetype :String = ""
@@ -75,11 +74,11 @@ class ArchiveDetails : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener 
     lateinit var imageUtils: Imageutils
     var listYoutube = ArrayList<YoutubeModel>()
     lateinit var  modelYou : ModelYoutube
-
     var map = HashMap<String, String>()
     lateinit var sbYoutube : StringBuilder
     lateinit var sbYoutubeDesc : StringBuilder
     var linkname : String = ""
+
     override fun image_attachment(from: Int, filename: String?, file: Bitmap?, uri: Uri?) {
         bitmap = file!!
         file_name = filename!!
@@ -99,22 +98,17 @@ class ArchiveDetails : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener 
     lateinit var listModel: ArrayList<ModelDetail>
     lateinit var modelMain: MainModel
     var size = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.archive_details)
 
-        window.setSoftInputMode(
-                WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
-      //  this.supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-      //  supportActionBar?.setCustomView(R.layout.custom_action_bar)
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 
-      //  v = supportActionBar!!.customView
-      //  v.titletxt.text = "Archive Details"
-     //   v.btn_logout.visibility = View.GONE
-      //  v.btn_edit.visibility = View.VISIBLE
-modelYou = ModelYoutube()
+        modelYou = ModelYoutube()
         imageUtils = Imageutils(this@ArchiveDetails)
         sb = StringBuilder()
+
         if (intent != null && intent.extras != null && intent.extras.getString("id") != null) {
             id = intent.extras.getString("id")
             linkname = intent.extras.getString("linkname")
@@ -130,12 +124,16 @@ modelYou = ModelYoutube()
         }
 
         btn_edit.setOnClickListener {
-            if(btn_edit.text.toString().equals("Edit")) {
+            if(btn_edit.text.toString().equals("Edit"))
+            {
                 edt_archive_title_detail.isEnabled = true
                 edt_archive_cat_detail.isEnabled = true
                 edt_archive_desc_detail.isEnabled = true
-             btn_edit.text = "Save"
-                recycler_archive_details.adapter = ArchiveDetailAdapter(this, modelMain.model, "edit", size,listYoutube)
+                btn_edit.text = "Save"
+                if(modelMain.model != null) {
+                    recycler_archive_details.adapter = ArchiveDetailAdapter(this, modelMain.model, "edit", size, listYoutube)
+
+                }
             }
             else {
                 if (CommonUtils.getConnectivityStatusString(this).equals("true")) {
@@ -167,7 +165,7 @@ modelYou = ModelYoutube()
     }
 
     private fun getArchiveDetails() {
-        var url = GlobalConstants.API_URL + "view-archive-data"
+        val url = GlobalConstants.API_URL + "view-archive-data"
         val pd = ProgressDialog.show(this@ArchiveDetails, "", "Loading", false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
             pd.dismiss()
@@ -385,7 +383,7 @@ modelYou = ModelYoutube()
         builder = AlertDialog.Builder(this@ArchiveDetails)
         builder.setTitle("Add Photo!")
 
-        builder.setItems(items,{ dialog, item ->
+        builder.setItems(items) { dialog, item ->
             if (items[item] == "Camera") {
                 openAlert(arrayOf("Capture Image","Take Video", "Cancel"))
 
@@ -451,7 +449,7 @@ modelYou = ModelYoutube()
             else if (items[item] == "Cancel") {
                 dialog.dismiss()
             }
-        })
+        }
         builder.show()
     }
 
@@ -484,9 +482,6 @@ modelYou = ModelYoutube()
                 val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
                 Log.e("file", f.toString() + fileSizeInKB)
 
-                //  img_feed_forum.setImageBitmap(file)
-                // recycler_media.adapter = AttachmentAdapter(this@ForumDetails,listImages!!,"add")
-
                 if(f != null){
                     uploadImage(f!!.absolutePath)
                 }
@@ -499,8 +494,6 @@ modelYou = ModelYoutube()
 
                 val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
                 Log.e("file", f.toString() + fileSizeInKB)
-
-                //recycler_media.adapter = AttachmentAdapter(this@ForumDetails,listImages!!,"add")
 
                 if(f != null){
                     uploadImage(f!!.absolutePath)
@@ -520,8 +513,6 @@ modelYou = ModelYoutube()
                     f = File(selectedPathVideo)
                     Log.e("f1", f.toString() + f!!.absolutePath)
 
-                    //recycler_media.adapter = AttachmentAdapter(this@ForumDetails,listImages!!,"add")
-
                     if(f != null){
                         uploadImage(f!!.absolutePath)
                     }
@@ -535,8 +526,6 @@ modelYou = ModelYoutube()
                     val selectedImageUri = data!!.getData()
                     selectedPath = getPath(selectedImageUri)
                     f = File(selectedPath)
-
-                    // recycler_media.adapter = AttachmentAdapter(this@ForumDetails,listImages!!,"add")
 
                     if(f != null){
                         uploadImage(f!!.absolutePath)
@@ -555,15 +544,11 @@ modelYou = ModelYoutube()
                 System.out.println("SELECT_VIDEO : " + selectedPath)
                 f = File(selectedPath)
 
-                // recycler_media.adapter = AttachmentAdapter(this@ForumDetails,listImages!!,"add")
-
                 if (f != null) {
                     uploadImage(f!!.absolutePath)
                 }
 
-                // Get the file instance
-                // File file = new File(path);
-                // Initiate the upload
+
             }
 
         }
@@ -592,7 +577,6 @@ modelYou = ModelYoutube()
         }
         else if (absolutePath.endsWith(".m4a")) {
             filetype = "mp3"
-
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
             bitmap = BitmapFactory.decodeResource(getResources(),R.drawable.mp3)
 
@@ -674,8 +658,6 @@ modelYou = ModelYoutube()
 
     // ****** Implementing thread to upload image****
     private val uploadimage = Runnable {
-        Log.e("type1222", "amannn"+f.toString())
-
         var res = ""
         try {
             val fis = FileInputStream(f)
@@ -703,16 +685,13 @@ modelYou = ModelYoutube()
                 if (status.equals("true")) {
                     val media = res.split(",")[2]
 
-                    // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
                     Common.showToast(this@ArchiveDetails, res.split(",")[1])
                     listImages = ArrayList()
                     listImages!!.add(bitmap)
 
                     if(listImages != null && listImages!!.size > 0) {
                         model1 = ModelImages()
-Log.e("true","in")
                         for (i in 0 until listImages!!.size) {
-                            Log.e("true","inside")
 
                             var m = ImagesModel()
 
@@ -723,7 +702,7 @@ Log.e("true","in")
                             m.value = "new"
                             list.add(m)
                         }
-                        Log.e("value",list.toString())
+
                         model1.model = list
 
                         recycler_media.visibility = View.VISIBLE
@@ -731,16 +710,9 @@ Log.e("true","in")
                         recycler_media.layoutManager = LinearLayoutManager(this@ArchiveDetails,LinearLayoutManager.HORIZONTAL,false)
                         recycler_media.adapter = AttachmentAdapter(this@ArchiveDetails,model1,"new")
                     }
-                    Log.e("valuess",model1.model[0].value)
-                    //model.model.
                     if(!media.equals("")){
                         sb!!.append(media +",")
                     }
-                    Log.e("list",model1.model.toString()+","+bitmap)
-
-
-                    //  Log.e("list",listImages!!.toString())
-                    //  img_feed_forum.setImageBitmap(file)
 
                 } else {
                     Common.showToast(this@ArchiveDetails, res.split(",")[1])
@@ -916,17 +888,13 @@ Log.e("true","in")
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
             pd.dismiss()
             Log.e("resp",response)
-            val gson = Gson()
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
 
         },
-
                 Response.ErrorListener { pd.dismiss() }) {
             @Throws(AuthFailureError::class)
             override fun getParams(): Map<String, String> {
-
-
                 map["user_id"] =  SharedPrefManager.getInstance(this@ArchiveDetails).userId
                 map["linkname"] = linkname
                 map["title"] = edt_archive_title_detail.text.toString()
@@ -1002,9 +970,6 @@ Log.e("true","in")
                 return map
             }
         }
-
-
-
 
         postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
         val requestQueue = Volley.newRequestQueue(this)

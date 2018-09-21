@@ -30,6 +30,7 @@ import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.forum.ForumRoot
+import com.retiredbrainiacs.model.forum.ListForm
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -48,6 +49,10 @@ class ForumFragment : Fragment(){
     lateinit var service: ApiInterface
     lateinit var gson: Gson
     lateinit var root : ResponseRoot
+    var totalPages = ""
+    var total_pages =0
+    var page = 1
+    var listForum = ArrayList<ListForm>()
     //==============
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -62,7 +67,7 @@ class ForumFragment : Fragment(){
         v1.btn_edit.visibility = View.GONE
         v1.titletxt.text = "Forum"
 
-
+listForum = ArrayList()
         // ============ Retrofit ===========
         service = ApiClient.getClient().create(ApiInterface::class.java)
         retroFit = ApiClient.getClient()
@@ -98,7 +103,7 @@ openDialog()
         v.recycler_forum.visibility= View.GONE
         val map = HashMap<String, String>()
         map["user_id"] = SharedPrefManager.getInstance(activity!!).userId
-        map["pg"] = "1"
+        map["pg"] = page.toString()
         map["param"] = ""
         Log.e("map forum",map.toString())
         service.getForums(map)
@@ -118,8 +123,19 @@ openDialog()
                         Log.e("resp form",t.status)
                         if(t != null && t.status.equals("true")){
                             if(t.listForm != null && t.listForm.size > 0){
+                                totalPages = t.totalPages
+
+                                listForum.addAll(t.listForm)
                                 v.recycler_forum.layoutManager = LinearLayoutManager(activity)
-                                v.recycler_forum.adapter = ForumAdapter(activity!!,t.listForm)
+                                if (totalPages.toInt() > 10) {
+                                    val mod = totalPages.toInt() % 10
+                                    total_pages = totalPages.toInt() / 10
+
+                                    total_pages = if (mod == 0) total_pages else total_pages + 1
+                                } else {
+                                    total_pages = 1
+                                }
+                                v.recycler_forum.adapter = ForumAdapter(activity!!,listForum,service,total_pages)
                             }
                         }
                     }

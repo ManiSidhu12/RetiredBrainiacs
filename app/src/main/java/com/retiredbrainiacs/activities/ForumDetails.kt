@@ -520,7 +520,7 @@ for (i in 0 until listImagesComment!!.size){
     }
     fun getPath(uri: Uri): String {
         val projection = arrayOf(MediaStore.MediaColumns.DATA)
-        val cursor = managedQuery(uri, projection, null, null, null)
+        val cursor = contentResolver.query(uri, projection, null, null, null)
         val column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
         cursor.moveToFirst()
         return cursor.getString(column_index)

@@ -10,6 +10,18 @@ public class ForumRoot {
 @SerializedName("status")
 @Expose
 private String status;
+
+    public String getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(String totalPages) {
+        this.totalPages = totalPages;
+    }
+
+    @SerializedName("totalpages")
+    @Expose
+    private String totalPages;
 @SerializedName("list_form")
 @Expose
 private List<ListForm> listForm = null;
