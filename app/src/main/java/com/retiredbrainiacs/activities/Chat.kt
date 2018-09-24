@@ -600,7 +600,7 @@ getChat()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (data != null) {
-                    val selectedImageUri = data!!.getData()
+                    val selectedImageUri = data!!.data
                     var selectedPathVideo = ""
                     selectedPathVideo = ImageFilePath.getPath(this, selectedImageUri)
                     Log.e("Image File Path", "" + selectedPathVideo)
@@ -619,7 +619,7 @@ getChat()
                 Log.e("file","videofile")
 
                 if (data != null) {
-                    val selectedImageUri = data!!.getData()
+                    val selectedImageUri = data!!.data
                     selectedPath = getPath(selectedImageUri)
                     f = File(selectedPath)
 

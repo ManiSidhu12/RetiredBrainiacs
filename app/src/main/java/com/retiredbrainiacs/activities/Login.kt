@@ -9,7 +9,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.RelativeLayout
 import com.android.volley.*
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
@@ -76,7 +78,7 @@ class Login : Activity(){
                 })
 
         authClient = TwitterAuthClient()
-
+        window.setFlags(WindowManager.LayoutParams.FLAG_SECURE, WindowManager.LayoutParams.FLAG_SECURE)
         setContentView(R.layout.login_screen)
 
         Common.setFontRegular(this@Login,txt_logo_login)

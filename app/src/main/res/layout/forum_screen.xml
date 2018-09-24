@@ -36,6 +36,8 @@
                 android:layout_marginStart="5dp"
                 android:hint="Search"
                 android:textSize="14sp"
+                android:imeOptions="actionSearch"
+                android:singleLine="true"
                 android:background="@android:color/transparent"/>
             <ImageView
                 android:id="@+id/img_msg_forum"

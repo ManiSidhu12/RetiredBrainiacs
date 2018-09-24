@@ -227,7 +227,7 @@ import java.util.*
                                 model = ModelDetail()
                                 model.id = root.listArch[i].bmpTif[j].id
                                 model.file = root.listArch[i].bmpTif[j].file
-                                model.file_align = root.listArch[i].bmpTif[j].fileAlign
+                                  model.file_align = root.listArch[i].bmpTif[j].fileAlign
                                 model.file_note = root.listArch[i].bmpTif[j].fileNote
                                 model.file_type = "bmp"
                                 listModel.add(model)
@@ -506,7 +506,7 @@ import java.util.*
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (data != null) {
-                    val selectedImageUri = data!!.getData()
+                    val selectedImageUri = data!!.data
                     var selectedPathVideo = ""
                     selectedPathVideo = ImageFilePath.getPath(this, selectedImageUri)
                     Log.e("Image File Path", "" + selectedPathVideo)
@@ -523,7 +523,7 @@ import java.util.*
                 Log.e("file","videofile")
 
                 if (data != null) {
-                    val selectedImageUri = data!!.getData()
+                    val selectedImageUri = data!!.data
                     selectedPath = getPath(selectedImageUri)
                     f = File(selectedPath)
 

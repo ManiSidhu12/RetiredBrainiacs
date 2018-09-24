@@ -28,19 +28,12 @@ import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.login.ProfileRoot
 import com.squareup.picasso.Picasso
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.profile_screen.*
 import okhttp3.*
 import okhttp3.logging.HttpLoggingInterceptor
 import org.json.JSONArray
 import org.json.JSONException
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 import java.io.File
 import java.io.FileInputStream
@@ -377,7 +370,7 @@ contri = ""
     //********** Implementing handler for upload image thread*****
      var imageHandler: Handler = object : Handler() {
         override fun handleMessage(msg: Message) {
-            var res = ""
+            var res: String
             try {
                 res = msg.obj.toString()
                 val status = res.split(",")[0]
