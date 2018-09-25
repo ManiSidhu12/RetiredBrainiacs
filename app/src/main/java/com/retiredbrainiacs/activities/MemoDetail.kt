@@ -184,15 +184,32 @@ deleteImage()
             if (root.status.equals("true")) {
                 edt_fname_memo_home.text = Editable.Factory.getInstance().newEditable(root.memorial[0].userData[0].personName)
                 page_id = root.memorial[0].userData[0].pageId
-                edt_dob_memo_home.text = root.memorial[0].userData[0].dateOfBirth
-                edt_dor_memo_home.text = root.memorial[0].userData[0].endDate
-                edt_story1_memo_home.text = Editable.Factory.getInstance().newEditable(root.memorial[0].userData[0].sampleContent1)
-                edt_story2_memo_home.text = Editable.Factory.getInstance().newEditable(root.memorial[0].userData[0].sampleContent2)
-                edt_story3_memo_home.text = Editable.Factory.getInstance().newEditable(root.memorial[0].userData[0].sampleContent3)
+
+                if(root.memorial[0].userData[0].sampleContent1 != null) {
+                    edt_story1_memo_home.text = Editable.Factory.getInstance().newEditable(root.memorial[0].userData[0].sampleContent1)
+                }
+                if(root.memorial[0].userData[0].sampleContent2 != null) {
+                    edt_story2_memo_home.text = Editable.Factory.getInstance().newEditable(root.memorial[0].userData[0].sampleContent2)
+                }
+                if(root.memorial[0].userData[0].sampleContent3 != null) {
+                    edt_story3_memo_home.text = Editable.Factory.getInstance().newEditable(root.memorial[0].userData[0].sampleContent3)
+                }
                 if (root.memorial[0].userData[0].dateOfBirth != null && !root.memorial[0].userData[0].dateOfBirth.isEmpty() && !root.memorial[0].userData[0].dateOfBirth.equals("dd/mm/yyyy")) {
-                    day = root.memorial[0].userData[0].dateOfBirth.split("/")[0].toInt()
-                    mnth2 = root.memorial[0].userData[0].dateOfBirth.split("/")[1].toInt()
-                    yer = root.memorial[0].userData[0].dateOfBirth.split("/")[2].toInt()
+                  if(root.memorial[0].userData[0].dateOfBirth.contains("-")) {
+                      yer = root.memorial[0].userData[0].dateOfBirth.split("-")[0].toInt()
+                      mnth2 = root.memorial[0].userData[0].dateOfBirth.split("-")[1].toInt()
+                      day = root.memorial[0].userData[0].dateOfBirth.split("-")[2].toInt()
+                  }
+                    else if(root.memorial[0].userData[0].dateOfBirth.contains("/")){
+                      yer = root.memorial[0].userData[0].dateOfBirth.split("/")[0].toInt()
+                      mnth2 = root.memorial[0].userData[0].dateOfBirth.split("/")[1].toInt()
+                      day = root.memorial[0].userData[0].dateOfBirth.split("/")[2].toInt()
+                  }
+                    edt_dob_memo_home.text = root.memorial[0].userData[0].dateOfBirth
+
+                }
+                if(root.memorial[0].userData[0].endDate != null){
+                    edt_dor_memo_home.text = root.memorial[0].userData[0].endDate
                 }
 
                /* if(root.memorial[0].userData[0].imageName.isEmpty()){

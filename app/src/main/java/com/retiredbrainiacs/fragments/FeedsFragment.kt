@@ -27,13 +27,17 @@ import android.support.v4.content.FileProvider
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.ImageView
+import android.widget.TextView
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -54,6 +58,7 @@ import com.retiredbrainiacs.common.*
 import com.retiredbrainiacs.common.EventListener
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.FeedsRoot
+import com.retiredbrainiacs.model.feeds.Post
 import com.squareup.picasso.Picasso
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -82,7 +87,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
     private val REQUEST_RECORD_AUDIO_PERMISSION = 200
     var RQS_RECORDING = 12
 
-
+var postList : MutableList<Post> = ArrayList()
     val privacyArray = arrayOf("Public", "Private")
     //============== Retrofit =========
     lateinit var service: ApiInterface
@@ -190,6 +195,19 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
 v.img_ques.setOnClickListener {
    openDialog()
 }
+v.edt_srch.addTextChangedListener(object : TextWatcher{
+    override fun afterTextChanged(s: Editable?) {
+        filter(v.edt_srch.text.toString().toLowerCase(Locale.getDefault()))
+
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    }
+
+})
 
         v.img_msg.setOnClickListener {
           if(toUserId != null && !toUserId.isEmpty())  {
@@ -955,4 +973,33 @@ fun openDialog(){
         dialog.dismiss()
     }
 }
+
+
+    //******* Implementing filter method to search text in list
+    fun filter(text:String) {
+       // text = text.toLowerCase(Locale.getDefault())
+      postList = ArrayList()
+        if (text.length == 0)
+        {
+            postList = ArrayList()
+            postList.addAll(root.posts)
+        }
+        else
+        {
+            postList = ArrayList()
+            for (i in 0 until root.posts.size)
+            {
+                if (root.posts[i].postContent.toLowerCase(Locale.getDefault()).contains(text))
+                {
+                    var m : Post
+                    m = root.posts[i]
+                   postList.add(m)
+                }
+            }
+        }
+
+
+        adap = FeedsAdapter(activity!!,postList, "post")
+        v.recycler_feed.adapter = adap
+    }
 }

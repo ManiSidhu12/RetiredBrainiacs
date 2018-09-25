@@ -14,7 +14,6 @@ import android.text.Editable
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -58,7 +57,6 @@ class ContactInfo : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     lateinit var pd : ProgressDialog
 
     lateinit var imageutils: Imageutils
-    var file_name : String = ""
     var file_path : String = ""
     lateinit var root : ResponseRoot
     lateinit var root1 : ProfileRoot
@@ -180,7 +178,6 @@ imageutils.imagepicker(1)
         } catch (ex: IOException) {
             ex.printStackTrace()
         }
-
         return json!!
     }
 
@@ -273,12 +270,12 @@ imageutils.imagepicker(1)
                 Common.showToast(this@ContactInfo,root.message)
                 var contri = ""
                 if(spin_country.selectedItem == null) {
-contri = ""
+                 contri = ""
                 }
                 else{
                    contri = spin_country.selectedItem.toString()
                 }
-              //  Log.e("country",spin_country.selectedItem.toString())
+
                 SharedPrefManager.getInstance(this@ContactInfo).setContactInfo(edt_phn.text.toString().trim(), edt_skype.text.toString().trim(), contri, edt_city.text.toString().trim(), edt_adrs1.text.toString(), edt_adrs2.text.toString(), edt_zipccode.text.toString().trim())
                 SharedPrefManager.getInstance(this@ContactInfo).rating = root.rating
 
@@ -378,7 +375,6 @@ contri = ""
                     Common.showToast(this@ContactInfo,res.split(",")[1])
                     startActivity(Intent(this@ContactInfo,Languages::class.java))
 
-
                 } else {
                     Common.showToast(this@ContactInfo,res.split(",")[1])
                 }
@@ -393,7 +389,8 @@ contri = ""
     }
 
 
-    fun setdata(){
+    fun setdata()
+    {
         if(SharedPrefManager.getInstance(this@ContactInfo).name != null) {
             edt_name.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).name)
         }
@@ -417,15 +414,12 @@ contri = ""
             edt_zipccode.text = Editable.Factory.getInstance().newEditable(SharedPrefManager.getInstance(this@ContactInfo).zipCode)
         }
         if(SharedPrefManager.getInstance(this@ContactInfo).userImg != null && !SharedPrefManager.getInstance(this@ContactInfo).userImg.isEmpty()){
-  no_file.visibility = View.GONE
+       no_file.visibility = View.GONE
        userImage.visibility = View.VISIBLE
        Picasso.with(this@ContactInfo).load(SharedPrefManager.getInstance(this@ContactInfo).userImg).into(userImage)
    }
 if(SharedPrefManager.getInstance(this@ContactInfo).country != null && !SharedPrefManager.getInstance(this@ContactInfo).country.isEmpty()){
-
-
         for (i in 0 until list_code.size) {
-            // Log.e("ii",""+i);
             if (list_code[i].equals(SharedPrefManager.getInstance(this@ContactInfo).country)) {
                 spin_country.setSelection(i + 1)
             }

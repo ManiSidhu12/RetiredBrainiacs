@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,8 +18,8 @@ import com.retiredbrainiacs.R
 import com.retiredbrainiacs.activities.ChatListing
 import com.retiredbrainiacs.common.Common
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
-import kotlinx.android.synthetic.main.friends_screen.*
 import kotlinx.android.synthetic.main.friends_screen.view.*
+import java.util.*
 
 class FriendsFragment : Fragment(){
     lateinit var v : View
@@ -53,6 +55,17 @@ class FriendsFragment : Fragment(){
 
 
     fun work(){
+        v.edt_srch_friends.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+        })
         v.img_msg_friends.setOnClickListener {
 
             startActivity(Intent(activity!!, ChatListing::class.java))

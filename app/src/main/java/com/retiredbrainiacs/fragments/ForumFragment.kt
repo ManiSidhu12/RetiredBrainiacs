@@ -8,9 +8,12 @@ import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -79,7 +82,7 @@ listForum = ArrayList()
 
 
         if(CommonUtils.getConnectivityStatusString(activity).equals("true")){
-            getForumAPI()
+            getForumAPI("")
         }
         else{
             CommonUtils.openInternetDialog(activity)
@@ -93,18 +96,29 @@ openDialog()
                 startActivity(Intent(activity!!, ChatListing::class.java))
 
         }
+        v.edt_srch_forum.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+            override fun onEditorAction(v1: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                  getForumAPI(v.edt_srch_forum.text.toString())
+                    return true
+                }
+                return false
+            }
+
+        })
 
         return v
     }
 
     //======= Get Forum API ====
-    fun getForumAPI() {
+/*
+    private fun getForumAPI(value : String) {
         v.progress_forum.visibility= View.VISIBLE
         v.recycler_forum.visibility= View.GONE
         val map = HashMap<String, String>()
         map["user_id"] = SharedPrefManager.getInstance(activity!!).userId
         map["pg"] = page.toString()
-        map["param"] = ""
+        map["param"] = value
         Log.e("map forum",map.toString())
         service.getForums(map)
                 //.timeout(1,TimeUnit.SECONDS)
@@ -148,6 +162,72 @@ openDialog()
 
                 })
     }
+*/
+    fun getForumAPI(value : String) {
+        v.progress_forum.visibility= View.VISIBLE
+        v.recycler_forum.visibility= View.GONE
+        val url = GlobalConstants.API_URL+"list_all_forums"
+
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            v.progress_forum.visibility = View.GONE
+            v.recycler_forum.visibility = View.VISIBLE
+
+Log.e("response",response)
+            val gson = Gson()
+            val reader = JsonReader(StringReader(response))
+            reader.isLenient = true
+            var root = gson.fromJson<ForumRoot>(reader, ForumRoot::class.java)
+
+            if (root != null) {
+                if (root.status.equals("true")) {
+                    if(root.listForm != null && root.listForm.size > 0){
+                        totalPages = root.totalPages
+if(value.equals("")) {
+    listForum.addAll(root.listForm)
+}
+                        else{
+    listForum = ArrayList()
+    listForum.addAll(root.listForm)
+                        }
+                        v.recycler_forum.layoutManager = LinearLayoutManager(activity)
+                        if (totalPages.toInt() > 10) {
+                            val mod = totalPages.toInt() % 10
+                            total_pages = totalPages.toInt() / 10
+
+                            total_pages = if (mod == 0) total_pages else total_pages + 1
+                        } else {
+                            total_pages = 1
+                        }
+                        v.recycler_forum.adapter = ForumAdapter(activity!!,listForum,service,total_pages)
+                    }
+
+                } else {
+
+Common.showToast(activity!!,"No Forum Found....")
+                }
+            }
+        },
+
+                Response.ErrorListener {                        v.progress_forum.visibility = View.GONE
+
+
+                }) {
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+                map["user_id"] = SharedPrefManager.getInstance(activity!!).userId
+                map["pg"] = page.toString()
+                map["param"] = value
+                Log.e("map forum",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(activity!!)
+        requestQueue.add(postRequest)
+    }
+
     private fun openDialog() {
         val dialog = Dialog(activity, android.R.style.Theme_Translucent_NoTitleBar)
         dialog.setContentView(R.layout.add_form_popup)

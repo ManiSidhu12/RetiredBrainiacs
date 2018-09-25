@@ -44,9 +44,6 @@ import java.util.*
 
 class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     override fun image_attachment(from: Int, filename: String?, file: Bitmap?, uri: Uri?) {
-
-
-
         f = File(filename)
         val path = Environment.getExternalStorageDirectory().toString() + File.separator + "RetiredBrainiacs" + File.separator
         Log.e("path",path)
@@ -74,6 +71,7 @@ class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     val SELECT_VIDEO = 4
     lateinit var imageUtils : Imageutils
     lateinit var fileUri: Uri
+    var msg= ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -127,24 +125,31 @@ class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     private fun uploadImage(absolutePath: String) {
         Log.e("absolute",absolutePath)
         if (absolutePath.endsWith(".jpg")) {
+            msg="image"
             filetype = "jpg"
             filename = "Image" + System.currentTimeMillis() + "." + filetype
 
         } else if (absolutePath.endsWith(".png")) {
+            msg="image"
             filetype = "png"
             filename = "Image" + System.currentTimeMillis() + "." + filetype
 
         } else if (absolutePath.endsWith(".jpeg")) {
+            msg="image"
             filetype = "jpeg"
             filename = "Image" + System.currentTimeMillis() + "." + filetype
 
         } else if (absolutePath.endsWith(".mp4")) {
+            msg="video"
+
             filetype = "mp4"
 
             filename = "Video" + System.currentTimeMillis() + "." + filetype
 
         }
         else if (absolutePath.endsWith(".m4a")) {
+            msg="audio"
+
             filetype = "mp3"
 
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
@@ -152,6 +157,8 @@ class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
 
         }
         else if(absolutePath.endsWith(".mp3")){
+            msg="audio"
+
             Log.e("in","mp3")
             filetype = "mp3"
 
@@ -159,32 +166,43 @@ class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
 
         }
         else if(absolutePath.endsWith(".3gp")){
+            msg="video"
+
             filetype = "3gp"
 
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
 
         }
         else if (absolutePath.endsWith(".avi")) {
+            msg="audio"
+
             filetype = "avi"
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
 
         }
         else if (absolutePath.endsWith(".ogg")) {
+            msg = "audio"
             filetype = "ogg"
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
 
         }
         else if (absolutePath.endsWith(".doc")) {
+            msg = "document"
+
             filetype = "doc"
             filename = "File" + System.currentTimeMillis() + "." + filetype
 
         }
         else if (absolutePath.endsWith(".docx")) {
+            msg = "document"
+
             filetype = "docx"
             filename = "File" + System.currentTimeMillis() + "." + filetype
 
         }
         else if (absolutePath.endsWith(".pdf")) {
+            msg = "pdf"
+
             filetype = "pdf"
             filename = "File" + System.currentTimeMillis() + "." + filetype
 
@@ -192,17 +210,23 @@ class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         }
 
         else if (absolutePath.endsWith(".xls")) {
+            msg = "xls"
+
             filetype = "xls"
             filename = "File" + System.currentTimeMillis() + "." + filetype
 
 
         }
         else if (absolutePath.endsWith(".xlsx")) {
+            msg = "xlsx"
+
             filetype = "xlsx"
             filename = "File" + System.currentTimeMillis() + "." + filetype
 
         }
         else if (absolutePath.endsWith(".txt")) {
+            msg = "txtt"
+
             filetype = "txt"
             filename = "File" + System.currentTimeMillis() + "." + filetype
 
@@ -221,7 +245,7 @@ class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         try {
             val fis = FileInputStream(f)
 
-            val edit = ChatAPI(this@Chat,filetype,filename,SharedPrefManager.getInstance(this@Chat).userId,to_id,txttype.text.toString())
+            val edit = ChatAPI(this@Chat,filetype,filename,SharedPrefManager.getInstance(this@Chat).userId,to_id,msg)
             res = edit.doStart(fis)
 
         } catch (e: Exception) {

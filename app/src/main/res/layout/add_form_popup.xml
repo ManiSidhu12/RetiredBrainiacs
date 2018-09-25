@@ -5,18 +5,7 @@
     android:background="@drawable/transbg"
     android:focusable="true"
     android:focusableInTouchMode="true">
-    <RelativeLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        >
-        <RelativeLayout
-            android:layout_marginTop="50dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
 
-            >
 
 
             <LinearLayout
@@ -25,14 +14,16 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:orientation="vertical"
-                android:background="@drawable/bg1"
+                android:background="@color/white"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 >
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_gravity="center_horizontal"
-                    android:background="#F5F5F5">
+                    android:background="@color/theme_color_orange">
 
 <TextView
     android:id="@+id/title1"
@@ -40,8 +31,17 @@
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
     android:text="Post a Forum"
-    android:textColor="@android:color/black"
+    android:textColor="@android:color/white"
     android:textSize="16sp"/>
+                    <ImageView
+                        android:id="@+id/imageView1"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerInParent="true"
+                        android:tint="@color/white"
+                        android:src="@drawable/close" />
+
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -54,10 +54,13 @@
                     <RelativeLayout
                         android:id="@+id/subject"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="45dp"
                        android:layout_alignParentStart="true"
                         android:layout_centerHorizontal="true"
-                        android:background="#F5F5F5">
+                        android:layout_marginTop="7dp"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/cmnt_bg">
                         <EditText
                             android:id="@+id/edt_post_forum"
                             android:layout_width="match_parent"
@@ -78,7 +81,9 @@
                         android:layout_below="@+id/subject"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="15dp"
-                        android:background="#F5F5F5"   >
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@drawable/cmnt_bg"   >
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
@@ -103,12 +108,13 @@
                     android:layout_height="1dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
+                    android:visibility="gone"
                     android:background="@android:color/darker_gray"/>
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="35dp"
                     android:layout_gravity="center_horizontal"
-                    android:layout_margin="10dp">
+                    android:layout_margin="15dp">
                     <Button
                         android:id="@+id/btn_post_forum"
                         android:layout_width="150dp"
@@ -126,23 +132,17 @@
                     android:layout_height="1dp"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="10dp"
+                    android:visibility="gone"
                     android:background="@android:color/darker_gray"/>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:layout_gravity="center_horizontal"
+                    android:visibility="gone"
                     android:background="#F5F5F5"/>
 
             </LinearLayout>
 
-        </RelativeLayout>
-        <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:src="@drawable/close" />
-    </RelativeLayout>
+
 
 </RelativeLayout>

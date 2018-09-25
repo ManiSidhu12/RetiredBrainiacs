@@ -4,8 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.retiredbrainiacs.common.GlobalConstants;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 

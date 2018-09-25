@@ -134,6 +134,15 @@ import java.util.*
                     recycler_archive_details.adapter = ArchiveDetailAdapter(this, modelMain.model, "edit", size, listYoutube)
 
                 }
+                else{
+                    var m = ModelDetail()
+                    m.id = ""
+                    m.file_note = ""
+                    m.file_type = ""
+                    modelMain.model.add(m)
+                    recycler_archive_details.adapter = ArchiveDetailAdapter(this, modelMain.model, "edit", size, listYoutube)
+
+                }
             }
             else {
                 if (CommonUtils.getConnectivityStatusString(this).equals("true")) {

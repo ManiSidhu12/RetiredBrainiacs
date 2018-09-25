@@ -25,13 +25,11 @@ import com.retiredbrainiacs.common.CommonUtils
 import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.friend.AllFriendRoot
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import com.retiredbrainiacs.model.friend.ListAll
 import kotlinx.android.synthetic.main.all_classified_screen.view.*
 import retrofit2.Retrofit
 import java.io.StringReader
+import java.util.*
 
 class AllFriendsFragment : Fragment(){
     lateinit var v : View
@@ -39,6 +37,8 @@ class AllFriendsFragment : Fragment(){
     lateinit var retroFit: Retrofit
     lateinit var service: ApiInterface
     lateinit var gson: Gson
+    lateinit var root : AllFriendRoot
+    lateinit var adap : FriendsAdapter
     //==============
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.all_classified_screen,container,false)
@@ -61,7 +61,13 @@ class AllFriendsFragment : Fragment(){
 
         return v
     }
+companion object {
+    var text = ""
+    fun setData(toLowerCase: String) {
+        text = toLowerCase
+}
 
+}
     //======= Get all Users API ====
     fun getAllUsersAPI() {
 
@@ -75,13 +81,14 @@ Log.e("response",response)
             val gson = Gson()
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
-            var root = gson.fromJson<AllFriendRoot>(reader, AllFriendRoot::class.java)
+            root = gson.fromJson<AllFriendRoot>(reader, AllFriendRoot::class.java)
 
             if (root != null) {
                 if (root.status.equals("true")) {
                     v.recycler_stores.layoutManager = LinearLayoutManager(activity!!)
                     if(root.listAll != null && root.listAll.size > 0) {
-                        v.recycler_stores.adapter = FriendsAdapter(activity!!, root.listAll, service, retroFit, gson)
+                     adap = FriendsAdapter(activity!!, root.listAll, service, retroFit, gson)
+                        v.recycler_stores.adapter = adap
                     }
                 } else {
                     Common.showToast(activity!!, "No User Found...")
