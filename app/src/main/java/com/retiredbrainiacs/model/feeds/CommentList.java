@@ -20,7 +20,17 @@ public class CommentList {
     @Expose
     private String comment;
 
+    public String getCommentTime() {
+        return commentTime;
+    }
 
+    public void setCommentTime(String commentTime) {
+        this.commentTime = commentTime;
+    }
+
+    @SerializedName("comment_date_time")
+    @Expose
+    private String commentTime;
     public Integer getEdit() {
         return edit;
     }

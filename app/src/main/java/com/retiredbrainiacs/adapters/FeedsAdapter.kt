@@ -136,6 +136,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                 override fun onCompletion(mp: MediaPlayer?) {
                     holder.btnPause.setImageResource(R.drawable.play1)
                     holder.txtCurrent.text = "0:0"
+                    mediaPlayer!!.release()
 
                 }
 

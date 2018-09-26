@@ -90,7 +90,7 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
             }
         if(commentList != null && commentList.size > 0){
             recycler_cmnts.layoutManager = LinearLayoutManager(this@CommentListing)
-            var dividerItemDecoration = DividerItemDecoration(this@CommentListing, 1)
+            val dividerItemDecoration = DividerItemDecoration(this@CommentListing, 1)
             recycler_cmnts.addItemDecoration(dividerItemDecoration)
 
              adap = CommentsAdapter(this@CommentListing,commentList,edt_cmnt,btn_post,post_id,txt_cmnt_count_detail)
@@ -130,14 +130,14 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
             }
     }
     private fun comment(){
-        var url = GlobalConstants.API_URL1+"?action=post_comment"
+        val url = GlobalConstants.API_URL1+"?action=post_comment"
         val pd = ProgressDialog.show(this@CommentListing,"","Loading",false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
             pd.dismiss()
             val gson = Gson()
             val reader = com.google.gson.stream.JsonReader(StringReader(response))
             reader.isLenient = true
-          var  root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+          val  root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if(root1.status.equals("true")){
                 Common.showToast(this@CommentListing,root1.message)
@@ -146,13 +146,12 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
                 if(root1.commentList != null && root1.commentList.size > 0){
                     commentList = root1.commentList
                     recycler_cmnts.layoutManager = LinearLayoutManager(this@CommentListing)
-                    var dividerItemDecoration = DividerItemDecoration(this@CommentListing, 1)
+                    val dividerItemDecoration = DividerItemDecoration(this@CommentListing, 1)
                     recycler_cmnts.addItemDecoration(dividerItemDecoration)
                     adap = CommentsAdapter(this@CommentListing, commentList, edt_cmnt, btn_post, post_id, txt_cmnt_count_detail)
                     recycler_cmnts.adapter = adap
 
-                // CommentListing.posts[CommentListing.positionPost].commentList = root1.commentList
-                  GlobalConstants.count = root1.commentList.size.toString()
+                    GlobalConstants.count = root1.commentList.size.toString()
                     listner.sendDataToActivity(commentList.size.toString(),pos)
                     post.commentCount = root1.commentList.size.toString()
                     post.commentList = root1.commentList
@@ -188,14 +187,14 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
 
     }
     private fun like(){
-        var url = GlobalConstants.API_URL1+"?action=submit_like"
+        val url = GlobalConstants.API_URL1+"?action=submit_like"
         val pd = ProgressDialog.show(this@CommentListing,"","Loading",false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
             pd.dismiss()
             val gson = Gson()
             val reader = com.google.gson.stream.JsonReader(StringReader(response))
             reader.isLenient = true
-       var   root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+       val root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if(root.status.equals("true")){
               //  Common.showToast(this@CommentListing,root.message)
@@ -203,7 +202,7 @@ if(intent != null && intent.extras != null && intent.extras.getString("id") != n
                     txt_like_count_detail.setTextColor(ContextCompat.getColor(this@CommentListing, R.color.theme_color_orange))
                     txt_like_detail.setTextColor(ContextCompat.getColor(this@CommentListing, R.color.theme_color_orange))
                     img_like_detail.setColorFilter(ContextCompat.getColor(this@CommentListing, R.color.theme_color_orange), android.graphics.PorterDuff.Mode.SRC_IN)
-post.likedByMe = "1"
+                    post.likedByMe = "1"
                 }
                 else{
                     txt_like_count_detail.setTextColor(Color.parseColor("#90949C"))
@@ -244,30 +243,23 @@ post.likedByMe = "1"
     }
 
     private fun editComment(){
-        var url = GlobalConstants.API_URL1+"?action=edit_comment"
+        val url = GlobalConstants.API_URL1+"?action=edit_comment"
         val pd = ProgressDialog.show(this@CommentListing,"","Loading",false)
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
             pd.dismiss()
             val gson = Gson()
             val reader = com.google.gson.stream.JsonReader(StringReader(response))
             reader.isLenient = true
-            var   root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+            val   root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
 
             if(root.status.equals("true")){
                 Common.showToast(this@CommentListing,"Updated Successfully....")
-           //     txtCmnt.text = edt_cmnt.text.toString()
 
                 commentList[GlobalConstants.pos].comment = edt_cmnt.text.toString()
                 edt_cmnt.text = Editable.Factory.getInstance().newEditable("")
                 adap.notifyDataSetChanged()
 
-             //   listner.sendDataToActivity(commentList.size.toString(),pos)
-               // recycler_cmnts.layoutManager = LinearLayoutManager(this@CommentListing)
 
-              /*  var dividerItemDecoration = DividerItemDecoration(this@CommentListing, 1)
-                recycler_cmnts.addItemDecoration(dividerItemDecoration)
-                adap = CommentsAdapter(this@CommentListing,root1.commentList,edt_cmnt,btn_post,post_id)
-                recycler_cmnts.adapter = adap*/
 
             }
             else{
@@ -284,7 +276,6 @@ post.likedByMe = "1"
             override fun getParams(): Map<String, String> {
                 val map = HashMap<String, String>()
 
-                // map["user_id"] = SharedPrefManager.getInstance(ctx).userId
                 map["post_id"] = post_id
                 map["comment_id"] = GlobalConstants.cmntid
                 map["comment"] = edt_cmnt.text.toString()

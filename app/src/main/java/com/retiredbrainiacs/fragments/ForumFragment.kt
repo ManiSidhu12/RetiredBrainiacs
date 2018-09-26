@@ -34,10 +34,6 @@ import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.forum.ForumRoot
 import com.retiredbrainiacs.model.forum.ListForm
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.add_form_popup.*
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.forum_screen.view.*
@@ -70,7 +66,8 @@ class ForumFragment : Fragment(){
         v1.btn_edit.visibility = View.GONE
         v1.titletxt.text = "Forum"
 
-listForum = ArrayList()
+        listForum = ArrayList()
+
         // ============ Retrofit ===========
         service = ApiClient.getClient().create(ApiInterface::class.java)
         retroFit = ApiClient.getClient()
@@ -172,7 +169,7 @@ openDialog()
             v.progress_forum.visibility = View.GONE
             v.recycler_forum.visibility = View.VISIBLE
 
-Log.e("response",response)
+            Log.e("response",response)
             val gson = Gson()
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
@@ -202,8 +199,7 @@ if(value.equals("")) {
                     }
 
                 } else {
-
-Common.showToast(activity!!,"No Forum Found....")
+                    Common.showToast(activity!!,"No Forum Found....")
                 }
             }
         },

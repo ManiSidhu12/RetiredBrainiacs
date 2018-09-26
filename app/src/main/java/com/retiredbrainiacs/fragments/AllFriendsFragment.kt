@@ -22,6 +22,7 @@ import com.retiredbrainiacs.apis.ApiClient
 import com.retiredbrainiacs.apis.ApiInterface
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.CommonUtils
+import com.retiredbrainiacs.common.EventListener
 import com.retiredbrainiacs.common.GlobalConstants
 import com.retiredbrainiacs.common.SharedPrefManager
 import com.retiredbrainiacs.model.friend.AllFriendRoot
@@ -30,8 +31,14 @@ import kotlinx.android.synthetic.main.all_classified_screen.view.*
 import retrofit2.Retrofit
 import java.io.StringReader
 import java.util.*
+import kotlin.collections.ArrayList
 
-class AllFriendsFragment : Fragment(){
+class AllFriendsFragment : Fragment(),EventListener{
+    override fun sendDataToActivity(data: String, pos: Int) {
+        Log.e("data",data)
+        filter(data!!)
+    }
+
     lateinit var v : View
     //============== Retrofit =========
     lateinit var retroFit: Retrofit
@@ -40,6 +47,8 @@ class AllFriendsFragment : Fragment(){
     lateinit var root : AllFriendRoot
     lateinit var adap : FriendsAdapter
     //==============
+    var listFriends : MutableList<ListAll> = ArrayList()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         v = inflater.inflate(R.layout.all_classified_screen,container,false)
 
@@ -61,13 +70,7 @@ class AllFriendsFragment : Fragment(){
 
         return v
     }
-companion object {
-    var text = ""
-    fun setData(toLowerCase: String) {
-        text = toLowerCase
-}
 
-}
     //======= Get all Users API ====
     fun getAllUsersAPI() {
 
@@ -114,5 +117,31 @@ Log.e("response",response)
         val requestQueue = Volley.newRequestQueue(activity)
         requestQueue.add(postRequest)
     }
+    //******* Implementing filter method to search text in list
+    fun filter(text:String) {
+        // text = text.toLowerCase(Locale.getDefault())
+        listFriends = ArrayList()
+        if (text.length == 0)
+        {
+            listFriends = ArrayList()
+            listFriends.addAll(root.listAll)
+        }
+        else
+        {
+            listFriends = ArrayList()
+            for (i in 0 until root.listAll.size)
+            {
+                if (root.listAll[i].displayName.toLowerCase(Locale.getDefault()).contains(text))
+                {
+                    var m : ListAll
+                    m = root.listAll[i]
+                    listFriends.add(m)
+                }
+            }
+        }
 
+        adap = FriendsAdapter(activity!!, listFriends, service, retroFit, gson)
+        v.recycler_stores.adapter = adap
+
+    }
 }

@@ -5,6 +5,7 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.text.Editable
+import android.text.format.DateUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -23,12 +24,15 @@ import com.android.volley.toolbox.Volley
 import com.google.gson.Gson
 import com.retiredbrainiacs.R
 import com.retiredbrainiacs.common.*
+import com.retiredbrainiacs.common.EventListener
 import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.CommentList
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.comments_adapter.view.*
 import kotlinx.android.synthetic.main.dialog_global.*
 import java.io.StringReader
+import java.text.SimpleDateFormat
+import java.util.*
 
 class CommentsAdapter(var ctx: Context, var commentList: MutableList<CommentList>, var edt_cmnt: EditText, var btn_post: Button, var post_id: String,var txt_cmnt_count_detail: TextView) : RecyclerView.Adapter<CommentsAdapter.ViewHolder>(){
     var listener: EventListener? = null
@@ -56,6 +60,7 @@ holder.layEdit.visibility = View.VISIBLE
         else{
             holder.layEdit.visibility = View.GONE
         }
+        holder.txtTime.text = commentList[position].commentTime
     holder.btnEdit.setOnClickListener {
     GlobalConstants.editStatus = true
     GlobalConstants.cmntid = commentList[position].commentId

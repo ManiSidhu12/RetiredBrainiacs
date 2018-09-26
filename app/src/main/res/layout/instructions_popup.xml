@@ -43,13 +43,7 @@
         android:lineSpacingExtra="10dp"
         android:text="Supported Image Formats: GIF, JPEG, PNG, BMP
 
-Supported Video Formats: MP4.
-
-
-TIFF to JPEG converter: http://tiff2jpg.com/
-
-
-Convert The video to MP4: https://video.online-convert.com/convert-to-mp4"/>
+Supported Video Formats: MP4."/>
 </RelativeLayout>
     <Button
         android:id="@+id/closebtn"
