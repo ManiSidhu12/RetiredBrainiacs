@@ -150,7 +150,7 @@
             android:layout_marginEnd="5dp"/>
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="60dp"
             android:layout_toStartOf="@+id/btn_post"
             android:background="@drawable/cmnt_bg"
             android:layout_toEndOf="@+id/img">

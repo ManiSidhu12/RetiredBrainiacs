@@ -21,6 +21,7 @@ public class UploadImage {
     private String postId,imagetype,filename;
     Context ctx;
     String msg,status;
+    String img = "";
     public UploadImage(Context c,String p_id, String filetype, String filename1) {
         try
         {
@@ -141,7 +142,7 @@ public class UploadImage {
             JSONObject job = new JSONObject(s);
             status = job.getString("status");
             msg = job.getString("message");
-String img;
+
             if(status.equalsIgnoreCase("true"))
             {
 img = job.getString("img");
@@ -166,7 +167,7 @@ img = job.getString("img");
             e.printStackTrace();
         }
         Log.e("msg",status+","+msg);
-        return status+","+msg;
+        return status+","+msg+","+img;
 
 
 

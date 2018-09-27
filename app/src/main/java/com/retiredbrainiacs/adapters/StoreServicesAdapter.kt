@@ -1,12 +1,13 @@
 package com.retiredbrainiacs.adapters
 
+import android.app.Dialog
 import android.content.Context
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.retiredbrainiacs.R
+import kotlinx.android.synthetic.main.coupon_popup.*
 import kotlinx.android.synthetic.main.list_item_service.view.*
 import kotlinx.android.synthetic.main.section_header.view.*
 
@@ -21,7 +22,7 @@ class StoreServicesAdapter(var ctx: Context,var listDataHeader: ArrayList<String
 
     override fun onCreateViewHolder(parent: ViewGroup?, header: Boolean): RecyclerView.ViewHolder {
         var v: View? = null
-        if (header) {
+        if(header) {
             v = LayoutInflater.from(parent!!.context).inflate(R.layout.section_header, parent, false)
             return SectionViewHolder(v)
         } else {
@@ -68,14 +69,27 @@ class StoreServicesAdapter(var ctx: Context,var listDataHeader: ArrayList<String
             itemViewHolder.lay_btns.visibility = View.GONE
 
         }
-    }
 
+        itemViewHolder.btn_subscribe.setOnClickListener {
+        openDialog(ctx)
+        }
+        itemViewHolder.btn_start.setOnClickListener {
+        openDialog(ctx)
+         }
+    }
+    private fun openDialog(ctx : Context) {
+        val dialog = Dialog(ctx, android.R.style.Theme_Translucent_NoTitleBar)
+        dialog.setContentView(R.layout.coupon_popup)
+        dialog.show()
+        dialog.dismiss_img.setOnClickListener {
+            dialog.dismiss()
+        }
+    }
     class SectionViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
         val txtHeader = itemView.txt_header
-
     }
     class ItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView){
-val txtItemTitle = itemView.txt_item
+        val txtItemTitle = itemView.txt_item
         val lay_btns = itemView.btns_subscription
         val v1 = itemView.v1
         val btn_subscribe = itemView.btn_subscribe

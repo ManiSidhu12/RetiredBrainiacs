@@ -39,7 +39,7 @@ class ChatListing : AppCompatActivity(){
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.custom_action_bar)
 
-         v = supportActionBar!!.customView
+        v = supportActionBar!!.customView
         v.titletxt.text = "Recent Chat"
         v.btn_logout.visibility = View.VISIBLE
         v.btn_logout.setBackgroundResource(R.drawable.addicon)
@@ -71,14 +71,22 @@ openDialog()
             if(root.status.equals("true")){
 
                 if(root.chatFriends != null && root.chatFriends.size > 0){
+                    chat_list_friends.visibility = View.VISIBLE
+                    no_recent_chat.visibility = View.GONE
                     //   recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails, root.commentList, edt_cmnt)
                     chat_list_friends.adapter = ChatListingAdapter(this,root.chatFriends)
 
                 }
+                else{
+                    chat_list_friends.visibility = View.GONE
+                    no_recent_chat.visibility = View.VISIBLE
+                }
 
             }
             else{
-                Common.showToast(this@ChatListing,root.message)
+                chat_list_friends.visibility = View.GONE
+                no_recent_chat.visibility = View.VISIBLE
+               // Common.showToast(this@ChatListing,root.message)
 
             }
         },

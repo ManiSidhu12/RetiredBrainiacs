@@ -67,7 +67,26 @@
                 android:enabled="false"
                 android:hint="Enter your email"/>
         </RelativeLayout>
-<TextView
+        <Button
+            android:id="@+id/btn_edit_memo"
+            android:layout_width="200dp"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="40dp"
+            android:background="@color/theme_color_orange"
+            android:textAllCaps="false"
+            android:text="Edit"
+            android:gravity="center"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+<View
+    android:layout_width="match_parent"
+    android:layout_height="1dp"
+    android:layout_gravity="center_horizontal"
+    android:layout_marginTop="15dp"
+    android:background="@android:color/darker_gray"/>
+        <TextView
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_horizontal"
@@ -145,7 +164,7 @@
                 android:textSize="14sp"
                 android:hint="Message"/>
         </RelativeLayout>
-<Button
+ <Button
     android:id="@+id/btn_send"
     android:layout_width="200dp"
     android:layout_height="45dp"

@@ -63,7 +63,15 @@ startActivity(Intent(this@Account,ContactInfo::class.java).putExtra("type","edit
             startActivity(Intent(this@Account,AboutUs::class.java))
         }
         lay_suggestion.setOnClickListener {
-            startActivity(Intent(this@Account,Sugggestions::class.java))
+            startActivity(Intent(this@Account,Sugggestions::class.java).putExtra("type","Suggestions"))
+
+        }
+        lay_contact.setOnClickListener {
+            startActivity(Intent(this@Account,Sugggestions::class.java).putExtra("type","Contact Us"))
+
+        }
+        lay_advertise.setOnClickListener {
+            startActivity(Intent(this@Account,Advertising::class.java))
 
         }
     }

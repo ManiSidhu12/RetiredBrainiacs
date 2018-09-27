@@ -68,11 +68,15 @@ if(CommonUtils.getConnectivityStatusString(ctx).equals("true")){
             val reader = com.google.gson.stream.JsonReader(StringReader(response))
             reader.isLenient = true
             var root = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
-
+Log.e("del response",response)
             if(root.status.equals("true")){
                 Common.showToast(ctx,root.message)
-                listCat.removeAt(position)
-                notifyDataSetChanged()
+
+
+                    listCat.removeAt(position)
+                    notifyDataSetChanged()
+
+
             }
             else{
                 Common.showToast(ctx,root.message)

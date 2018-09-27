@@ -196,7 +196,7 @@ imageutils.imagepicker(1)
     override fun image_attachment(from: Int, filename: String, file: Bitmap, uri: Uri) {
        // this.bitmap = file
         file_path = filename
-        lay_upload.visibility = View.GONE
+        lay_upload.visibility = View.VISIBLE
         userImage.visibility = View.VISIBLE
         userImage.setImageBitmap(file)
         f = File(file_path)

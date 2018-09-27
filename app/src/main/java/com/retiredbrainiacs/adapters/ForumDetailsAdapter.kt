@@ -308,7 +308,7 @@ holder.itemView.setOnClickListener {
                 //layoutFeed.visibility = View.GONE
                 formMain.removeAt(position)
                 notifyDataSetChanged()
-
+GlobalConstants.forumComment = ""
             }
             else{
                 Common.showToast(ctx,root1.message)

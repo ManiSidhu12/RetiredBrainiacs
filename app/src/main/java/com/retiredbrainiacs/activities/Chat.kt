@@ -32,6 +32,7 @@ import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.FileProvider
 import android.text.Editable
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.retiredbrainiacs.apis.ChatAPI
 import com.retiredbrainiacs.common.*
@@ -298,14 +299,23 @@ txttype.text = Editable.Factory.getInstance().newEditable("")
             if(root.status.equals("true")){
 
                 if(root.chatList != null && root.chatList.size > 0){
-                    //   recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails, root.commentList, edt_cmnt)
+                    no_chat.visibility = View.GONE
+                    recycler_chat.visibility = View.VISIBLE
+                    //recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails, root.commentList, edt_cmnt)
                  adap = ChatAdapter(this,root.chatList)
                  recycler_chat.adapter = adap
+                }
+                else{
+                    recycler_chat.visibility = View.GONE
+                    no_chat.visibility = View.VISIBLE
                 }
 
             }
             else{
-                Common.showToast(this@Chat,root.message)
+                recycler_chat.visibility = View.GONE
+                no_chat.visibility = View.VISIBLE
+
+              //  Common.showToast(this@Chat,root.message)
 
 
             }

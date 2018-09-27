@@ -50,21 +50,29 @@ class ChatAdapter(var ctx: Context,  var chatList: MutableList<ChatList>) : Recy
             holder.txtTimeUser.text = chatList[position].insertedDate
             if(chatList[position].msgImage != null && !chatList[position].msgImage.isEmpty()){
                 type = "img"
+                holder.arrowUser.visibility = View.GONE
+                holder.txtMsgUser.visibility = View.GONE
                 holder.msgImage.visibility = View.VISIBLE
                 Picasso.with(ctx).load(chatList[position].msgImage).into(holder.msgImage)
             }
           else if(chatList[position].msgAudio != null && !chatList[position].msgAudio.isEmpty()){
                 type = "audio"
+                holder.arrowUser.visibility = View.GONE
+                holder.txtMsgUser.visibility = View.GONE
                 holder.msgImage.visibility = View.VISIBLE
                 holder.msgImage.setImageResource(R.drawable.mp3)
             }
             else if(chatList[position].msgVideo != null && !chatList[position].msgVideo.isEmpty()){
                 type = "video"
+                holder.arrowUser.visibility = View.GONE
+                holder.txtMsgUser.visibility = View.GONE
                 holder.msgImage.visibility = View.VISIBLE
                 holder.msgImage.setImageResource(R.drawable.video_image)
             }
             else if(chatList[position].msgDownload != null && !chatList[position].msgDownload.isEmpty()){
                 type ="file"
+                holder.arrowUser.visibility = View.GONE
+                holder.txtMsgUser.visibility = View.GONE
                 holder.msgImage.visibility = View.VISIBLE
                 holder.msgImage.setImageResource(R.drawable.pdf)
             }
@@ -93,18 +101,26 @@ class ChatAdapter(var ctx: Context,  var chatList: MutableList<ChatList>) : Recy
                 holder.txtMsgFrnd.visibility = View.GONE
             }
             if(chatList[position].msgImage != null && !chatList[position].msgImage.isEmpty()){
+                holder.arrowFriend.visibility = View.GONE
+                holder.txtMsgFrnd.visibility = View.GONE
                 holder.frndMsgImg.visibility = View.VISIBLE
                 Picasso.with(ctx).load(chatList[position].msgImage).into(holder.frndMsgImg)
             }
             else if(chatList[position].msgAudio != null && !chatList[position].msgAudio.isEmpty()){
+                holder.arrowFriend.visibility = View.GONE
+                holder.txtMsgFrnd.visibility = View.GONE
                 holder.frndMsgImg.visibility = View.VISIBLE
                 holder.frndMsgImg.setImageResource(R.drawable.mp3)
             }
             else if(chatList[position].msgVideo != null && !chatList[position].msgVideo.isEmpty()){
+                holder.arrowFriend.visibility = View.GONE
+                holder.txtMsgFrnd.visibility = View.GONE
                 holder.frndMsgImg.visibility = View.VISIBLE
                 holder.frndMsgImg.setImageResource(R.drawable.video_image)
             }
             else if(chatList[position].msgDownload != null && !chatList[position].msgDownload.isEmpty()){
+                holder.arrowFriend.visibility = View.GONE
+                holder.txtMsgFrnd.visibility = View.GONE
                 holder.frndMsgImg.visibility = View.VISIBLE
                 holder.frndMsgImg.setImageResource(R.drawable.pdf)
             }
@@ -120,7 +136,7 @@ class ChatAdapter(var ctx: Context,  var chatList: MutableList<ChatList>) : Recy
                 mediaPlayer = MediaPlayer()
                 try {
                     mediaPlayer!!.setDataSource(chatList[position].msgAudio) // setup song from https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3 URL to mediaplayer data source
-                    mediaPlayer!!.prepare(); // you must call this method after setup the datasource in setDataSource method. After calling prepare() the instance of MediaPlayer starts load data from URL to internal buffer.
+                    mediaPlayer!!.prepare() // you must call this method after setup the datasource in setDataSource method. After calling prepare() the instance of MediaPlayer starts load data from URL to internal buffer.
 
                     var duration = mediaPlayer!!.duration
                     holder.seekFrnd.max = duration
@@ -140,7 +156,7 @@ class ChatAdapter(var ctx: Context,  var chatList: MutableList<ChatList>) : Recy
                         }
                     })
                 } catch (e: Exception) {
-                    e.printStackTrace();
+                    e.printStackTrace()
                 }
                 if (!mediaPlayer!!.isPlaying()) {
                     mediaPlayer!!.start()

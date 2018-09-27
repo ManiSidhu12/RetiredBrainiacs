@@ -46,7 +46,10 @@ class ForumAdapter(var ctx: Context, var listForm: MutableList<ListForm>, var se
         holder.txtPost.text = listForm.get(position).subject
         holder.postData.text = listForm.get(position).content
         holder.txtTime.text = listForm.get(position).addedDate
-        holder.txtRating.text = listForm.get(position).rating.toString() + "/5"
+        if(listForm.get(position).rating != null) {
+            holder.rateBar.rating = listForm.get(position).rating.toFloat()
+            holder.txtRating.text = listForm.get(position).rating.toString() + "/5"
+        }
         if(listForm.get(position).commentCount.isEmpty()){
             holder.txtRply.text = "0 Reply"
         }

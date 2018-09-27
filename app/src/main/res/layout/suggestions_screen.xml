@@ -15,6 +15,7 @@
         android:scaleType="fitXY"
         />
     <TextView
+        android:id="@+id/txt_main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Suggestions"
@@ -42,6 +43,7 @@
         android:layout_marginStart="7dp"
         android:src="@drawable/name"/>
     <EditText
+        android:id="@+id/edt_name_suggest"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toEndOf="@+id/img1"
@@ -71,6 +73,7 @@
                 android:layout_marginStart="7dp"
                 android:src="@drawable/emailimg"/>
             <EditText
+                android:id="@+id/edt_email_suggest"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toEndOf="@+id/img2"
@@ -100,6 +103,7 @@
                 android:layout_marginStart="7dp"
                 android:src="@drawable/mobileimg"/>
             <EditText
+                android:id="@+id/edt_mobile_suggest"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toEndOf="@+id/img3"
@@ -130,6 +134,7 @@
                 android:layout_marginTop="10dp"
                 android:src="@drawable/suggestionimg"/>
             <EditText
+                android:id="@+id/edt_suggestion"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_toEndOf="@+id/img4"

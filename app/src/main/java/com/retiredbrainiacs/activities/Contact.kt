@@ -55,12 +55,12 @@ class Contact : AppCompatActivity() {
                 }
             }
         }
-        v.btn_edit.setOnClickListener {
-            if (v.btn_edit.text.toString().equals("Edit")) {
+       btn_edit_memo.setOnClickListener {
+            if (btn_edit_memo.text.toString().equals("Edit")) {
                 name_contact.isEnabled = true
                 phn_contact.isEnabled = true
                 email_contact.isEnabled = true
-                v.btn_edit.text = "Save"
+                btn_edit_memo.text = "Save"
             } else {
                 if (CommonUtils.getConnectivityStatusString(this).equals("true")) {
                     addMemorialPage()
@@ -200,7 +200,7 @@ class Contact : AppCompatActivity() {
                 phn_contact.isEnabled = false
                 email_contact.isEnabled = false
 
-
+                btn_edit_memo.text = "Edit"
             } else {
                 Common.showToast(this, root.message)
 

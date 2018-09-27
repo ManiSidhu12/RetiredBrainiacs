@@ -13,6 +13,7 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.adapters.FeedsAdapter
 import com.retiredbrainiacs.apis.UploadImage
 import com.retiredbrainiacs.common.Common
 import com.retiredbrainiacs.common.Imageutils
@@ -35,7 +36,13 @@ lateinit var post : Post
     lateinit var f : File
 
     lateinit var pd : ProgressDialog
-
+    lateinit var adapt : FeedsAdapter
+companion object {
+  lateinit var  adapter : FeedsAdapter
+    fun setData(adap : FeedsAdapter){
+        adapter = adap
+    }
+}
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -45,7 +52,7 @@ lateinit var post : Post
         v1 = supportActionBar!!.customView
         v1.titletxt.text = "Image"
         imageUtils = Imageutils(this@FullImage)
-
+adapt = FullImage.adapter
         if(intent != null && intent.extras != null){
             if( intent.extras.getParcelable<Post>("post") != null){
                 post =  intent.extras.getParcelable<Post>("post")
@@ -141,11 +148,17 @@ Log.e("post",post.image)
             try {
                 res = msg.obj.toString()
                 val status = res.split(",")[0]
-
-                if (status.equals("true", ignoreCase = true)) {
+Log.e("res",res.toString())
+                if (status.equals("true")) {
                     // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
                     Common.showToast(this@FullImage,res.split(",")[1])
-                    finish()
+                    post.image = res.split(",")[2]
+                    Log.e("post img",post.image)
+                   /* if(adapt != null) {
+                        Log.e("in","in")
+                        adapt.notifyDataSetChanged()
+                    }*/
+                this@FullImage.finish()
 
 
                 } else {

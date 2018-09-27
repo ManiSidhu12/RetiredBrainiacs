@@ -178,14 +178,14 @@ edt_location.setOnClickListener {
             reader.isLenient = true
             root = gson.fromJson<CategoryRoot>(reader, CategoryRoot::class.java)
             if (root.status.equals("true")) {
-                list = ArrayList()
+                listCat = ArrayList()
                 listID = ArrayList()
                 if(root.catList != null && root.catList.size > 0){
                 for ( i in 0 until root.catList.size){
                     listCat!!.add(root.catList[i].title)
                     listID!!.add(root.catList[i].categoryId)
                 }
-                    val adapterActions = ArrayAdapter(this, R.layout.spin_setting1, list)
+                    val adapterActions = ArrayAdapter(this, R.layout.spin_setting1, listCat)
                     adapterActions.setDropDownViewResource(R.layout.spinner_txt)
                     spin_ad_category.adapter = adapterActions
                   spin_ad_category.adapter = NothingSelectedSpinnerAdapter(adapterActions, R.layout.category, this@CreateClassified)

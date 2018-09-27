@@ -76,19 +76,12 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
         Common.setFontRegular(ctx, holder.txtComment)
         Common.setFontBtnRegular(ctx, holder.btnPost)
         Common.setFontRegular(ctx, holder.edtCmnt)
+
         holder.txtPost.text = posts[position].postContent
-        var sdf = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
-        sdf.timeZone = TimeZone.getTimeZone("GMT")
-        var time = sdf!!.parse(posts[position].postingDate).getTime()
-        var now = System.currentTimeMillis()
-
-        var ago = DateUtils.getRelativeTimeSpanString(time, now, DateUtils.DAY_IN_MILLIS)
-
         holder.txtUserName.text = posts[position].wallPostUserName
         holder.txtLikeCount.text = posts[position].likeCount
         holder.txtCmntCount.text = posts[position].commentList.size.toString()
-        val date = posts[position].postingDate.replace(" ", ",")
-        holder.txtTime.text = ago
+        holder.txtTime.text = posts[position].postingDate
 
         if (posts[position].audio.isEmpty() && posts[position].video.isEmpty() && posts[position].image.isEmpty()) {
             holder.imgLayout.visibility = View.GONE
@@ -310,6 +303,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
 
         holder.imgPost.setOnClickListener {
             if (posts[position].image != null && !posts[position].image.isEmpty()) {
+                FullImage.setData(this)
                 ctx.startActivity(Intent(ctx, FullImage::class.java).putExtra("post", posts[position]))
             }
         }

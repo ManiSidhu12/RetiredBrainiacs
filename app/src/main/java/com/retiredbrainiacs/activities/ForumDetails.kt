@@ -69,7 +69,7 @@ class ForumDetails() : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener 
     var forumId  : String = ""
   var listComments :   ArrayList<FormMessage> ?= null
   var listImagesComment : ArrayList<HashMap<String,String>> ? = null
-    var commentId = ""
+   // var commentId = ""
     companion object {
         lateinit var  listNew : ArrayList<HashMap<String, String>>
 
@@ -116,7 +116,8 @@ var type : String = ""
             linkname = intent.extras.getString("linkname")
             title = intent.extras.getString("title")
             content = intent.extras.getString("content")
-commentId = intent.extras.getString("commentId")
+//commentId = intent.extras.getString("commentId")
+GlobalConstants.forumComment = intent.extras.getString("commentId")
             discoveries.text = title
             discoveries_content.text = content
             type = intent.extras.getString("type")
@@ -195,7 +196,7 @@ for (i in 0 until listImagesComment!!.size){
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
             root = gson.fromJson<ForumDetailRoot>(reader, ForumDetailRoot::class.java)
-
+Log.e("response forum detail",response)
             if(root.status.equals("true")) {
                 recycler_forum_details.adapter = ForumDetailsAdapter(this@ForumDetails,root.formMessages,linkname,title,content)
                  forumId = root.formMain[0].forumId
@@ -229,9 +230,9 @@ for (i in 0 until listImagesComment!!.size){
         builder = AlertDialog.Builder(this@ForumDetails)
         builder.setTitle("Add Photo!")
 
-        builder.setItems(items,{ dialog, item ->
+        builder.setItems(items) { dialog, item ->
             if (items[item] == "Camera") {
-      openAlert(arrayOf("Capture Image","Take Video", "Cancel"))
+                openAlert(arrayOf("Capture Image","Take Video", "Cancel"))
 
             }   else if (items[item] == "Files") {
 
@@ -241,7 +242,7 @@ for (i in 0 until listImagesComment!!.size){
             }
             else if (items[item] == "Capture Image") {
 
-      imageUtils.launchCamera(1)
+                imageUtils.launchCamera(1)
 
             }
             else if (items[item] == "Take Video") {
@@ -273,7 +274,7 @@ for (i in 0 until listImagesComment!!.size){
             }
             else if (items[item] == "Photos") {
 
-         imageUtils.launchGallery(1)
+                imageUtils.launchGallery(1)
             }
             else if (items[item] == "Videos") {
 
@@ -295,7 +296,7 @@ for (i in 0 until listImagesComment!!.size){
             else if (items[item] == "Cancel") {
                 dialog.dismiss()
             }
-        })
+        }
         builder.show()
     }
 
@@ -520,7 +521,7 @@ for (i in 0 until listImagesComment!!.size){
     }
     fun getPath(uri: Uri): String {
         val projection = arrayOf(MediaStore.MediaColumns.DATA)
-        val cursor = contentResolver.query(uri, projection, null, null, null)
+        val cursor = managedQuery(uri, projection, null, null, null)
         val column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
         cursor.moveToFirst()
         return cursor.getString(column_index)
@@ -528,7 +529,7 @@ for (i in 0 until listImagesComment!!.size){
 
     // ****** Implementing thread to upload image****
     private val uploadimage = Runnable {
-        Log.e("type1222", "amannn"+f.toString())
+      //  Log.e("type1222", "amannn"+f.toString())
 
         var res = ""
         try {
@@ -726,7 +727,7 @@ val edit = AddForum(this@ForumDetails,filetype,filename,GlobalConstants.API_URL+
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
             var root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
-
+Log.e("response upload",response)
              if(root1.status.equals("true")) {
                 Common.showToast(this@ForumDetails,root1.message)
                 model = ModelImages()
@@ -749,7 +750,7 @@ val edit = AddForum(this@ForumDetails,filetype,filename,GlobalConstants.API_URL+
                 map["user_id"] =  SharedPrefManager.getInstance(this@ForumDetails).userId
                 map["forum_id"] = forumId
                 map["comment"] =  edt_forum_data.text.toString()
-                map["comment_id"] = commentId
+                map["comment_id"] = GlobalConstants.forumComment
                 if(sb != null && sb!!.length > 0) {
                     map["attachment"] = sb!!.deleteCharAt(sb!!.length - 1).toString()
                 }

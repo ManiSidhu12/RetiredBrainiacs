@@ -850,7 +850,9 @@ if(resultCode == RESULT_OK){
     override fun onResume() {
         super.onResume()
         if (adap != null) {
-            adap!!.notifyDataSetChanged()
+            Log.e("resume","resume")
+            adap = FeedsAdapter(activity!!, root.posts, "post")
+            v.recycler_feed.adapter = adap
         }
     }
 
@@ -1002,4 +1004,6 @@ fun openDialog(){
         adap = FeedsAdapter(activity!!,postList, "post")
         v.recycler_feed.adapter = adap
     }
+
+
 }

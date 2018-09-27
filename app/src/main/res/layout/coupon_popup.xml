@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="@drawable/transbg">
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:orientation="vertical"
+        android:background="@color/white"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/theme_color_orange">
+
+        <TextView
+            android:id="@+id/title_coupon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="Coupon"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"/>
+        <ImageView
+            android:id="@+id/dismiss_img"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:tint="@color/white"
+            android:src="@drawable/close" />
+
+    </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+           android:layout_gravity="center_horizontal"
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/cmnt_bg">
+            <EditText
+                android:id="@+id/edt_coupon"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:hint="Gift Coupon Code"
+                android:textSize="14sp"
+                android:layout_margin="7dp"
+                android:padding="3dp"
+                android:singleLine="true"
+                android:textColor="@android:color/black"
+                android:gravity="start|top"/>
+        </RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_margin="20dp"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            >
+        <Button
+            android:id="@+id/btn_submit_coupon"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:layout_weight="1"
+            android:textColor="@android:color/white"
+            android:background="@color/theme_color_orange"
+            android:layout_marginEnd="7dp"/>
+        <Button
+            android:id="@+id/btn_no_coupon"
+            android:layout_width="0dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center_horizontal"
+            android:text="No Coupon"
+            android:textAllCaps="false"
+            android:layout_weight="1"
+            android:layout_marginStart="7dp"
+            android:textColor="@android:color/white"
+            android:background="@color/create_color"
+            android:layout_marginEnd="5dp"/>
+
+    </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
