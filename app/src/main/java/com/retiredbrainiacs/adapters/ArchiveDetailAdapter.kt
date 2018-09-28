@@ -43,7 +43,7 @@ class ArchiveDetailAdapter(var ctx: Context, var model: MutableList<ModelDetail>
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        var v = LayoutInflater.from(ctx).inflate(R.layout.archive_detail_adap,parent,false)
+        val v = LayoutInflater.from(ctx).inflate(R.layout.archive_detail_adap,parent,false)
         return ViewHolder(v)
     }
 

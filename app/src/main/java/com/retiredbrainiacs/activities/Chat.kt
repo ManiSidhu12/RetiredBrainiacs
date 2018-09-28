@@ -2,7 +2,6 @@ package com.retiredbrainiacs.activities
 
 import android.Manifest
 import android.app.ProgressDialog
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import com.android.volley.AuthFailureError
@@ -24,7 +23,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.*
 import android.provider.MediaStore
@@ -43,7 +41,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
+class Chat : Activity(),Imageutils.ImageAttachmentListener{
     override fun image_attachment(from: Int, filename: String?, file: Bitmap?, uri: Uri?) {
         f = File(filename)
         val path = Environment.getExternalStorageDirectory().toString() + File.separator + "RetiredBrainiacs" + File.separator
@@ -73,18 +71,22 @@ class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
     lateinit var imageUtils : Imageutils
     lateinit var fileUri: Uri
     var msg= ""
-
+    lateinit var v : View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContentView(R.layout.chat_screen)
+
+
         recycler_chat.layoutManager = LinearLayoutManager(this)
         imageUtils = Imageutils(this@Chat)
 
         if(intent.extras != null && intent.extras.getString("linkname") != null){
             linkname = intent.extras.getString("linkname")
             to_id = intent.extras.getString("toId")
+            chat_name.text = intent.extras.getString("name")
+
         }
 
         if(CommonUtils.getConnectivityStatusString(this).equals("true")){
@@ -120,6 +122,15 @@ class Chat : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         attch_img.setOnClickListener {
             openAlert(arrayOf("Camera","Photos","Videos","Files", "Cancel"))
         }
+        btn_clearchat.setOnClickListener {
+            if (CommonUtils.getConnectivityStatusString(this).equals("true")) {
+                clearChat()
+            }
+            else{
+                CommonUtils.openInternetDialog(this)
+
+            }
+            }
     }
 
     //***** Implementing upload Image ****
@@ -301,6 +312,7 @@ txttype.text = Editable.Factory.getInstance().newEditable("")
                 if(root.chatList != null && root.chatList.size > 0){
                     no_chat.visibility = View.GONE
                     recycler_chat.visibility = View.VISIBLE
+                    btn_clearchat.visibility = View.VISIBLE
                     //recycler_cmnts_detail.adapter = CommentsAdapter(this@FeedDetails, root.commentList, edt_cmnt)
                  adap = ChatAdapter(this,root.chatList)
                  recycler_chat.adapter = adap
@@ -308,11 +320,15 @@ txttype.text = Editable.Factory.getInstance().newEditable("")
                 else{
                     recycler_chat.visibility = View.GONE
                     no_chat.visibility = View.VISIBLE
+                    btn_clearchat.visibility = View.GONE
+
                 }
 
             }
             else{
                 recycler_chat.visibility = View.GONE
+                btn_clearchat.visibility = View.GONE
+
                 no_chat.visibility = View.VISIBLE
 
               //  Common.showToast(this@Chat,root.message)
@@ -394,7 +410,7 @@ getChat()
         builder = AlertDialog.Builder(this@Chat)
         builder.setTitle("Add Photo!")
 
-        builder.setItems(items,{ dialog, item ->
+        builder.setItems(items) { dialog, item ->
             if (items[item] == "Camera") {
                 openAlert(arrayOf("Capture Image","Take Video", "Cancel"))
 
@@ -460,7 +476,7 @@ getChat()
             else if (items[item] == "Cancel") {
                 dialog.dismiss()
             }
-        })
+        }
         builder.show()
     }
     fun checkPermission() {
@@ -490,8 +506,7 @@ getChat()
                     alert.show()
                 } else {
                     // No explanation needed, we can request the permission.
-                    ActivityCompat.requestPermissions(this@Chat,
-                            arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                    ActivityCompat.requestPermissions(this@Chat, arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
                             PERMISSION)
 
                     // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
@@ -594,7 +609,6 @@ getChat()
         Log.e("data",data.toString()+","+requestCode)
         imageUtils.onActivityResult(requestCode, resultCode, data)
         if (requestCode == VIDEO_CAPTURE_CODE) {
-            Log.e("file","qqfile")
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -604,9 +618,6 @@ getChat()
 
                 val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
                 Log.e("file", f.toString() + fileSizeInKB)
-
-                //  img_feed_forum.setImageBitmap(file)
-                // recycler_media.adapter = AttachmentAdapter(this@ForumDetails,listImages!!,"add")
 
                 if(f != null){
                   uploadImage(f!!.absolutePath)
@@ -695,6 +706,60 @@ getChat()
         val column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
         cursor.moveToFirst()
         return cursor.getString(column_index)
+    }
+    private fun clearChat(){
+        val url = GlobalConstants.API_URL1+"?action=clear_chat"
+        val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->
+            if(pd != null) {
+                pd!!.dismiss()
+            }
+            val gson = Gson()
+            val reader = com.google.gson.stream.JsonReader(StringReader(response))
+            reader.isLenient = true
+          val  root1 = gson.fromJson<ResponseRoot>(reader, ResponseRoot::class.java)
+
+            if(root1.status.equals("true")){
+
+
+                    no_chat.visibility = View.VISIBLE
+                    recycler_chat.visibility = View.GONE
+                    btn_clearchat.visibility = View.GONE
+
+
+
+            }
+            else{
+                recycler_chat.visibility = View.VISIBLE
+                btn_clearchat.visibility = View.VISIBLE
+
+                no_chat.visibility = View.GONE
+
+                //  Common.showToast(this@Chat,root.message)
+
+
+            }
+        },
+
+                Response.ErrorListener {
+                    if(pd != null) {
+                        pd!!.dismiss()
+                    }
+                }){
+            @Throws(AuthFailureError::class)
+            override fun getParams(): Map<String, String> {
+                val map = HashMap<String, String>()
+
+                map["user_id"] = SharedPrefManager.getInstance(this@Chat).userId
+                map["linkname"] = linkname
+                Log.e("map get chat",map.toString())
+                return map
+            }
+        }
+
+        postRequest.retryPolicy = DefaultRetryPolicy(0, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT)
+        val requestQueue = Volley.newRequestQueue(this)
+        requestQueue.add(postRequest)
+
     }
 
 }

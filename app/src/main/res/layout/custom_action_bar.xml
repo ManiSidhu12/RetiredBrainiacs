@@ -19,7 +19,7 @@
     android:layout_height="wrap_content"
     android:layout_alignParentEnd="true"
     android:layout_centerInParent="true"
-    android:layout_marginRight="5dp"
+    android:layout_marginEnd="5dp"
     >
     <Button
         android:id="@+id/btn_edit"
@@ -40,8 +40,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerInParent="true"
-        android:background="@drawable/addicon"
-        android:visibility="gone"
-         />
+        android:background="@drawable/add1"
+        android:backgroundTint="@color/white"
+        android:visibility="gone"/>
 </RelativeLayout>
 </RelativeLayout>

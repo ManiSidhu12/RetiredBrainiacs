@@ -37,7 +37,7 @@ lateinit var post : Post
 
     lateinit var pd : ProgressDialog
     lateinit var adapt : FeedsAdapter
-companion object {
+   companion object {
   lateinit var  adapter : FeedsAdapter
     fun setData(adap : FeedsAdapter){
         adapter = adap
@@ -56,7 +56,7 @@ adapt = FullImage.adapter
         if(intent != null && intent.extras != null){
             if( intent.extras.getParcelable<Post>("post") != null){
                 post =  intent.extras.getParcelable<Post>("post")
-Log.e("post",post.image)
+      //Log.e("post",post.image)
                 if( post.image != null && !post.image.isEmpty()){
                     Picasso.with(this@FullImage).load(post.image).into(image_zoom)
 

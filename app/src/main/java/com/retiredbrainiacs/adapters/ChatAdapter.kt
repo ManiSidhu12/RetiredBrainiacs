@@ -2,6 +2,7 @@ package com.retiredbrainiacs.adapters
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Handler
@@ -12,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import com.retiredbrainiacs.R
+import com.retiredbrainiacs.activities.ChatImage
 import com.retiredbrainiacs.model.chat.ChatList
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.chatscreen.view.*
@@ -248,6 +250,9 @@ class ChatAdapter(var ctx: Context,  var chatList: MutableList<ChatList>) : Recy
 
                 })
                 holder.videoUser.start()
+            }
+            else if(chatList[position].msgImage != null && !chatList[position].msgImage.isEmpty()){
+ctx.startActivity(Intent(ctx,ChatImage::class.java).putExtra("img",chatList[position].msgImage))
             }
             }
     }

@@ -21,6 +21,7 @@ class Home : AppCompatActivity() {
                 var b = Bundle()
                 b.putString("link", "")
                 b.putString("id", "")
+                b.putString("name", "")
                 val detailsFragment = FeedsFragment()
                 detailsFragment.setArguments(b)
                 supportFragmentManager.beginTransaction().replace(R.id.frame_layout,detailsFragment).commit()
@@ -63,6 +64,7 @@ class Home : AppCompatActivity() {
         var b = Bundle()
         b.putString("link", "")
         b.putString("id", "")
+        b.putString("name", "")
         val detailsFragment = FeedsFragment()
         detailsFragment.setArguments(b)
 

@@ -31,7 +31,7 @@ class ChatListingAdapter (var ctx: Context, var chatFriends: MutableList<ChatFri
             Picasso.with(ctx).load(chatFriends[position].image).into(holder.img)
         }
         holder.itemView.setOnClickListener {
-            ctx.startActivity(Intent(ctx,Chat::class.java).putExtra("linkname",chatFriends[position].userActivationKey).putExtra("toId",chatFriends[position].userId))
+            ctx.startActivity(Intent(ctx,Chat::class.java).putExtra("linkname",chatFriends[position].userActivationKey).putExtra("toId",chatFriends[position].userId).putExtra("name",chatFriends[position].displayName))
         }
     }
 

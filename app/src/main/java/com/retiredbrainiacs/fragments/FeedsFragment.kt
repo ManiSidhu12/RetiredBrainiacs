@@ -12,7 +12,6 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
 import android.graphics.Bitmap
-import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.media.ThumbnailUtils
 import android.net.Uri
@@ -29,15 +28,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
-import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
-import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.ImageView
-import android.widget.TextView
 import com.android.volley.AuthFailureError
 import com.android.volley.DefaultRetryPolicy
 import com.android.volley.Request
@@ -60,10 +56,6 @@ import com.retiredbrainiacs.model.ResponseRoot
 import com.retiredbrainiacs.model.feeds.FeedsRoot
 import com.retiredbrainiacs.model.feeds.Post
 import com.squareup.picasso.Picasso
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.custom_action_bar.view.*
 import kotlinx.android.synthetic.main.home_feed_screen.*
 import kotlinx.android.synthetic.main.home_feed_screen.view.*
@@ -85,7 +77,7 @@ class FeedsFragment : Fragment(), Imageutils.ImageAttachmentListener, EventListe
 
     }
     private val REQUEST_RECORD_AUDIO_PERMISSION = 200
-    var RQS_RECORDING = 12
+    private var RQS_RECORDING = 12
 
 var postList : MutableList<Post> = ArrayList()
     val privacyArray = arrayOf("Public", "Private")
@@ -104,6 +96,7 @@ var postList : MutableList<Post> = ArrayList()
     var file_path: String = ""
     var fileName1: String = ""
     var toUserId : String = ""
+    var toName = ""
     var f: File? = null
      var f1: File ? = null
     lateinit var pd: ProgressDialog
@@ -172,6 +165,7 @@ var postList : MutableList<Post> = ArrayList()
             linkname = arguments!!.getString("link")
             if(arguments!!.getString("id") != null) {
                 toUserId = arguments!!.getString("id")
+                toName = arguments!!.getString("name")
             }
         } else {
             linkname = ""
@@ -211,7 +205,7 @@ v.edt_srch.addTextChangedListener(object : TextWatcher{
 
         v.img_msg.setOnClickListener {
           if(toUserId != null && !toUserId.isEmpty())  {
-              startActivity(Intent(activity!!, Chat::class.java).putExtra("linkname",linkname).putExtra("toId",toUserId))
+              startActivity(Intent(activity!!, Chat::class.java).putExtra("linkname",linkname).putExtra("toId",toUserId).putExtra("name",toName))
 
           }
             else{
@@ -530,7 +524,7 @@ if(resultCode == RESULT_OK){
     }
 
     private fun getFeeds() {
-        var url = GlobalConstants.API_URL1 + "?action=my_wall_post"
+        val url = GlobalConstants.API_URL1 + "?action=my_wall_post"
         v.progress_feed.visibility = View.VISIBLE
         v.recycler_feed.visibility = View.GONE
         val postRequest = object : StringRequest(Request.Method.POST, url, Response.Listener<String> { response ->

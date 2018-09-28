@@ -123,8 +123,8 @@
             
             <ImageView
                 android:id="@+id/friend_file"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_alignParentLeft="true"
                 android:layout_below="@+id/friend_video"
                 android:src="@drawable/pdf"
@@ -324,8 +324,8 @@
             
               <ImageView
                 android:id="@+id/user_file"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/user_video"
                 android:src="@drawable/pdf"

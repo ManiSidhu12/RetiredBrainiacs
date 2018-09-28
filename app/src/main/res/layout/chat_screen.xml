@@ -3,12 +3,50 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF">
+    <RelativeLayout
+        android:id="@+id/layoutTop"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/theme_color_orange"
+        >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text=""
+            android:textColor="@android:color/white"
+            android:id="@+id/chat_name"
+            android:gravity="center"
+            android:textSize="16sp" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_centerInParent="true"
+            android:layout_marginEnd="9dp"
+            >
+            <Button
+                android:id="@+id/btn_clearchat"
+                android:layout_width="wrap_content"
+                android:layout_height="35dp"
+                android:layout_centerInParent="true"
+                android:text="Clear Chat"
+                android:textSize="16sp"
+                android:textAllCaps="false"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_bg"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recycler_chat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
+        android:layout_below="@+id/layoutTop"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:layout_above="@+id/msgbottomlayout"

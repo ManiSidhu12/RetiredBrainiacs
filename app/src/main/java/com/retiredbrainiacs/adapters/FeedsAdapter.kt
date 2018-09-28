@@ -314,7 +314,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                 mediaPlayer!!.setDataSource(posts[position].audio) // setup song from https://www.hrupin.com/wp-content/uploads/mp3/testsong_20_sec.mp3 URL to mediaplayer data source
                 mediaPlayer!!.prepare(); // you must call this method after setup the datasource in setDataSource method. After calling prepare() the instance of MediaPlayer starts load data from URL to internal buffer.
               //  holder.txtDuration.text = "/" + mediaPlayer!!.duration.toString()
-                var duration = mediaPlayer!!.duration
+                val duration = mediaPlayer!!.duration
                 holder.seekBar.max = duration
                 holder.txtDuration.text = "/" + formateMilliSeccond(mediaPlayer!!.duration.toLong())
                 holder.txtCurrent.text = formateMilliSeccond(mediaPlayer!!.currentPosition.toLong())

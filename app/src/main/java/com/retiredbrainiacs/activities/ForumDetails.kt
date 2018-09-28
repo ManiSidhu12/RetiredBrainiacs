@@ -47,7 +47,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
-class ForumDetails() : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener {
+class ForumDetails : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener {
     var file_name :String = ""
     var filename :String = ""
     var filetype :String = ""
@@ -98,7 +98,7 @@ class ForumDetails() : YouTubeBaseActivity(),Imageutils.ImageAttachmentListener 
     lateinit var builder: AlertDialog.Builder
     lateinit var imageUtils: Imageutils
     var position  : Int  = 0
-var type : String = ""
+   var type : String = ""
     var list = ArrayList<ImagesModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -521,7 +521,7 @@ Log.e("response forum detail",response)
     }
     fun getPath(uri: Uri): String {
         val projection = arrayOf(MediaStore.MediaColumns.DATA)
-        val cursor = managedQuery(uri, projection, null, null, null)
+        val cursor = contentResolver.query(uri, projection, null, null, null)
         val column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA)
         cursor.moveToFirst()
         return cursor.getString(column_index)
@@ -529,8 +529,6 @@ Log.e("response forum detail",response)
 
     // ****** Implementing thread to upload image****
     private val uploadimage = Runnable {
-      //  Log.e("type1222", "amannn"+f.toString())
-
         var res = ""
         try {
             val fis = FileInputStream(f)
@@ -706,8 +704,7 @@ val edit = AddForum(this@ForumDetails,filetype,filename,GlobalConstants.API_URL+
         val mediaFile: File
 
         if (type == MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE) {
-            mediaFile = File(mediaStorageDir.path + File.separator
-                    + "IMG_" + timeStamp + ".jpg")
+            mediaFile = File(mediaStorageDir.path + File.separator + "IMG_" + timeStamp + ".jpg")
         } else if (type == MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO) {
             mediaFile = File(mediaStorageDir.path + File.separator + "VID_" + timeStamp + ".mp4")
 

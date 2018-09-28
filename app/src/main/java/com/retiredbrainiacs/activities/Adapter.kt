@@ -30,7 +30,7 @@ class Adapter(var ctx: Context, var listFriends: MutableList<ListFriend>) :Recyc
         }
         holder.txtName.text = listFriends[position].displayName
         holder.itemView.setOnClickListener {
-            ctx.startActivity(Intent(ctx,Chat::class.java).putExtra("linkname",listFriends[position].userActivationKey).putExtra("toId",listFriends[position].userId))
+            ctx.startActivity(Intent(ctx,Chat::class.java).putExtra("linkname",listFriends[position].userActivationKey).putExtra("toId",listFriends[position].userId).putExtra("name",listFriends[position].displayName))
         }
     }
 

@@ -220,5 +220,5 @@
         android:layout_marginStart="-10dp"
         android:layout_marginTop="-15dp"
         android:visibility="gone"
-        android:background="@drawable/close"/>
+        android:background="@drawable/cross"/>
 </RelativeLayout>
