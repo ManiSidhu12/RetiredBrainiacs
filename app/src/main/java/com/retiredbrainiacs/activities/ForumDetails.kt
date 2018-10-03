@@ -196,7 +196,7 @@ for (i in 0 until listImagesComment!!.size){
             val reader = JsonReader(StringReader(response))
             reader.isLenient = true
             root = gson.fromJson<ForumDetailRoot>(reader, ForumDetailRoot::class.java)
-Log.e("response forum detail",response)
+            Log.e("response forum detail",response)
             if(root.status.equals("true")) {
                 recycler_forum_details.adapter = ForumDetailsAdapter(this@ForumDetails,root.formMessages,linkname,title,content)
                  forumId = root.formMain[0].forumId
@@ -358,7 +358,7 @@ Log.e("response forum detail",response)
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (data != null) {
-                    val selectedImageUri = data!!.getData()
+                    val selectedImageUri = data!!.data
                     var selectedPathVideo = ""
                     selectedPathVideo = ImageFilePath.getPath(this, selectedImageUri)
                     Log.e("Image File Path", "" + selectedPathVideo)
@@ -461,6 +461,11 @@ Log.e("response forum detail",response)
         }
         else if (absolutePath.endsWith(".avi")) {
             filetype = "avi"
+            filename = "Audio" + System.currentTimeMillis() + "." + filetype
+
+        }
+        else if (absolutePath.endsWith(".aac")) {
+            filetype = "aac"
             filename = "Audio" + System.currentTimeMillis() + "." + filetype
 
         }

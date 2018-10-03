@@ -94,7 +94,10 @@ adapt = FullImage.adapter
 
 
        f = File(file_path)
+       val fileSizeInBytes = f!!.length()
 
+       val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
+       Log.e("img size", f.toString() + fileSizeInKB)
         val path = Environment.getExternalStorageDirectory().toString() + File.separator + "RetiredBrainiacs" + File.separator
        imageUtils.createImage(file, filename, path, false)
 
@@ -148,17 +151,13 @@ adapt = FullImage.adapter
             try {
                 res = msg.obj.toString()
                 val status = res.split(",")[0]
-Log.e("res",res.toString())
+             Log.e("res",res)
                 if (status.equals("true")) {
                     // Toast.makeText(this@ContactInfo, "Successful", Toast.LENGTH_SHORT).show()
                     Common.showToast(this@FullImage,res.split(",")[1])
                     post.image = res.split(",")[2]
                     Log.e("post img",post.image)
-                   /* if(adapt != null) {
-                        Log.e("in","in")
-                        adapt.notifyDataSetChanged()
-                    }*/
-                this@FullImage.finish()
+                    this@FullImage.finish()
 
 
                 } else {

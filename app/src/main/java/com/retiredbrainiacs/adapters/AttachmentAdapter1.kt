@@ -44,6 +44,7 @@ class AttachmentAdapter1 (var ctx: Context, var listImages: ModelImages, var typ
         else {
             holder.close.visibility = View.VISIBLE
         }
+        holder.lay.visibility = View.VISIBLE
         if(listImages.model[position].imageBitmap != null){
             holder.img.setImageBitmap(listImages.model[position].imageBitmap)
         }
@@ -136,5 +137,7 @@ class AttachmentAdapter1 (var ctx: Context, var listImages: ModelImages, var typ
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val img = itemView.img
         val close = itemView.img_close
+        val lay = itemView.edt_lay
+        val edt = itemView.edt_desc_media
     }
 }

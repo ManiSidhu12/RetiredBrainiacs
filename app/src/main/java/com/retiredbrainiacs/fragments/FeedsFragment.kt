@@ -299,6 +299,10 @@ v.edt_srch.addTextChangedListener(object : TextWatcher{
             imageUtils.imagepicker(1)
         }
         f = File(file_path)
+        val fileSizeInBytes = f!!.length()
+
+        val fileSizeInKB = (fileSizeInBytes / 1024).toFloat()
+        Log.e("img size", f.toString() + fileSizeInKB)
         val path = Environment.getExternalStorageDirectory().toString() + File.separator + "ImageAttach" + File.separator
         imageUtils.createImage(file, filename, path, false)
     }
@@ -843,11 +847,11 @@ if(resultCode == RESULT_OK){
 
     override fun onResume() {
         super.onResume()
-        if (adap != null) {
-            Log.e("resume","resume")
-            adap = FeedsAdapter(activity!!, root.posts, "post")
-            v.recycler_feed.adapter = adap
+        Log.e("akkkk","resume")
+        if(adap != null) {
+            adap!!.notifyDataSetChanged()
         }
+       // getFeeds()
     }
 
     protected fun openAudioPickerAlert(c: Context?) {
@@ -860,11 +864,7 @@ if(resultCode == RESULT_OK){
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(activity!!, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(activity!!, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
                     {
-
-                        // Permission is not granted
-                        // Should we show an explanation?
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!,
-                                        Manifest.permission.RECORD_AUDIO)) {
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(activity!!,Manifest.permission.RECORD_AUDIO)) {
                             // Show an explanation to the user *asynchronously* -- don't block
                             // this thread waiting for the user's response! After the user
                             // sees the explanation, try again to request the permission.
@@ -920,9 +920,7 @@ if(resultCode == RESULT_OK){
                         alertBuilder.setMessage("Permission is necessary to get audio!!!")
                         alertBuilder.setPositiveButton(android.R.string.yes, object : DialogInterface.OnClickListener {
                             override fun onClick(dialog: DialogInterface, which: Int) {
-                                ActivityCompat.requestPermissions(activity!!,
-                                        arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                                        SELECT_AUDIO)
+                                ActivityCompat.requestPermissions(activity!!,arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE), SELECT_AUDIO)
                             }
 
                         })

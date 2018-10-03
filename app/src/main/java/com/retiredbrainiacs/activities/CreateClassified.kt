@@ -1,5 +1,6 @@
 package com.retiredbrainiacs.activities
 
+import android.app.Activity
 import android.app.ProgressDialog
 import android.content.Intent
 import android.graphics.Bitmap
@@ -63,7 +64,7 @@ class CreateClassified : AppCompatActivity(),Imageutils.ImageAttachmentListener{
         }
     }
     var sb : StringBuilder ? = null
-var linkName = ""
+    var linkName = ""
     var img =  ArrayList<Image>()
     lateinit var pd : ProgressDialog
     var width = 0
@@ -81,7 +82,7 @@ var linkName = ""
     lateinit var root : CategoryRoot
     var listCat : ArrayList<String> ?= null
     var listID : ArrayList<String> ?= null
-    internal var PLACE_AUTOCOMPLETE_REQUEST_CODE = 1
+    internal var PLACE_AUTOCOMPLETE_REQUEST_CODE = 13
     var list = ArrayList<ImagesModel>()
 
     var listImages : java.util.ArrayList<Bitmap>?= null
@@ -106,7 +107,7 @@ var linkName = ""
         display.getSize(size)
         width = size.x
         recycler_media_classified.layoutManager = LinearLayoutManager(this@CreateClassified,LinearLayoutManager.HORIZONTAL,false)
-global = Global()
+        global = Global()
 
         if(intent.extras != null && intent.extras.getString("type").equals("edit")){
             linkName = intent.extras.getString("linkname")
@@ -124,13 +125,14 @@ global = Global()
         }
 
         btn_post_ad.setOnClickListener {
-if(validate()){
-   if(CommonUtils.getConnectivityStatusString(this).equals("true")){
+        if(validate())
+        {
+      if(CommonUtils.getConnectivityStatusString(this).equals("true")){
       createClassified()
-   }
-    else{
+       }
+       else{
        CommonUtils.openInternetDialog(this)
-   }
+          }
 }
         }
 edt_location.setOnClickListener {
@@ -150,15 +152,11 @@ edt_location.setOnClickListener {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         imageutils.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE) run {
-            if (resultCode == RESULT_OK) {
+        if (requestCode == PLACE_AUTOCOMPLETE_REQUEST_CODE && resultCode == Activity.RESULT_OK){
                 val place = PlaceAutocomplete.getPlace(this, data)
                 edt_location.text = place.name.toString()
                 var latLng = place.latLng.toString()
 
-
-
-            }
         }
 
     }
@@ -293,8 +291,6 @@ edt_location.setOnClickListener {
     }
     // ****** Implementing thread to upload image****
     private val uploadimage = Runnable {
-        Log.e("type1222", "amannn"+f.toString())
-
         var res = ""
         try {
             val fis = FileInputStream(f)

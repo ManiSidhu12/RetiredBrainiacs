@@ -204,7 +204,8 @@ if(value.equals("")) {
             }
         },
 
-                Response.ErrorListener {                        v.progress_forum.visibility = View.GONE
+                Response.ErrorListener {
+                    v.progress_forum.visibility = View.GONE
 
 
                 }) {

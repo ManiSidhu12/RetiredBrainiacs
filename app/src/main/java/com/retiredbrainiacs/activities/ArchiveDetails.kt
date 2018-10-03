@@ -240,7 +240,7 @@ import java.util.*
                                 model.file_note = root.listArch[i].bmpTif[j].fileNote
                                 model.file_type = "bmp"
                                 listModel.add(model)
-                                sb!!.append(root.listArch[i].archiveimages[j].file + ",")
+                                sb!!.append(root.listArch[i].bmpTif[j].file + ",")
 
                             }
                             modelMain.model = listModel
@@ -254,7 +254,7 @@ import java.util.*
                                 model.file_note = root.listArch[i].xml[j].fileNote
                                 model.file_type = "xml"
                                 listModel.add(model)
-                                sb!!.append(root.listArch[i].archiveimages[j].file + ",")
+                                sb!!.append(root.listArch[i].xml[j].file + ",")
 
                             }
                             modelMain.model = listModel
@@ -268,7 +268,7 @@ import java.util.*
                                 model.file_note = root.listArch[i].pdf[j].fileNote
                                 model.file_type = "pdf"
                                 listModel.add(model)
-                                sb!!.append(root.listArch[i].archiveimages[j].file + ",")
+                                sb!!.append(root.listArch[i].pdf[j].file + ",")
 
                             }
                             modelMain.model = listModel
@@ -282,7 +282,7 @@ import java.util.*
                                 model.file_note = root.listArch[i].xls[j].fileNote
                                 model.file_type = "xls"
                                 listModel.add(model)
-                                sb!!.append(root.listArch[i].archiveimages[j].file + ",")
+                                sb!!.append(root.listArch[i].xls[j].file + ",")
 
                             }
                             modelMain.model = listModel
@@ -296,7 +296,7 @@ import java.util.*
                                 model.file_note = root.listArch[i].xlsx[j].fileNote
                                 model.file_type = "xlsx"
                                 listModel.add(model)
-                                sb!!.append(root.listArch[i].archiveimages[j].file + ",")
+                                sb!!.append(root.listArch[i].xlsx[j].file + ",")
 
                             }
                             modelMain.model = listModel
@@ -310,7 +310,7 @@ import java.util.*
                                 model.file_note = root.listArch[i].doc[j].fileNote
                                 model.file_type = "doc"
                                 listModel.add(model)
-                                sb!!.append(root.listArch[i].archiveimages[j].file + ",")
+                                sb!!.append(root.listArch[i].doc[j].file + ",")
 
                             }
                             modelMain.model = listModel
@@ -324,7 +324,7 @@ import java.util.*
                                 model.file_note = root.listArch[i].docx[j].fileNote
                                 model.file_type = "docx"
                                 listModel.add(model)
-                                sb!!.append(root.listArch[i].archiveimages[j].file + ",")
+                                sb!!.append(root.listArch[i].docx[j].file + ",")
 
                             }
                             modelMain.model = listModel
@@ -338,7 +338,7 @@ import java.util.*
                                 model.file_note = root.listArch[i].mp4MovWmv[j].fileNote
                                 model.file_type = "mp4"
                                 listModel.add(model)
-                                sb!!.append(root.listArch[i].archiveimages[j].file + ",")
+                                sb!!.append(root.listArch[i].mp4MovWmv[j].file + ",")
 
                             }
                             modelMain.model = listModel
@@ -352,7 +352,7 @@ import java.util.*
                                 model.file_note = root.listArch[i].mp3[j].fileNote
                                 model.file_type = "mp3"
                                 listModel.add(model)
-                                sb!!.append(root.listArch[i].archiveimages[j].file + ",")
+                                sb!!.append(root.listArch[i].mp3[j].file + ",")
 
                             }
                             modelMain.model = listModel

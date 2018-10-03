@@ -41,7 +41,7 @@ import java.util.*
 class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: String) : RecyclerView.Adapter<FeedsAdapter.ViewHolder>() {
     val privacyArray = arrayOf("Public", "Private")
     val actionsArray = arrayOf("Edit", "Delete")
-    var mediaPlayer: MediaPlayer? = null
+    var mediaPlayer =  MediaPlayer()
     lateinit var root: ResponseRoot
     var type1 = ""
     var dialog: Dialog? = null
@@ -107,6 +107,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
             holder.imgPost.visibility = View.VISIBLE
             Picasso.with(ctx).load(posts[position].image).into(holder.imgPost)
         } else if (posts[position].videoImg != null && !posts[position].videoImg.isEmpty()) {
+            Log.e("innn","iinnn"+position)
             if (posts[position].video != null && !posts[position].video.isEmpty()) {
                 holder.btnPlay.visibility = View.VISIBLE
             } else {
@@ -119,7 +120,7 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
             holder.imgLayout.visibility = View.GONE
             holder.audioLay.visibility = View.VISIBLE
 
-            mediaPlayer = MediaPlayer()
+//            mediaPlayer = MediaPlayer()
             mediaPlayer!!.setOnBufferingUpdateListener(object : MediaPlayer.OnBufferingUpdateListener {
                 override fun onBufferingUpdate(mp: MediaPlayer?, percent: Int) {
                 }
@@ -153,7 +154,9 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
 
                 override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
                     if(fromUser){
-                        mediaPlayer!!.seekTo(progress)
+                        if(mediaPlayer != null) {
+                            mediaPlayer!!.seekTo(progress)
+                        }
                         holder.seekBar.progress = progress
                     }
 
@@ -265,20 +268,16 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
                 holder.imgLayout.visibility = View.GONE
                 holder.videoView.visibility = View.VISIBLE
                 holder.videoView.setVideoURI(Uri.parse(posts[position].video))
-                holder.videoView.setOnPreparedListener(object : MediaPlayer.OnPreparedListener {
-                    override fun onPrepared(mp: MediaPlayer?) {
-                        mp!!.setVolume(0f, 0f)
-                        mp!!.setLooping(false)
-                        mp.setOnCompletionListener {
-                            holder.videoView.visibility = View.GONE
-                            holder.imgLayout.visibility = View.VISIBLE
+                holder.videoView.setOnPreparedListener { mp ->
+                    mp!!.setVolume(0f, 0f)
+                    mp!!.setLooping(false)
+                    mp.setOnCompletionListener {
+                        holder.videoView.visibility = View.GONE
+                        holder.imgLayout.visibility = View.VISIBLE
 
 
-                        }
                     }
-
-
-                })
+                }
                 holder.videoView.start()
             } else if (posts[position].audio != null && !posts[position].audio.isEmpty()) {
                 holder.imgLayout.visibility = View.GONE
@@ -572,9 +571,9 @@ class FeedsAdapter(var ctx: Context, var posts: MutableList<Post>, var type: Str
 
             if (root1.status.equals("true")) {
                 Common.showToast(ctx, root1.message)
-                //layoutFeed.visibility = View.GONE
+               // layoutFeed.visibility = View.GONE
                 post.removeAt(position)
-                notifyDataSetChanged()
+              notifyDataSetChanged()
 
             } else {
                 Common.showToast(ctx, root1.message)
